@@ -607,7 +607,7 @@ static int msm_audio_hyp_unassign(struct msm_audio_fd_data *msm_audio_fd_data)
 		ret = qcom_scm_assign_mem(msm_audio_fd_data->paddr, msm_audio_fd_data->plen,
 			&src_vmid_unmap_list, dst_vmids_unmap, ARRAY_SIZE(dst_vmids_unmap));
 		if (ret < 0) {
-			pr_err("%s: qcom assign unmap failed result = %d addr = 0x%pK size = %d\n",
+			pr_err("%s: qcom assign unmap failed result = %d addr = 0x%llx size = %zu\n",
 			__func__, ret, msm_audio_fd_data->paddr, msm_audio_fd_data->plen);
 		}
 		msm_audio_fd_data->hyp_assign = false;
@@ -750,7 +750,7 @@ static long msm_audio_ion_ioctl(struct file *file, unsigned int ioctl_num,
 		ret = qcom_scm_assign_mem(paddr, pa_len, &src_vmid_map_list,
 		                      dst_vmids_map, ARRAY_SIZE(dst_vmids_map));
 		if (ret < 0) {
-			pr_err("%s: qcom_assign failed result = %d addr = 0x%pK size = %d\n",
+			pr_err("%s: qcom_assign failed result = %d addr = 0x%llx size = %lu\n",
 					__func__, ret, paddr, pa_len);
 			return ret;
 		}
@@ -766,7 +766,7 @@ static long msm_audio_ion_ioctl(struct file *file, unsigned int ioctl_num,
 		ret = qcom_scm_assign_mem(paddr, pa_len, &src_vmid_unmap_list,
 		                      dst_vmids_unmap, ARRAY_SIZE(dst_vmids_unmap));
 		if (ret < 0) {
-			pr_err("%s: qcom scm unassign failed result = %d addr = 0x%pK size = %d\n",
+			pr_err("%s: qcom scm unassign failed result = %d addr = 0x%llx size = %lu\n",
 					__func__, ret, paddr, pa_len);
 			return ret;
 		}

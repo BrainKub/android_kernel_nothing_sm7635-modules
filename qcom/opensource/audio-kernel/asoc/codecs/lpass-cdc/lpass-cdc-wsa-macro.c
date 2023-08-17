@@ -3675,7 +3675,7 @@ static int lpass_cdc_wsa_macro_set_cur_state(
 		wsa_priv->thermal_cur_state = state;
 	} else {
 		dev_err_ratelimited(wsa_priv->dev,
-			"%s: incorrect requested state:%d\n",
+			"%s: incorrect requested state:%lu\n",
 			__func__, state);
 		return -EINVAL;
 	}
