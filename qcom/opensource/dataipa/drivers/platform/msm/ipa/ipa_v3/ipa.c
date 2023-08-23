@@ -12441,7 +12441,7 @@ int ipa3_iommu_map(struct iommu_domain *domain,
 	if (cb->is_cache_coherent)
 		prot |= IOMMU_CACHE;
 
-	return iommu_map_atomic(domain, iova, paddr, size, prot, GFP_ATOMIC);
+	return iommu_map(domain, iova, paddr, size, prot, GFP_ATOMIC);
 }
 
 /**
