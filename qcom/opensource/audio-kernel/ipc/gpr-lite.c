@@ -395,7 +395,7 @@ static void gpr_device_remove(struct device *dev)
 	return;
 }
 
-static int gpr_uevent(struct device *dev, struct kobj_uevent_env *env)
+static int gpr_uevent(const struct device *dev, struct kobj_uevent_env *env)
 {
 	struct gpr_device *adev = to_gpr_device(dev);
 	int ret;
