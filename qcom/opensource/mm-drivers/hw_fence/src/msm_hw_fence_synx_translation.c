@@ -5,7 +5,7 @@
 
 #include <linux/types.h>
 #include <linux/slab.h>
-#include <linux/soc/qcom/msm_hw_fence.h>
+#include "msm_hw_fence.h"
 #include "msm_hw_fence_synx_translation.h"
 #include "hw_fence_drv_priv.h"
 #include "hw_fence_drv_debug.h"

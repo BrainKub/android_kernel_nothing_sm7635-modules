@@ -10,9 +10,9 @@
 #include <linux/device.h>
 #include <linux/types.h>
 #include <linux/dma-mapping.h>
-#include <linux/soc/qcom/msm_hw_fence.h>
 #include <linux/dma-fence-array.h>
 #include <linux/slab.h>
+#include "msm_hw_fence.h"
 
 /* max u64 to indicate invalid fence */
 #define HW_FENCE_INVALID_PARENT_FENCE (~0ULL)
