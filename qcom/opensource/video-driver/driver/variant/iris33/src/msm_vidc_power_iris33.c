@@ -506,7 +506,7 @@ static int msm_vidc_calc_bw_iris33_new(struct msm_vidc_inst *inst,
 	vidc_data->calc_bw_ddr = kbps(codec_output.ddr_bw_rd + codec_output.ddr_bw_wr);
 	vidc_data->calc_bw_llcc = kbps(codec_output.noc_bw_rd + codec_output.noc_bw_wr);
 
-	i_vpr_l(inst, "%s: calc_bw_ddr %lu calc_bw_llcc %lu",
+	i_vpr_l(inst, "%s: calc_bw_ddr %llu calc_bw_llcc %llu",
 		__func__, vidc_data->calc_bw_ddr, vidc_data->calc_bw_llcc);
 
 	return ret;

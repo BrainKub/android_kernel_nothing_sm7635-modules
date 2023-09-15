@@ -151,7 +151,7 @@ int msm_vidc_set_ir_period(void *instance,
 		ir_type = HFI_PROP_IR_CYCLIC_PERIOD;
 	} else {
 		i_vpr_e(inst, "%s: invalid ir_type %d\n",
-			__func__, inst->capabilities[IR_TYPE]);
+			__func__, inst->capabilities[IR_TYPE].value);
 		return -EINVAL;
 	}
 

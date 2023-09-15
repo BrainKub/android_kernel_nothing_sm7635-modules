@@ -1043,7 +1043,7 @@ int msm_vidc_calculate_bandwidth(struct api_calculation_input codec_input,
 	} else if (codec_input.decoder_or_encoder == CODEC_ENCODER) {
 		rc = calculate_bandwidth_encoder_iris33(codec_input, codec_output);
 	} else {
-		d_vpr_e("%s: invalid codec\n", codec_input.decoder_or_encoder);
+		d_vpr_e("%u: invalid codec\n", codec_input.decoder_or_encoder);
 		return -EINVAL;
 	}
 

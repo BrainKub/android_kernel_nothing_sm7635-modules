@@ -4914,7 +4914,7 @@ int msm_vidc_check_core_mbps(struct msm_vidc_inst *inst)
 	core_unlock(core, __func__);
 
 	if (critical_mbps > core->capabilities[MAX_MBPS].value) {
-		i_vpr_e(inst, "%s: Hardware overloaded with critical sessions. needed %u, max %u",
+		i_vpr_e(inst, "%s: Hardware overloaded with critical sessions. needed %llu, max %u",
 			__func__, critical_mbps, core->capabilities[MAX_MBPS].value);
 		return -ENOMEM;
 	}
@@ -4936,7 +4936,7 @@ int msm_vidc_check_core_mbps(struct msm_vidc_inst *inst)
 	if (is_encode_session(inst)) {
 		/* reject encoder if all encoders mbps is greater than MAX_MBPS */
 		if (enc_mbps > core->capabilities[MAX_MBPS].value) {
-			i_vpr_e(inst, "%s: Hardware overloaded. needed %u, max %u", __func__,
+			i_vpr_e(inst, "%s: Hardware overloaded. needed %llu, max %u", __func__,
 				mbps, core->capabilities[MAX_MBPS].value);
 			return -ENOMEM;
 		}
@@ -4968,7 +4968,7 @@ int msm_vidc_check_core_mbps(struct msm_vidc_inst *inst)
 		}
 	}
 
-	i_vpr_h(inst, "%s: HW load needed %u is within max %u", __func__,
+	i_vpr_h(inst, "%s: HW load needed %llu is within max %u", __func__,
 			total_mbps, core->capabilities[MAX_MBPS].value);
 
 	return 0;

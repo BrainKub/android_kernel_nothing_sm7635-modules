@@ -416,7 +416,7 @@ static int msm_vidc_memory_unmap_free(struct msm_vidc_core *core, struct msm_vid
 	}
 
 	d_vpr_h(
-		"%s: dmabuf %pK, size %d, kvaddr %pK, buffer_type %s, secure %d, region %d\n",
+		"%s: dmabuf 0x%llx, size %d, kvaddr %pK, buffer_type %s, secure %d, region %d\n",
 		__func__, mem->device_addr, mem->size, mem->kvaddr,
 		buf_name(mem->type), mem->secure, mem->region);
 
@@ -552,14 +552,14 @@ static int msm_vidc_iommu_map(struct msm_vidc_core *core, struct msm_vidc_mem *m
 	}
 
 	rc = iommu_map(cb->domain, mem->device_addr, mem->phys_addr,
-		mem->size, IOMMU_READ | IOMMU_WRITE | IOMMU_MMIO);
+		mem->size, IOMMU_READ | IOMMU_WRITE | IOMMU_MMIO, GFP_KERNEL);
 	if (rc) {
-		d_vpr_e("iommu_map failed for device_addr 0x%x, size %d, rc:%d\n",
+		d_vpr_e("iommu_map failed for device_addr 0x%llx, size %d, rc:%d\n",
 			mem->device_addr, mem->size, rc);
 		return rc;
 	}
 
-	d_vpr_h("%s: phys_addr %#x size %#x device_addr %#x, mem_region %d\n",
+	d_vpr_h("%s: phys_addr %#llx size %#x device_addr %#llx, mem_region %d\n",
 		__func__, mem->phys_addr, mem->size, mem->device_addr, mem->region);
 
 	return rc;
@@ -582,7 +582,7 @@ static int msm_vidc_iommu_unmap(struct msm_vidc_core *core, struct msm_vidc_mem 
 		return -EIO;
 	}
 
-	d_vpr_h("%s: phys_addr %#x size %#x device_addr %#x, mem_region %d\n",
+	d_vpr_h("%s: phys_addr %#llx size %#x device_addr %#llx, mem_region %d\n",
 		__func__, mem->phys_addr, mem->size, mem->device_addr, mem->region);
 
 	iommu_unmap(cb->domain, mem->device_addr, mem->size);

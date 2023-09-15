@@ -722,7 +722,7 @@ static int msm_venc_metadata_delivery(struct msm_vidc_inst *inst,
 			if (is_meta_tx_inp_enabled(inst, i)) {
 				if (count + 1 >= sizeof(payload) / sizeof(u32)) {
 					i_vpr_e(inst,
-						"%s: input metadatas (%d) exceeded limit (%d)\n",
+						"%s: input metadatas (%d) exceeded limit (%lu)\n",
 						__func__, count, sizeof(payload) / sizeof(u32));
 					return -EINVAL;
 				}
@@ -735,7 +735,7 @@ static int msm_venc_metadata_delivery(struct msm_vidc_inst *inst,
 			if (is_meta_tx_out_enabled(inst, i)) {
 				if (count + 1 >= sizeof(payload) / sizeof(u32)) {
 					i_vpr_e(inst,
-						"%s: input metadatas (%d) exceeded limit (%d)\n",
+						"%s: input metadatas (%d) exceeded limit (%lu)\n",
 						__func__, count, sizeof(payload) / sizeof(u32));
 					return -EINVAL;
 				}
@@ -780,7 +780,7 @@ static int msm_venc_dynamic_metadata_delivery(struct msm_vidc_inst *inst,
 		if (is_dyn_meta_tx_inp_enabled(inst, i)) {
 			if (count + 1 >= sizeof(payload) / sizeof(u32)) {
 				i_vpr_e(inst,
-					"%s: dynamic input metadatas (%d) exceeded limit (%d)\n",
+					"%s: dynamic input metadatas (%d) exceeded limit (%lu)\n",
 					__func__, count, sizeof(payload) / sizeof(u32));
 				return -EINVAL;
 			}
@@ -817,7 +817,7 @@ static int msm_venc_metadata_subscription(struct msm_vidc_inst *inst,
 			if (is_meta_rx_inp_enabled(inst, i)) {
 				if (count + 1 >= sizeof(payload) / sizeof(u32)) {
 					i_vpr_e(inst,
-						"%s: input metadatas (%d) exceeded limit (%d)\n",
+						"%s: input metadatas (%d) exceeded limit (%lu)\n",
 						__func__, count, sizeof(payload) / sizeof(u32));
 					return -EINVAL;
 				}
@@ -830,7 +830,7 @@ static int msm_venc_metadata_subscription(struct msm_vidc_inst *inst,
 			if (is_meta_rx_out_enabled(inst, i)) {
 				if (count + 1 >= sizeof(payload) / sizeof(u32)) {
 					i_vpr_e(inst,
-						"%s: input metadatas (%d) exceeded limit (%d)\n",
+						"%s: input metadatas (%d) exceeded limit (%lu)\n",
 						__func__, count, sizeof(payload) / sizeof(u32));
 					return -EINVAL;
 				}

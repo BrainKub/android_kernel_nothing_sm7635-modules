@@ -211,7 +211,7 @@ static int __opp_set_rate(struct msm_vidc_core *core, u64 freq)
 	dev_pm_opp_put(opp);
 
 	/* print freq value */
-	d_vpr_h("%s: set rate %lld (requested %lld)\n",
+	d_vpr_h("%s: set rate %lu (requested %lld)\n",
 		__func__, opp_freq, freq);
 
 	/* scale freq to power up mxc & mmcx */
@@ -236,7 +236,7 @@ static int __init_register_base(struct msm_vidc_core *core)
 			__func__, PTR_ERR(res->register_base_addr));
 		return -EINVAL;
 	}
-	d_vpr_h("%s: reg_base %#x\n", __func__, res->register_base_addr);
+	d_vpr_h("%s: reg_base %pK\n", __func__, res->register_base_addr);
 
 	return 0;
 }
@@ -287,7 +287,7 @@ static int __init_bus(struct msm_vidc_core *core)
 	bus_count = core->platform->data.bw_tbl_size;
 
 	if (!bus_tbl || !bus_count) {
-		d_vpr_e("%s: invalid bus tbl %#x or count %d\n",
+		d_vpr_e("%s: invalid bus tbl %pK or count %d\n",
 			__func__, bus_tbl, bus_count);
 		return -EINVAL;
 	}
@@ -479,7 +479,7 @@ static int __init_clocks(struct msm_vidc_core *core)
 	clk_count = core->platform->data.clk_tbl_size;
 
 	if (!clk_tbl || !clk_count) {
-		d_vpr_e("%s: invalid clock tbl %#x or count %d\n",
+		d_vpr_e("%s: invalid clock tbl %pK or count %d\n",
 			__func__, clk_tbl, clk_count);
 		return -EINVAL;
 	}
@@ -521,7 +521,7 @@ static int __init_clocks(struct msm_vidc_core *core)
 			}
 
 			if (!freq_tbl) {
-				d_vpr_e("%s: invalid freq tbl %#x\n", __func__, freq_tbl);
+				d_vpr_e("%s: invalid freq tbl %pK\n", __func__, freq_tbl);
 				return -EINVAL;
 			}
 
@@ -571,7 +571,7 @@ static int __init_reset_clocks(struct msm_vidc_core *core)
 	rst_count = core->platform->data.clk_rst_tbl_size;
 
 	if (!rst_tbl || !rst_count) {
-		d_vpr_e("%s: invalid reset tbl %#x or count %d\n",
+		d_vpr_e("%s: invalid reset tbl %pK or count %d\n",
 			__func__, rst_tbl, rst_count);
 		return -EINVAL;
 	}
@@ -634,7 +634,7 @@ static int __init_subcaches(struct msm_vidc_core *core)
 	llcc_count = core->platform->data.subcache_tbl_size;
 
 	if (!llcc_tbl || !llcc_count) {
-		d_vpr_e("%s: invalid llcc tbl %#x or count %d\n",
+		d_vpr_e("%s: invalid llcc tbl %pK or count %d\n",
 			__func__, llcc_tbl, llcc_count);
 		return -EINVAL;
 	}
@@ -688,7 +688,7 @@ static int __init_freq_table(struct msm_vidc_core *core)
 	freq_count = core->platform->data.freq_tbl_size;
 
 	if (!freq_tbl || !freq_count) {
-		d_vpr_e("%s: invalid freq tbl %#x or count %d\n",
+		d_vpr_e("%s: invalid freq tbl %pK or count %d\n",
 			__func__, freq_tbl, freq_count);
 		return -EINVAL;
 	}
@@ -731,7 +731,7 @@ static int __init_context_banks(struct msm_vidc_core *core)
 	cb_count = core->platform->data.context_bank_tbl_size;
 
 	if (!cb_tbl || !cb_count) {
-		d_vpr_e("%s: invalid context bank tbl %#x or count %d\n",
+		d_vpr_e("%s: invalid context bank tbl %pK or count %d\n",
 			__func__, cb_tbl, cb_count);
 		return -EINVAL;
 	}
@@ -810,7 +810,7 @@ static int __init_device_region(struct msm_vidc_core *core)
 
 	/* print device region fields */
 	venus_hfi_for_each_device_region(core, dev_reg_info) {
-		d_vpr_h("%s: name %s phy_addr %#x size %#x dev_addr %#x dev_region %d\n",
+		d_vpr_h("%s: name %s phy_addr %#llx size %#x dev_addr %#x dev_region %d\n",
 			__func__, dev_reg_info->name, dev_reg_info->phy_addr, dev_reg_info->size,
 			dev_reg_info->dev_addr, dev_reg_info->region);
 	}
@@ -1143,7 +1143,7 @@ static int print_residency_stats(struct msm_vidc_core *core, struct clock_info *
 
 	/* print residency percent for each clock */
 	list_for_each_entry(residency, &cl->residency_list, list) {
-		d_vpr_hs("%s: %s clock rate [%d] total %lluus residency %u%%\n",
+		d_vpr_hs("%s: %s clock rate [%llu] total %lluus residency %llu%%\n",
 			__func__, cl->name, residency->rate, residency->total_time_us,
 			(residency->total_time_us * 100 + total_time_us / 2) / total_time_us);
 	}
