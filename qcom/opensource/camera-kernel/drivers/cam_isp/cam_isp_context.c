@@ -221,7 +221,7 @@ static int __cam_isp_ctx_print_event_record(struct cam_isp_context *ctx_isp)
 			}
 			if (record->event_type != CAM_ISP_CTX_EVENT_SHUTTER)
 				len += scnprintf(buf + len, CAM_ISP_CONTEXT_DBG_BUF_LEN - len,
-					"%llu[%lld:%06lld] ", record->req_id, ts.tv_sec,
+					"%llu[%lld:%06ld] ", record->req_id, ts.tv_sec,
 					ts.tv_nsec / NSEC_PER_USEC);
 			else
 				/*

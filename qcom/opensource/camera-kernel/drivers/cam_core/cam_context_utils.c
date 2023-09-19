@@ -1644,7 +1644,7 @@ static int cam_context_user_dump(struct cam_context *ctx,
 				local_len = dump_args->offset +
 					sizeof(struct cam_context_dump_header);
 				scnprintf(hdr->tag, CAM_CTXT_DUMP_TAG_MAX_LEN,
-					"%s_OUT_FENCE_REQUEST_APPLIED.%d.%d.%d:",
+					"%s_OUT_FENCE_REQUEST_APPLIED.%d.%pad.%d:",
 					ctx->dev_name,
 					req->out_map_entries[i].resource_handle,
 					&(req->out_map_entries[i].image_buf_addr),
@@ -1685,7 +1685,7 @@ static int cam_context_user_dump(struct cam_context *ctx,
 				local_len = dump_args->offset +
 					sizeof(struct cam_context_dump_header);
 				scnprintf(hdr->tag, CAM_CTXT_DUMP_TAG_MAX_LEN,
-					"%s_OUT_FENCE_REQUEST_PENDING.%d.%d.%d:",
+					"%s_OUT_FENCE_REQUEST_PENDING.%d.%pad.%d:",
 					ctx->dev_name,
 					req->out_map_entries[i].resource_handle,
 					&(req->out_map_entries[i].image_buf_addr),
@@ -1726,7 +1726,7 @@ static int cam_context_user_dump(struct cam_context *ctx,
 				local_len = dump_args->offset +
 					sizeof(struct cam_context_dump_header);
 				scnprintf(hdr->tag, CAM_CTXT_DUMP_TAG_MAX_LEN,
-					"%s_OUT_FENCE_REQUEST_ACTIVE.%d.%d.%d:",
+					"%s_OUT_FENCE_REQUEST_ACTIVE.%d.%pad.%d:",
 					ctx->dev_name,
 					req->out_map_entries[i].resource_handle,
 					&(req->out_map_entries[i].image_buf_addr),
