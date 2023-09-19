@@ -22,6 +22,7 @@
 #include <dsp/digital-cdc-rsc-mgr.h>
 #include <linux/pm_runtime.h>
 #include <dsp/audio_notifier.h>
+#include <linux/gpio/driver.h>
 
 #include "core.h"
 #include "pinctrl-utils.h"

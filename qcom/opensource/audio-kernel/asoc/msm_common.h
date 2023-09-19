@@ -8,6 +8,7 @@
 
 #include <sound/soc.h>
 #include <sound/pcm.h>
+#include <linux/cpu.h>
 
 enum {
 	MI2S = 0,
