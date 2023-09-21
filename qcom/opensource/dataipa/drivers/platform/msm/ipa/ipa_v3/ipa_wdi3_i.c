@@ -833,7 +833,7 @@ int ipa3_conn_wdi3_pipes(struct ipa_wdi_conn_in_params *in,
 		in->u_rx.rx.event_ring_size);
 	db_val += GSI_EVT_RING_RE_SIZE_8B;
 	iowrite32(db_val, db_addr);
-	IPADBG("RX base_addr 0x%x evt wp val: 0x%x\n",
+	IPADBG("RX base_addr 0x%llx evt wp val: 0x%x\n",
 		ep_rx->gsi_mem_info.evt_ring_base_addr, db_val);
 
 	gsi_query_evt_ring_db_addr(ep_tx->gsi_evt_ring_hdl,
@@ -855,7 +855,7 @@ int ipa3_conn_wdi3_pipes(struct ipa_wdi_conn_in_params *in,
 	db_val += ((ipa3_ctx->ipa_hw_type >= IPA_HW_v4_9) ?
 		GSI_EVT_RING_RE_SIZE_32B : GSI_EVT_RING_RE_SIZE_16B);
 	iowrite32(db_val, db_addr);
-	IPADBG("db_addr %u  TX base_addr 0x%x evt wp val: 0x%x\n",
+	IPADBG("db_addr %u  TX base_addr 0x%llx evt wp val: 0x%x\n",
 		evt_ring_db_addr_low,
 		ep_tx->gsi_mem_info.evt_ring_base_addr, db_val);
 
@@ -933,7 +933,7 @@ int ipa3_conn_wdi3_pipes(struct ipa_wdi_conn_in_params *in,
 					in->u_tx1.tx.event_ring_size);
 		db_val += GSI_EVT_RING_RE_SIZE_16B;
 		iowrite32(db_val, db_addr);
-		IPADBG("db_addr %u  TX1 base_addr 0x%x evt wp val: 0x%x\n",
+		IPADBG("db_addr %u  TX1 base_addr 0x%llx evt wp val: 0x%x\n",
 			evt_ring_db_addr_low,
 			ep_tx1->gsi_mem_info.evt_ring_base_addr, db_val);
 	}
@@ -1156,7 +1156,7 @@ int ipa3_enable_wdi3_pipes(int ipa_ep_idx_tx, int ipa_ep_idx_rx,
 					HOLB_MONITOR_MASK, holb_max_cnt,
 					IPA_EE_AP);
 	if (result)
-		IPAERR("Add HOLB monitor failed for gsi ch %d\n",
+		IPAERR("Add HOLB monitor failed for gsi ch %lu\n",
 				ep_tx->gsi_chan_hdl);
 
 	/* start gsi rx channel */

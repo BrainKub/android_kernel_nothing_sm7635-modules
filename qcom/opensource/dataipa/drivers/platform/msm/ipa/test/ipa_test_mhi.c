@@ -1839,7 +1839,7 @@ static int ipa_mhi_test_create_aggr_open_frame(void)
 			(u64)ipahal_read_reg(IPA_STATE_AGGR_ACTIVE);
 	}
 
-	IPA_UT_LOG("IPA_STATE_AGGR_ACTIVE  0x%x\n", aggr_state_active);
+	IPA_UT_LOG("IPA_STATE_AGGR_ACTIVE  0x%llx\n", aggr_state_active);
 	if (aggr_state_active == 0) {
 		IPA_UT_LOG("No aggregation frame open!\n");
 		IPA_UT_TEST_FAIL_REPORT("No aggregation frame open");

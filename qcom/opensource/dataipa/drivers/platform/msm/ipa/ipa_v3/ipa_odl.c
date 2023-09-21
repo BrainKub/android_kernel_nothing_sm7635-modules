@@ -705,7 +705,7 @@ int ipa_odl_init(void)
 	mutex_init(&ipa3_odl_ctx->adpl_msg_lock);
 	mutex_init(&ipa3_odl_ctx->pipe_lock);
 
-	odl_cdev[loop].class = class_create(THIS_MODULE, "ipa_adpl");
+	odl_cdev[loop].class = class_create("ipa_adpl");
 
 	if (IS_ERR(odl_cdev[loop].class)) {
 		IPAERR("Error: odl_cdev->class NULL\n");
@@ -741,7 +741,7 @@ int ipa_odl_init(void)
 
 	loop++;
 
-	odl_cdev[loop].class = class_create(THIS_MODULE, "ipa_odl_ctl");
+	odl_cdev[loop].class = class_create("ipa_odl_ctl");
 
 	if (IS_ERR(odl_cdev[loop].class)) {
 		IPAERR("Error: odl_cdev->class NULL\n");

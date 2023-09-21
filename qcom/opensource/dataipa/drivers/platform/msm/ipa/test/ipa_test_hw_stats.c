@@ -754,7 +754,7 @@ static int ipa_test_hw_stats_query_drop_stats(void *priv)
                        ipahal_get_ep_bit(ep_idx)))
                        continue;
 
-               IPA_UT_INFO("Client %u pkt_cnt %u bytes cnt %llu\n", i,
+               IPA_UT_INFO("Client %u pkt_cnt %u bytes cnt %u\n", i,
                        query->client[i].drop_packet_cnt, query->client[i].drop_byte_cnt);
        }
 

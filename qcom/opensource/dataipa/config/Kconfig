@@ -66,3 +66,8 @@ config IPA_UT
         bool "Short description of export CONFIG_IPA_UT"
         help
           Long description of export CONFIG_IPA_UT
+
+config IPA3
+        tristate "Short description of export IPA3"
+        help
+          Long description of export IPA3

@@ -2726,7 +2726,7 @@ int ipa3_resume_gsi_wdi_pipe(u32 clnt_hdl)
 						HOLB_MONITOR_MASK, holb_max_cnt,
 						IPA_EE_AP);
 		if (res)
-			IPAERR("Add HOLB monitor failed for gsi ch %d\n",
+			IPAERR("Add HOLB monitor failed for gsi ch %lu\n",
 					ep->gsi_chan_hdl);
 	}
 	pcmd_t = &ipa3_ctx->gsi_info[IPA_HW_PROTOCOL_WDI];

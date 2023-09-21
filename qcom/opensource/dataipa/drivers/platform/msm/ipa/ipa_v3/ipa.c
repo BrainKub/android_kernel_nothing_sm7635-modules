@@ -29,14 +29,14 @@
 #include <linux/hashtable.h>
 #include <linux/jhash.h>
 #include <linux/pci.h>
+#include <linux/sched/clock.h>
 #include <linux/soc/qcom/smem.h>
-#include <linux/qcom_scm.h>
+#include <linux/firmware/qcom/qcom_scm.h>
 #include <asm/cacheflush.h>
 #include <linux/soc/qcom/smem_state.h>
 #include <linux/of_irq.h>
 #include <linux/ctype.h>
 #include <linux/of_address.h>
-#include <linux/qcom_scm.h>
 #include <linux/soc/qcom/mdt_loader.h>
 #include <linux/version.h>
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 14, 0))
@@ -2645,7 +2645,7 @@ static int ipa3_send_pkt_threshold(unsigned long usr_param)
 
 	if (((struct ipa_ioc_set_pkt_threshold *)buff1)->ioctl_data_size !=
 		sizeof(struct ipa_set_pkt_threshold)) {
-		IPAERR("IPA_IOC_SET_PKT_THRESHOLD size not match(%d,%d)!\n",
+		IPAERR("IPA_IOC_SET_PKT_THRESHOLD size not match(%d,%lu)!\n",
 		((struct ipa_ioc_set_pkt_threshold *)buff1)->ioctl_data_size,
 		sizeof(struct ipa_set_pkt_threshold));
 		kfree(buff1);
@@ -2706,7 +2706,7 @@ static int ipa3_send_sw_flt_list(unsigned long usr_param)
 
 	if (sw_flt_list.ioctl_data_size !=
 		sizeof(struct ipa_sw_flt_list_type)) {
-		IPAERR("IPA_IOC_SET_SW_FLT size not match(%d,%d)!\n",
+		IPAERR("IPA_IOC_SET_SW_FLT size not match(%d,%lu)!\n",
 		sw_flt_list.ioctl_data_size,
 		sizeof(struct ipa_sw_flt_list_type));
 		return -EFAULT;
@@ -2770,7 +2770,7 @@ static int ipa3_send_ippt_sw_flt_list(unsigned long usr_param)
 	/* Expect ipa_ippt_sw_flt_list_type struct*/
 	if (sw_flt_list.ioctl_data_size !=
 		sizeof(struct ipa_ippt_sw_flt_list_type)) {
-		IPAERR("IPA_IOC_SET_IPPT_SW_FLT size not match(%d,%d)!\n",
+		IPAERR("IPA_IOC_SET_IPPT_SW_FLT size not match(%d,%lu)!\n",
 		sw_flt_list.ioctl_data_size,
 		sizeof(struct ipa_ippt_sw_flt_list_type));
 		return -EFAULT;
@@ -9628,7 +9628,7 @@ static int ipa3_pre_init(const struct ipa3_plat_drv_res *resource_p,
 	}
 
 	IPADBG(
-	    "base(0x%x)+offset(0x%x)=(0x%x) mapped to (0x%x) with len (0x%x)\n",
+	    "base(0x%x)+offset(0x%x)=(0x%x) mapped to (0x%p) with len (0x%x)\n",
 	    resource_p->ipa_mem_base,
 	    ipa3_ctx->ctrl->ipa_reg_base_ofst,
 	    resource_p->ipa_mem_base + ipa3_ctx->ctrl->ipa_reg_base_ofst,
@@ -9833,7 +9833,7 @@ static int ipa3_pre_init(const struct ipa3_plat_drv_res *resource_p,
 	spin_lock_init(&ipa3_ctx->wc_memb.ipa_tx_mul_spinlock);
 	INIT_LIST_HEAD(&ipa3_ctx->wc_memb.wlan_comm_desc_list);
 
-	ipa3_ctx->cdev.class = class_create(THIS_MODULE, DRV_NAME);
+	ipa3_ctx->cdev.class = class_create(DRV_NAME);
 
 	result = alloc_chrdev_region(&ipa3_ctx->cdev.dev_num, 0, 1, DRV_NAME);
 	if (result) {
@@ -12441,7 +12441,7 @@ int ipa3_iommu_map(struct iommu_domain *domain,
 	if (cb->is_cache_coherent)
 		prot |= IOMMU_CACHE;
 
-	return iommu_map_atomic(domain, iova, paddr, size, prot);
+	return iommu_map_atomic(domain, iova, paddr, size, prot, GFP_ATOMIC);
 }
 
 /**

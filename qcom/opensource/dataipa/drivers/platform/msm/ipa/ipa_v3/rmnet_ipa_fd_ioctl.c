@@ -617,7 +617,8 @@ int ipa3_wan_ioctl_init(void)
 	}
 	wan_ioctl_major = MAJOR(device);
 
-	class = class_create(THIS_MODULE, DRIVER_NAME);
+	class = class_create(DRIVER_NAME);
+
 	if (IS_ERR(class)) {
 		IPAWANERR(":class_create err.\n");
 		goto class_err;

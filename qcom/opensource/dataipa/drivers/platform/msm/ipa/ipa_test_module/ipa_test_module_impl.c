@@ -355,7 +355,7 @@ static ssize_t channel_write_gsi(struct file *filp, const char __user *buf,
 	struct gsi_xfer_elem gsi_xfer;
 
 	if (count > (RX_BUFF_SIZE))
-		IPATEST_ERR("-----PROBLEM----- count=%zu RX_BUFF_SIZE=%d\n",
+		IPATEST_ERR("-----PROBLEM----- count=%zu RX_BUFF_SIZE=%lu\n",
 		count, RX_BUFF_SIZE);
 
 	/* Copy the data from the user and transmit */
@@ -555,7 +555,8 @@ int create_channel_device_by_type(
 	/* Add a pointer from the channel device to the test context info */
 	channel_dev->test = ipa_test;
 
-	channel_dev->class = class_create(THIS_MODULE, channel_dev->name);
+	channel_dev->class = class_create(channel_dev->name);
+
 	if (IS_ERR(channel_dev->class)) {
 		IPATEST_ERR(":class_create() err.\n");
 		ret = -ENOMEM;
@@ -2684,8 +2685,10 @@ int exception_hdl_init(void)
 		IPATEST_ERR("alloc_chrdev_region failed (%d)\n", res);
 		return res;
 	}
+
 	p_exception_hdl_data->class =
-			class_create(THIS_MODULE, EXCEPTION_DRV_NAME);
+			class_create(EXCEPTION_DRV_NAME);
+
 	p_exception_hdl_data->dev =
 			device_create(p_exception_hdl_data->class
 					, NULL, p_exception_hdl_data->dev_num,
@@ -4782,8 +4785,8 @@ static int __init ipa_test_init(void)
 	ipa_test->signature = TEST_SIGNATURE;
 	ipa_test->current_configuration_idx = -1;
 
-	ipa_test_class = class_create(THIS_MODULE, IPA_TEST_DRV_NAME);
-
+	ipa_test_class = class_create(IPA_TEST_DRV_NAME);
+	
 	ret = alloc_chrdev_region(&ipa_test->dev_num, 0, 1, IPA_TEST_DRV_NAME);
 	if (ret) {
 		IPATEST_ERR("alloc_chrdev_region err.\n");

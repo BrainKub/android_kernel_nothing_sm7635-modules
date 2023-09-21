@@ -315,7 +315,7 @@ static void gsi_channel_state_change_wait(unsigned long chan_hdl,
 
 		GSIDBG("GSI wait on chan_hld=%lu irqtyp=%u state=%u intr=%u\n",
 			chan_hdl,
-			type,
+			type.ch_ctrl,
 			ctx->state,
 			gsi_pending_intr);
 	}
@@ -1365,7 +1365,7 @@ static void __gsi_msi_write_msg(struct msi_desc *desc, struct msi_msg *msg)
 		gsi_ctx->msi_addr_set = true;
 	}
 
-	GSIDBG("saved msi %u msg data %u addr 0x%08x%08x, MSI:0x%lx\n", msi,
+	GSIDBG("saved msi %u msg data %u addr 0x%08x%08x, MSI:0x%llx\n", msi,
 		msg->data, msg->address_hi, msg->address_lo, gsi_ctx->msi_addr);
 }
 
@@ -1406,7 +1406,7 @@ static int __gsi_allocate_msis(void)
 	size_t size = 0;
 
 	/* Allocate all MSIs */
-	GSIDBG("gsi_ctx->dev = %lu, gsi_ctx->msi.num = %d", gsi_ctx->dev, gsi_ctx->msi.num);
+	GSIDBG("gsi_ctx->dev = %p, gsi_ctx->msi.num = %d", gsi_ctx->dev, gsi_ctx->msi.num);
 	result = platform_msi_domain_alloc_irqs(gsi_ctx->dev, gsi_ctx->msi.num,
 			__gsi_msi_write_msg);
 	if (result) {
@@ -2181,7 +2181,7 @@ static int __gsi_pair_msi(struct gsi_evt_ctx *ctx,
 	props->msi_addr = (uint64_t)gsi_ctx->msi.msg[msi].address_hi << 32 |
 			(uint64_t)gsi_ctx->msi.msg[msi].address_lo;
 
-	GSIDBG("props->intvec = %d, props->msi_addr = %lu\n", props->intvec, props->msi_addr);
+	GSIDBG("props->intvec = %d, props->msi_addr = %llu\n", props->intvec, props->msi_addr);
 
 	if (props->msi_addr == 0)
 		BUG();
@@ -3502,79 +3502,79 @@ void gsi_dump_ch_info(unsigned long chan_hdl)
 	}
 
 	if (chan_hdl >= gsi_ctx->max_ch) {
-		GSIDBG("invalid chan id %u\n", chan_hdl);
+		GSIDBG("invalid chan id %lu\n", chan_hdl);
 		return;
 	}
 
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_CNTXT_0,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d CTX0  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu CTX0  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_CNTXT_1,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d CTX1  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu CTX1  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_CNTXT_2,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d CTX2  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu CTX2  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_CNTXT_3,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d CTX3  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu CTX3  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_CNTXT_4,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d CTX4  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu CTX4  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_CNTXT_5,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d CTX5  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu CTX5  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_CNTXT_6,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d CTX6  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu CTX6  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_CNTXT_7,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d CTX7  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu CTX7  0x%x\n", chan_hdl, val);
 	if (gsi_ctx->per.ver >= GSI_VER_3_0) {
 		val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_CNTXT_8,
 			gsi_ctx->per.ee, chan_hdl);
-		GSIERR("CH%2d CTX8  0x%x\n", chan_hdl, val);
+		GSIERR("CH%2lu CTX8  0x%x\n", chan_hdl, val);
 	}
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_RE_FETCH_READ_PTR,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d REFRP 0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu REFRP 0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_RE_FETCH_WRITE_PTR,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d REFWP 0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu REFWP 0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_QOS,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d QOS   0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu QOS   0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_0,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d SCR0  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu SCR0  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_1,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d SCR1  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu SCR1  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_2,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d SCR2  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu SCR2  0x%x\n", chan_hdl, val);
 	val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_3,
 		gsi_ctx->per.ee, chan_hdl);
-	GSIERR("CH%2d SCR3  0x%x\n", chan_hdl, val);
+	GSIERR("CH%2lu SCR3  0x%x\n", chan_hdl, val);
 	if (gsi_ctx->per.ver >= GSI_VER_3_0) {
 		val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_4,
 			gsi_ctx->per.ee, chan_hdl);
-		GSIERR("CH%2d SCR4  0x%x\n", chan_hdl, val);
+		GSIERR("CH%2lu SCR4  0x%x\n", chan_hdl, val);
 		val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_5,
 			gsi_ctx->per.ee, chan_hdl);
-		GSIERR("CH%2d SCR5  0x%x\n", chan_hdl, val);
+		GSIERR("CH%2lu SCR5  0x%x\n", chan_hdl, val);
 		val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_6,
 			gsi_ctx->per.ee, chan_hdl);
-		GSIERR("CH%2d SCR6  0x%x\n", chan_hdl, val);
+		GSIERR("CH%2lu SCR6  0x%x\n", chan_hdl, val);
 		val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_7,
 			gsi_ctx->per.ee, chan_hdl);
-		GSIERR("CH%2d SCR7  0x%x\n", chan_hdl, val);
+		GSIERR("CH%2lu SCR7  0x%x\n", chan_hdl, val);
 		val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_8,
 			gsi_ctx->per.ee, chan_hdl);
-		GSIERR("CH%2d SCR8  0x%x\n", chan_hdl, val);
+		GSIERR("CH%2lu SCR8  0x%x\n", chan_hdl, val);
 		val = gsihal_read_reg_nk(GSI_EE_n_GSI_CH_k_SCRATCH_9,
 			gsi_ctx->per.ee, chan_hdl);
-		GSIERR("CH%2d SCR9  0x%x\n", chan_hdl, val);
+		GSIERR("CH%2lu SCR9  0x%x\n", chan_hdl, val);
 	}
 
 	return;
@@ -5628,7 +5628,7 @@ int gsi_query_device_msi_addr(u64 *addr)
 	else
 		*addr = 0;
 
-	GSIDBG("Device MSI Addr: 0x%lx", *addr);
+	GSIDBG("Device MSI Addr: 0x%llx", *addr);
     return 0;
 }
 EXPORT_SYMBOL(gsi_query_device_msi_addr);

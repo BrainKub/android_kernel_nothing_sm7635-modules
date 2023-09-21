@@ -113,12 +113,12 @@ static ssize_t rmnet_ll_ipa3_read_stats(struct file *file, char __user *ubuf,
 		"outstanding_pkts=%u\n"
 		"tx_pkt_sent=%u\n"
 		"rx_pkt_rcvd=%u\n"
-		"tx_byte_sent=%lu\n"
-		"rx_byte_rcvd=%lu\n"
+		"tx_byte_sent=%llu\n"
+		"rx_byte_rcvd=%llu\n"
 		"tx_pkt_dropped=%u\n"
 		"rx_pkt_dropped=%u\n"
-		"tx_byte_dropped=%lu\n"
-		"rx_byte_dropped=%lu\n",
+		"tx_byte_dropped=%llu\n"
+		"rx_byte_dropped=%llu\n",
 		skb_queue_len(&rmnet_ll_ipa3_ctx->tx_queue),
 		atomic_read(
 		&rmnet_ll_ipa3_ctx->stats.outstanding_pkts),

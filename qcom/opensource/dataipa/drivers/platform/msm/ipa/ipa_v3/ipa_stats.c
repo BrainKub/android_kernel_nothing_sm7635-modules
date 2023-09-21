@@ -1886,7 +1886,8 @@ static int ipa_tlpd_stats_ioctl_init(void)
 	}
 	ipa_lnx_stats_ioctl_major = MAJOR(device);
 
-	class = class_create(THIS_MODULE, DRIVER_NAME);
+	class = class_create(DRIVER_NAME);
+	
 	if (IS_ERR(class)) {
 		IPA_STATS_ERR(":class_create err.\n");
 		goto class_err;

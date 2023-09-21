@@ -282,7 +282,7 @@ static struct ipahal_stats_init_pyld *ipahal_generate_init_pyld_tethering_v5_0(
 
 	/*
 	 * Note that the address of the offset in the RAM line is of RAM line
-	 *(8-byte address) and not like the address in the BASE register,
+	 *(8-byte address) and not like the address in the "BASE" register,
 	 * which is a byte address
 	 */
 	incremental_offset =
@@ -601,7 +601,7 @@ static struct ipahal_stats_init_pyld *ipahal_generate_init_pyld_flt_rt_v4_5(
 
 	if (num > IPA_MAX_FLT_RT_CNT_INDEX ||
 		num <= 0) {
-		IPAHAL_ERR("num %d not valid\n", num);
+		IPAHAL_ERR("num %ld not valid\n", num);
 		return NULL;
 	}
 	pyld = IPAHAL_MEM_ALLOC(sizeof(*pyld) +

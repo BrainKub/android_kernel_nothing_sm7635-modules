@@ -1728,7 +1728,7 @@ int ipa3_enable_wigig_pipe_i(enum ipa_client_type client)
 						HOLB_MONITOR_MASK, holb_max_cnt,
 						IPA_EE_AP);
 		if (res)
-			IPAERR("Add HOLB monitor failed for gsi ch %d\n",
+			IPAERR("Add HOLB monitor failed for gsi ch %lu\n",
 					ep->gsi_chan_hdl);
 	}
 

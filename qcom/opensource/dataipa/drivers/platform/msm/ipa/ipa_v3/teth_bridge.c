@@ -246,7 +246,7 @@ int ipa3_teth_bridge_driver_init(void)
 	if (!ipa3_teth_ctx)
 		return -ENOMEM;
 
-	ipa3_teth_ctx->class = class_create(THIS_MODULE, TETH_BRIDGE_DRV_NAME);
+	ipa3_teth_ctx->class = class_create(TETH_BRIDGE_DRV_NAME);
 
 	res = alloc_chrdev_region(&ipa3_teth_ctx->dev_num, 0, 1,
 				  TETH_BRIDGE_DRV_NAME);
