@@ -722,10 +722,10 @@ void rmnet_get_packets(void *port, u64 *rx, u64 *tx)
 		for_each_possible_cpu(cpu) {
 			ps = per_cpu_ptr(priv->pcpu_stats, cpu);
 			do {
-				start = u64_stats_fetch_begin_irq(&ps->syncp);
+				start = u64_stats_fetch_begin(&ps->syncp);
 				*tx += ps->stats.tx_pkts;
 				*rx += ps->stats.rx_pkts;
-			} while (u64_stats_fetch_retry_irq(&ps->syncp, start));
+			} while (u64_stats_fetch_retry(&ps->syncp, start));
 		}
 	}
 	rcu_read_unlock();

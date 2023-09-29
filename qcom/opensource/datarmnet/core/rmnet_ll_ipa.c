@@ -73,7 +73,7 @@ static void rmnet_ll_ipa_rx(void *arg, void *rx_data)
 	}
 
 	if (unlikely(arg != (void *)(uintptr_t)(IPA_RMNET_LL_RECEIVE))) {
-		pr_err("%s: invalid arg %u\n", __func__, (uintptr_t)arg);
+		pr_err("%s: invalid arg %lu\n", __func__, (uintptr_t)arg);
 		return;
 	}
 
