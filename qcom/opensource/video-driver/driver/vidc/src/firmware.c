@@ -7,9 +7,15 @@
 #include <linux/of_address.h>
 #include <linux/devcoredump.h>
 #include <linux/firmware.h>
-#include <linux/qcom_scm.h>
+#include <linux/version.h>
 #include <linux/soc/qcom/mdt_loader.h>
 #include <linux/soc/qcom/smem.h>
+
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+#include <linux/firmware/qcom/qcom_scm.h>
+#else
+#include <linux/qcom_scm.h>
+#endif
 
 #include "msm_vidc_core.h"
 #include "msm_vidc_debug.h"
