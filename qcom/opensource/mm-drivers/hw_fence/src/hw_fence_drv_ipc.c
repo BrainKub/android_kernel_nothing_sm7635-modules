@@ -280,7 +280,7 @@ static int _hw_fence_ipcc_init_map_with_configurable_clients(struct hw_fence_dri
 		for (j = 0; j < clients_num; j++) {
 			/* this should never happen if drv_data->clients_num is correct */
 			if (map_idx >= drv_data->clients_num) {
-				HWFNC_ERR("%s clients_num:%lu exceeds drv_data->clients_num:%lu\n",
+				HWFNC_ERR("%s clients_num:%d exceeds drv_data->clients_num:%u\n",
 					drv_data->hw_fence_client_types[client_type].name,
 					clients_num, drv_data->clients_num);
 				return -EINVAL;
@@ -381,7 +381,7 @@ int hw_fence_ipcc_enable_dpu_signaling(struct hw_fence_driver_data *drv_data)
 		return -1;
 	}
 
-	HWFNC_DBG_H("ipcc_io_mem:0x%lx\n", (u64)drv_data->ipcc_io_mem);
+	HWFNC_DBG_H("ipcc_io_mem:0x%llx\n", (u64)drv_data->ipcc_io_mem);
 
 	HWFNC_DBG_H("Initialize dpu signals\n");
 	/* Enable Client-Signal pairs from DPU (25) to APPS(NS) (8) */
@@ -402,7 +402,7 @@ int hw_fence_ipcc_enable_dpu_signaling(struct hw_fence_driver_data *drv_data)
 			val = 0x00000001;
 			ptr = IPC_PROTOCOLp_CLIENTc_CONFIG(drv_data->ipcc_io_mem,
 				drv_data->protocol_id, hw_fence_client->ipc_client_id_phys);
-			HWFNC_DBG_H("Write:0x%x to RegOffset:0x%lx\n", val, (u64)ptr);
+			HWFNC_DBG_H("Write:0x%x to RegOffset:0x%llx\n", val, (u64)ptr);
 			writel_relaxed(val, ptr);
 
 			protocol_enabled = true;
@@ -418,7 +418,7 @@ int hw_fence_ipcc_enable_dpu_signaling(struct hw_fence_driver_data *drv_data)
 				(hw_fence_client->ipc_signal_id & 0xFFFF);
 		ptr = IPC_PROTOCOLp_CLIENTc_RECV_SIGNAL_ENABLE(drv_data->ipcc_io_mem,
 			drv_data->protocol_id, hw_fence_client->ipc_client_id_phys);
-		HWFNC_DBG_H("Write:0x%x to RegOffset:0x%lx\n", val, (u64)ptr);
+		HWFNC_DBG_H("Write:0x%x to RegOffset:0x%llx\n", val, (u64)ptr);
 		writel_relaxed(val, ptr);
 	}
 

@@ -62,7 +62,7 @@ static int init_hw_fences_queues(struct hw_fence_driver_data *drv_data,
 	case HW_FENCE_MEM_RESERVE_CLIENT_QUEUE:
 		if (client_id >= drv_data->clients_num ||
 				!drv_data->hw_fence_client_queue_size[client_id].type) {
-			HWFNC_ERR("Invalid client_id:%d for clients_num:%lu\n", client_id,
+			HWFNC_ERR("Invalid client_id:%d for clients_num:%u\n", client_id,
 				drv_data->clients_num);
 			return -EINVAL;
 		}
@@ -89,7 +89,7 @@ static int init_hw_fences_queues(struct hw_fence_driver_data *drv_data,
 		HWFNC_ERR("Failed to reserve id:%d client %d\n", mem_reserve_id, client_id);
 		return -ENOMEM;
 	}
-	HWFNC_DBG_INIT("phys:0x%x ptr:0x%pK size:%d\n", phys, ptr, size);
+	HWFNC_DBG_INIT("phys:0x%llx ptr:0x%pK size:%d\n", phys, ptr, size);
 
 	/* Populate Memory descriptor with address */
 	mem_descriptor->virtual_addr = ptr;
@@ -145,7 +145,7 @@ static int init_hw_fences_queues(struct hw_fence_driver_data *drv_data,
 				hfi_queue_header->tx_wm = txq_idx_start;
 			hfi_queue_header->read_index = txq_idx_start;
 			hfi_queue_header->write_index = txq_idx_start;
-			HWFNC_DBG_INIT("init:TX_QUEUE client:%d rd_idx=%s=%lu\n", client_id,
+			HWFNC_DBG_INIT("init:TX_QUEUE client:%d rd_idx=%s=%u\n", client_id,
 				skip_txq_wr_idx ? "wr_idx=tx_wm" : "wr_idx",
 				txq_idx_start);
 		}
@@ -158,7 +158,7 @@ static int init_hw_fences_queues(struct hw_fence_driver_data *drv_data,
 		queues[i].pa_queue = qphys;
 		queues[i].va_header = hfi_queue_header;
 		queues[i].q_size_bytes = queue_size;
-		HWFNC_DBG_INIT("init:%s client:%d q[%d] va=0x%pK pa=0x%x hd:0x%pK sz:%u pkt:%d\n",
+		HWFNC_DBG_INIT("init:%s client:%d q[%d] va=0x%pK pa=0x%llx hd:0x%pK sz:%u pkt:%d\n",
 			hfi_queue_header->type == HW_FENCE_TX_QUEUE ? "TX_QUEUE" : "RX_QUEUE",
 			client_id, i, queues[i].va_queue, queues[i].pa_queue, queues[i].va_header,
 			queues[i].q_size_bytes, payload_size);
@@ -171,7 +171,7 @@ static int init_hw_fences_queues(struct hw_fence_driver_data *drv_data,
 		} else {
 			queues[i].rd_wr_idx_factor = 1;
 		}
-		HWFNC_DBG_INIT("rd_wr_idx_start:%lu rd_wr_idx_factor:%lu skip_wr_idx:%s\n",
+		HWFNC_DBG_INIT("rd_wr_idx_start:%u rd_wr_idx_factor:%u skip_wr_idx:%s\n",
 			queues[i].rd_wr_idx_start, queues[i].rd_wr_idx_factor,
 			queues[i].skip_wr_idx ? "true" : "false");
 
@@ -199,7 +199,7 @@ static void _translate_queue_indexes_custom_to_default(struct msm_hw_fence_queue
 	if (REQUIRES_IDX_TRANSLATION(queue)) {
 		*read_idx = IDX_TRANSLATE_CUSTOM_TO_DEFAULT(queue, *read_idx);
 		*write_idx = IDX_TRANSLATE_CUSTOM_TO_DEFAULT(queue, *write_idx);
-		HWFNC_DBG_Q("rd_idx_u32:%lu wr_idx_u32:%lu rd_wr_idx start:%lu factor:%lu\n",
+		HWFNC_DBG_Q("rd_idx_u32:%u wr_idx_u32:%u rd_wr_idx start:%u factor:%u\n",
 			*read_idx, *write_idx, queue->rd_wr_idx_start, queue->rd_wr_idx_factor);
 	}
 }
@@ -210,13 +210,13 @@ int hw_fence_read_queue(struct msm_hw_fence_client *hw_fence_client,
 	struct msm_hw_fence_queue *queue;
 
 	if (queue_type >= HW_FENCE_CLIENT_QUEUES || !hw_fence_client || !payload) {
-		HWFNC_ERR("Invalid queue type:%s hw_fence_client:0x%pK payload:0x%pK\n", queue_type,
+		HWFNC_ERR("Invalid queue type:%d hw_fence_client:0x%pK payload:0x%pK\n", queue_type,
 			hw_fence_client, payload);
 		return -EINVAL;
 	}
 
 	queue = &hw_fence_client->queues[queue_type];
-	HWFNC_DBG_Q("read client:%lu queue:0x%pK\n", hw_fence_client->client_id, queue);
+	HWFNC_DBG_Q("read client:%d queue:0x%pK\n", hw_fence_client->client_id, queue);
 
 	return hw_fence_read_queue_helper(queue, payload);
 }
@@ -234,7 +234,7 @@ int hw_fence_read_queue_helper(struct msm_hw_fence_queue *queue,
 
 	q_size_u32 = (queue->q_size_bytes / sizeof(u32));
 	payload_size_u32 = (sizeof(struct msm_hw_fence_queue_payload) / sizeof(u32));
-	HWFNC_DBG_Q("sizeof payload:%d\n", sizeof(struct msm_hw_fence_queue_payload));
+	HWFNC_DBG_Q("sizeof payload:%lu\n", sizeof(struct msm_hw_fence_queue_payload));
 
 	if (!hfi_header || !payload) {
 		HWFNC_ERR("Invalid queue\n");
@@ -262,7 +262,7 @@ int hw_fence_read_queue_helper(struct msm_hw_fence_queue *queue,
 	/* Move the pointer where we need to read and cast it */
 	read_ptr = ((u32 *)queue->va_queue + read_idx);
 	read_ptr_payload = (struct msm_hw_fence_queue_payload *)read_ptr;
-	HWFNC_DBG_Q("read_ptr:0x%pK queue: va=0x%pK pa=0x%pK read_ptr_payload:0x%pK\n", read_ptr,
+	HWFNC_DBG_Q("read_ptr:0x%pK queue: va=0x%pK pa=0x%llx read_ptr_payload:0x%pK\n", read_ptr,
 		queue->va_queue, queue->pa_queue, read_ptr_payload);
 
 	/* Calculate the index after the read */
@@ -279,7 +279,7 @@ int hw_fence_read_queue_helper(struct msm_hw_fence_queue *queue,
 	/* translate to_read_idx to custom indexing with offset */
 	if (REQUIRES_IDX_TRANSLATION(queue)) {
 		to_read_idx = IDX_TRANSLATE_DEFAULT_TO_CUSTOM(queue, to_read_idx);
-		HWFNC_DBG_Q("translated to_read_idx:%lu rd_wr_idx start:%lu factor:%lu\n",
+		HWFNC_DBG_Q("translated to_read_idx:%u rd_wr_idx start:%u factor:%u\n",
 			to_read_idx, queue->rd_wr_idx_start, queue->rd_wr_idx_factor);
 	}
 
@@ -349,7 +349,7 @@ int hw_fence_update_queue(struct hw_fence_driver_data *drv_data,
 	int ret = 0;
 
 	if (queue_type >= hw_fence_client->queues_num) {
-		HWFNC_ERR("Invalid queue type:%d client_id:%d q_num:%lu\n", queue_type,
+		HWFNC_ERR("Invalid queue type:%d client_id:%d q_num:%d\n", queue_type,
 			hw_fence_client->client_id, hw_fence_client->queues_num);
 		return -EINVAL;
 	}
@@ -409,13 +409,13 @@ int hw_fence_update_queue(struct hw_fence_driver_data *drv_data,
 	/* Move the pointer where we need to write and cast it */
 	q_payload_write_ptr = ((u32 *)queue->va_queue + write_idx);
 	write_ptr_payload = (struct msm_hw_fence_queue_payload *)q_payload_write_ptr;
-	HWFNC_DBG_Q("q_payload_write_ptr:0x%pK queue: va=0x%pK pa=0x%pK write_ptr_payload:0x%pK\n",
+	HWFNC_DBG_Q("q_payload_write_ptr:0x%pK queue: va=0x%pK pa=0x%llx write_ptr_payload:0x%pK\n",
 		q_payload_write_ptr, queue->va_queue, queue->pa_queue, write_ptr_payload);
 
 	/* calculate the index after the write */
 	to_write_idx = write_idx + payload_size_u32;
 
-	HWFNC_DBG_Q("to_write_idx:%d write_idx:%d payload_size:%u\n", to_write_idx, write_idx,
+	HWFNC_DBG_Q("to_write_idx:%u write_idx:%u payload_size:%u\n", to_write_idx, write_idx,
 		payload_size_u32);
 	HWFNC_DBG_L("client_id:%d update %s hash:%llu ctx_id:%llu seqno:%llu flags:%llu error:%u\n",
 		hw_fence_client->client_id, _get_queue_type(queue_type),
@@ -432,7 +432,7 @@ int hw_fence_update_queue(struct hw_fence_driver_data *drv_data,
 	/* translate to_write_idx to custom indexing with offset */
 	if (REQUIRES_IDX_TRANSLATION(queue)) {
 		to_write_idx = IDX_TRANSLATE_DEFAULT_TO_CUSTOM(queue, to_write_idx);
-		HWFNC_DBG_Q("translated to_write_idx:%lu rd_wr_idx start:%lu factor:%lu\n",
+		HWFNC_DBG_Q("translated to_write_idx:%d rd_wr_idx start:%d factor:%d\n",
 			to_write_idx, queue->rd_wr_idx_start, queue->rd_wr_idx_factor);
 	}
 
@@ -498,7 +498,7 @@ int hw_fence_update_existing_txq_payload(struct hw_fence_driver_data *drv_data,
 	}
 
 	first_payload = (struct msm_hw_fence_queue_payload *)((u32 *)queue->va_queue + read_idx);
-	HWFNC_DBG_Q("client:%d txq: va=0x%pK pa=0x%pK idx:%d ptr_payload:0x%pK\n",
+	HWFNC_DBG_Q("client:%d txq: va=0x%pK pa=0x%llx idx:%d ptr_payload:0x%pK\n",
 		hw_fence_client->client_id, queue->va_queue, queue->pa_queue, read_idx,
 		first_payload);
 
@@ -520,7 +520,7 @@ int hw_fence_update_existing_txq_payload(struct hw_fence_driver_data *drv_data,
 
 		second_payload = (struct msm_hw_fence_queue_payload *)
 			((u32 *)queue->va_queue + second_idx);
-		HWFNC_DBG_Q("client:%d txq: va=0x%pK pa=0x%pK idx:%d ptr_payload:0x%pK\n",
+		HWFNC_DBG_Q("client:%d txq: va=0x%pK pa=0x%llx idx:%d ptr_payload:0x%pK\n",
 			hw_fence_client->client_id, queue->va_queue, queue->pa_queue, second_idx,
 			second_payload);
 
@@ -564,7 +564,7 @@ static int init_global_locks(struct hw_fence_driver_data *drv_data)
 		HWFNC_ERR("Failed to reserve clients locks mem %d\n", ret);
 		return -ENOMEM;
 	}
-	HWFNC_DBG_INIT("phys:0x%x ptr:0x%pK size:%d\n", phys, ptr, size);
+	HWFNC_DBG_INIT("phys:0x%llx ptr:0x%pK size:%d\n", phys, ptr, size);
 
 	/* Populate Memory descriptor with address */
 	mem_descriptor = &drv_data->clients_locks_mem_desc;
@@ -594,7 +594,7 @@ static int init_hw_fences_table(struct hw_fence_driver_data *drv_data)
 		HWFNC_ERR("Failed to reserve table mem %d\n", ret);
 		return -ENOMEM;
 	}
-	HWFNC_DBG_INIT("phys:0x%x ptr:0x%pK size:%d\n", phys, ptr, size);
+	HWFNC_DBG_INIT("phys:0x%llx ptr:0x%pK size:%d\n", phys, ptr, size);
 
 	/* Populate Memory descriptor with address */
 	mem_descriptor = &drv_data->hw_fences_mem_desc;
@@ -629,8 +629,8 @@ static int init_hw_fences_events(struct hw_fence_driver_data *drv_data)
 	}
 	drv_data->events = (struct msm_hw_fence_event *)ptr;
 	drv_data->total_events = size / sizeof(struct msm_hw_fence_event);
-	HWFNC_DBG_INIT("events:0x%pK total_events:%u event_sz:%u total_size:%u\n", drv_data->events,
-		drv_data->total_events, sizeof(struct msm_hw_fence_event), size);
+	HWFNC_DBG_INIT("events:0x%pK total_events:%u event_sz:%lu total_size:%u\n",
+		drv_data->events, drv_data->total_events, sizeof(struct msm_hw_fence_event), size);
 
 	return 0;
 }
@@ -914,7 +914,7 @@ static inline struct msm_hw_fence *_get_hw_fence(u32 table_total_entries,
 	u64 hash)
 {
 	if (hash >= table_total_entries) {
-		HWFNC_ERR("hash:%llu out of max range:%llu\n",
+		HWFNC_ERR("hash:%llu out of max range:%u\n",
 			hash, table_total_entries);
 		return NULL;
 	}
@@ -978,7 +978,7 @@ static void  _reserve_hw_fence(struct hw_fence_driver_data *drv_data,
 	hw_fence->fence_create_time = hw_fence_get_qtime(drv_data);
 	hw_fence->debug_refcount++;
 
-	HWFNC_DBG_LUT("Reserved fence client:%d ctx:%llu seq:%llu hash:%llu\n",
+	HWFNC_DBG_LUT("Reserved fence client:%d ctx:%llu seq:%llu hash:%u\n",
 		client_id, context, seqno, hash);
 }
 
@@ -992,7 +992,7 @@ static void  _unreserve_hw_fence(struct hw_fence_driver_data *drv_data,
 	/* unreserve this HW fence */
 	hw_fence->valid = 0;
 
-	HWFNC_DBG_LUT("Unreserved fence client:%d ctx:%llu seq:%llu hash:%llu\n",
+	HWFNC_DBG_LUT("Unreserved fence client:%d ctx:%llu seq:%llu hash:%u\n",
 		client_id, context, seqno, hash);
 }
 
@@ -1014,7 +1014,7 @@ static void  _reserve_join_fence(struct hw_fence_driver_data *drv_data,
 
 	hw_fence->pending_child_cnt = pending_child_cnt;
 
-	HWFNC_DBG_LUT("Reserved join fence client:%d ctx:%llu seq:%llu hash:%llu\n",
+	HWFNC_DBG_LUT("Reserved join fence client:%d ctx:%llu seq:%llu hash:%u\n",
 		client_id, context, seqno, hash);
 }
 
@@ -1028,7 +1028,7 @@ static void  _fence_found(struct hw_fence_driver_data *drv_data,
 	 * Currently just keeping this function for debugging purposes, can be removed
 	 * in final versions
 	 */
-	HWFNC_DBG_LUT("Found fence client:%d ctx:%llu seq:%llu hash:%llu\n",
+	HWFNC_DBG_LUT("Found fence client:%d ctx:%llu seq:%llu hash:%u\n",
 		client_id, context, seqno, hash);
 }
 
@@ -1129,7 +1129,7 @@ struct msm_hw_fence *_hw_fence_lookup_and_process(struct hw_fence_driver_data *d
 				wmb();
 			}
 
-			HWFNC_DBG_L("client_id:%lu op:%s ctx:%llu seqno:%llu hash:%llu step:%llu\n",
+			HWFNC_DBG_L("client_id:%u op:%s ctx:%llu seqno:%llu hash:%llu step:%llu\n",
 				client_id, _get_op_mode(op_code), context, seqno, *hash, step);
 
 			hw_fence_found = true;
@@ -1178,7 +1178,7 @@ int hw_fence_create(struct hw_fence_driver_data *drv_data,
 	/* allocate hw fence in table */
 	if (!_hw_fence_lookup_and_process(drv_data, hw_fences_tbl,
 		context, seqno, client_id, 0, HW_FENCE_LOOKUP_OP_CREATE, hash)) {
-		HWFNC_ERR("Fail to create fence client:%lu ctx:%llu seqno:%llu\n",
+		HWFNC_ERR("Fail to create fence client:%u ctx:%llu seqno:%llu\n",
 			client_id, context, seqno);
 		ret = -EINVAL;
 	}
@@ -1207,7 +1207,7 @@ int hw_fence_destroy(struct hw_fence_driver_data *drv_data,
 
 	/* remove hw fence from table*/
 	if (_hw_fence_cleanup(drv_data, hw_fences_tbl, client_id, context, seqno)) {
-		HWFNC_ERR("Fail destroying fence client:%lu ctx:%llu seqno:%llu\n",
+		HWFNC_ERR("Fail destroying fence client:%u ctx:%llu seqno:%llu\n",
 			client_id, context, seqno);
 		ret = -EINVAL;
 	}
@@ -1225,12 +1225,12 @@ int hw_fence_destroy_with_hash(struct hw_fence_driver_data *drv_data,
 
 	hw_fence = _get_hw_fence(drv_data->hw_fence_table_entries, hw_fences_tbl, hash);
 	if (!hw_fence) {
-		HWFNC_ERR("bad hw fence hash:%llu client:%lu\n", hash, client_id);
+		HWFNC_ERR("bad hw fence hash:%llu client:%u\n", hash, client_id);
 		return -EINVAL;
 	}
 
 	if (hw_fence->fence_allocator != client_id) {
-		HWFNC_ERR("client:%lu cannot destroy fence hash:%llu fence_allocator:%lu\n",
+		HWFNC_ERR("client:%u cannot destroy fence hash:%llu fence_allocator:%u\n",
 			client_id, hash, hw_fence->fence_allocator);
 		return -EINVAL;
 	}
@@ -1238,7 +1238,7 @@ int hw_fence_destroy_with_hash(struct hw_fence_driver_data *drv_data,
 	/* remove hw fence from table*/
 	if (_hw_fence_cleanup(drv_data, hw_fences_tbl, client_id, hw_fence->ctx_id,
 			hw_fence->seq_id)) {
-		HWFNC_ERR("Fail destroying fence client:%lu ctx:%llu seqno:%llu hash:%llu\n",
+		HWFNC_ERR("Fail destroying fence client:%u ctx:%llu seqno:%llu hash:%llu\n",
 			client_id, hw_fence->ctx_id, hw_fence->seq_id, hash);
 		ret = -EINVAL;
 	}
@@ -1277,12 +1277,12 @@ static struct msm_hw_fence *_hw_fence_process_join_fence(struct hw_fence_driver_
 		join_fence = _hw_fence_lookup_and_process(drv_data, hw_fences_tbl, context,
 			seqno, client_id, pending_child_cnt, HW_FENCE_LOOKUP_OP_CREATE_JOIN, hash);
 		if (!join_fence)
-			HWFNC_ERR("Fail to create join fence client:%lu ctx:%llu seqno:%llu\n",
+			HWFNC_ERR("Fail to create join fence client:%u ctx:%llu seqno:%llu\n",
 				client_id, context, seqno);
 	} else {
 		/* destroy the fence */
 		if (_hw_fence_cleanup(drv_data, hw_fences_tbl, client_id, context, seqno))
-			HWFNC_ERR("Fail destroying join fence client:%lu ctx:%llu seqno:%llu\n",
+			HWFNC_ERR("Fail destroying join fence client:%u ctx:%llu seqno:%llu\n",
 				client_id, context, seqno);
 	}
 
@@ -1301,7 +1301,7 @@ struct msm_hw_fence *msm_hw_fence_find(struct hw_fence_driver_data *drv_data,
 	hw_fence = _hw_fence_lookup_and_process(drv_data, hw_fences_tbl, context,
 		seqno, client_id, 0, HW_FENCE_LOOKUP_OP_FIND_FENCE, hash);
 	if (!hw_fence)
-		HWFNC_ERR("Fail to find hw fence client:%lu ctx:%llu seqno:%llu\n",
+		HWFNC_ERR("Fail to find hw fence client:%u ctx:%llu seqno:%llu\n",
 			client_id, context, seqno);
 
 	return hw_fence;
@@ -1363,7 +1363,7 @@ static void _cleanup_join_and_child_fences(struct hw_fence_driver_data *drv_data
 		hw_fence_child = msm_hw_fence_find(drv_data, hw_fence_client, child_fence->context,
 			child_fence->seqno, &hash);
 		if (!hw_fence_child) {
-			HWFNC_ERR("Cannot cleanup child fence context:%lu seqno:%lu hash:%lu\n",
+			HWFNC_ERR("Cannot cleanup child fence context:%llu seqno:%llu hash:%llu\n",
 				child_fence->context, child_fence->seqno, hash);
 
 			/*
@@ -1463,7 +1463,7 @@ int hw_fence_process_fence_array(struct hw_fence_driver_data *drv_data,
 		hw_fence_child = msm_hw_fence_find(drv_data, hw_fence_client, child_fence->context,
 			child_fence->seqno, &hash);
 		if (!hw_fence_child) {
-			HWFNC_ERR("Cannot find child fence context:%lu seqno:%lu hash:%lu\n",
+			HWFNC_ERR("Cannot find child fence context:%llu seqno:%llu hash:%llu\n",
 				child_fence->context, child_fence->seqno, hash);
 			ret = -EINVAL;
 			goto error_array;
@@ -1610,7 +1610,7 @@ int hw_fence_process_fence(struct hw_fence_driver_data *drv_data,
 	}
 	/* fence must be hw-fence */
 	if (!test_bit(MSM_HW_FENCE_FLAG_ENABLED_BIT, &fence->flags)) {
-		HWFNC_ERR("DMA Fence in is not a HW Fence flags:0x%llx\n", fence->flags);
+		HWFNC_ERR("DMA Fence in is not a HW Fence flags:0x%lx\n", fence->flags);
 		return -EINVAL;
 	}
 
@@ -1666,7 +1666,7 @@ void hw_fence_utils_reset_queues(struct hw_fence_driver_data *drv_data,
 		hfi_header->tx_wm = wr_idx;
 	writel_relaxed(wr_idx, &hfi_header->read_index);
 	wmb(); /* make sure data is updated after write the index*/
-	HWFNC_DBG_Q("update tx queue %s to match write_index:%lu\n",
+	HWFNC_DBG_Q("update tx queue %s to match write_index:%u\n",
 		queue->skip_wr_idx ? "read_index=tx_wm" : "read_index", wr_idx);
 
 	/* For the client RxQ: set the write-index same as last read done by the client */
@@ -1693,7 +1693,7 @@ void hw_fence_utils_reset_queues(struct hw_fence_driver_data *drv_data,
 
 		/* unlock */
 		GLOBAL_ATOMIC_STORE(drv_data, &drv_data->client_lock_tbl[lock_idx], 0);
-		HWFNC_DBG_Q("update rx queue write_index to match read_index:%lu\n", rd_idx);
+		HWFNC_DBG_Q("update rx queue write_index to match read_index:%u\n", rd_idx);
 	}
 }
 
@@ -1706,7 +1706,7 @@ int hw_fence_utils_cleanup_fence(struct hw_fence_driver_data *drv_data,
 
 	GLOBAL_ATOMIC_STORE(drv_data, &hw_fence->lock, 1); /* lock */
 	if (hw_fence->wait_client_mask & BIT(hw_fence_client->client_id)) {
-		HWFNC_DBG_H("clearing client:%d wait bit for fence: ctx:%d seqno:%d\n",
+		HWFNC_DBG_H("clearing client:%d wait bit for fence: ctx:%llu seqno:%llu\n",
 			hw_fence_client->client_id, hw_fence->ctx_id,
 			hw_fence->seq_id);
 		hw_fence->wait_client_mask &= ~BIT(hw_fence_client->client_id);
@@ -1728,7 +1728,7 @@ int hw_fence_utils_cleanup_fence(struct hw_fence_driver_data *drv_data,
 		ret = hw_fence_destroy(drv_data, hw_fence_client,
 			hw_fence->ctx_id, hw_fence->seq_id);
 		if (ret) {
-			HWFNC_ERR("Error destroying HW fence: ctx:%d seqno:%d\n",
+			HWFNC_ERR("Error destroying HW fence: ctx:%llu seqno:%llu\n",
 				hw_fence->ctx_id, hw_fence->seq_id);
 		}
 	}

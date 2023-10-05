@@ -92,7 +92,7 @@ void *msm_hw_fence_register(enum hw_fence_client_id client_id_ext,
 	hw_fence_client->queues_num = hw_fence_utils_get_queues_num(hw_fence_drv_data, client_id);
 	if (!hw_fence_client->queues_num || (hw_fence_client->update_rxq &&
 			hw_fence_client->queues_num < HW_FENCE_CLIENT_QUEUES)) {
-		HWFNC_ERR("client:%d invalid q_num:%lu for updates_rxq:%s\n", client_id,
+		HWFNC_ERR("client:%d invalid q_num:%d for updates_rxq:%s\n", client_id,
 			hw_fence_client->queues_num,
 			hw_fence_client->update_rxq ? "true" : "false");
 		ret = -EINVAL;
@@ -243,7 +243,7 @@ int msm_hw_fence_destroy(void *client_handle,
 
 	/* This Fence not a HW-Fence */
 	if (!test_bit(MSM_HW_FENCE_FLAG_ENABLED_BIT, &fence->flags)) {
-		HWFNC_ERR("DMA Fence is not a HW Fence flags:0x%llx\n", fence->flags);
+		HWFNC_ERR("DMA Fence is not a HW Fence flags:0x%lx\n", fence->flags);
 		return -EINVAL;
 	}
 
@@ -437,7 +437,7 @@ int msm_hw_fence_update_txq(void *client_handle, u64 handle, u64 flags, u32 erro
 		return -EAGAIN;
 	} else if (IS_ERR_OR_NULL(client_handle) ||
 			(handle >= hw_fence_drv_data->hw_fences_tbl_cnt)) {
-		HWFNC_ERR("Invalid handle:%d or client handle:%d max:%d\n", handle,
+		HWFNC_ERR("Invalid handle:%llu or client handle:%d max:%d\n", handle,
 			IS_ERR_OR_NULL(client_handle), hw_fence_drv_data->hw_fences_tbl_cnt);
 		return -EINVAL;
 	}
@@ -464,11 +464,11 @@ int msm_hw_fence_update_txq_error(void *client_handle, u64 handle, u32 error, u3
 		return -EAGAIN;
 	} else if (IS_ERR_OR_NULL(client_handle) ||
 			(handle >= hw_fence_drv_data->hw_fences_tbl_cnt) || !error) {
-		HWFNC_ERR("Invalid client_handle:0x%pK or fence handle:%d max:%d or error:%d\n",
+		HWFNC_ERR("Invalid client_handle:0x%pK or fence handle:%llu max:%d or error:%d\n",
 			client_handle, handle, hw_fence_drv_data->hw_fences_tbl_cnt, error);
 		return -EINVAL;
 	} else if (update_flags != MSM_HW_FENCE_UPDATE_ERROR_WITH_MOVE) {
-		HWFNC_ERR("invalid flags:0x%x expected:0x%x no support of in-place error update\n",
+		HWFNC_ERR("invalid flags:0x%x expected:0x%lx no support of in-place error update\n",
 			update_flags, MSM_HW_FENCE_UPDATE_ERROR_WITH_MOVE);
 		return -EINVAL;
 	}
@@ -623,7 +623,7 @@ int msm_hw_fence_dump_fence(void *client_handle, struct dma_fence *fence)
 		HWFNC_ERR("Invalid client handle:%d\n", IS_ERR_OR_NULL(client_handle));
 		return -EINVAL;
 	} else if (!test_bit(MSM_HW_FENCE_FLAG_ENABLED_BIT, &fence->flags)) {
-		HWFNC_ERR("DMA Fence is not a HW Fence ctx:%llu seqno:%llu flags:0x%llx\n",
+		HWFNC_ERR("DMA Fence is not a HW Fence ctx:%llu seqno:%llu flags:0x%lx\n",
 			fence->context, fence->seqno, fence->flags);
 		return -EINVAL;
 	}
