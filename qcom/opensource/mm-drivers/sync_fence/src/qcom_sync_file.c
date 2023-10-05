@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
  * Copyright (c) 2021, The Linux Foundation. All rights reserved.
  */
 
@@ -21,6 +21,7 @@
 #include <linux/sync_file.h>
 #include <uapi/sync_fence/qcom_sync_file.h>
 #include <linux/soc/qcom/qcom_sync_file.h>
+#include <linux/version.h>
 
 #define CLASS_NAME	"sync"
 #define DRV_NAME	"spec_sync"
@@ -378,7 +379,7 @@ static int spec_sync_bind_array(struct fence_bind_data *sync_bind_info)
 	for (i = 0; i < num_fences; i++) {
 		if (!(fence_array->fences[i]->context == DUMMY_CONTEXT &&
 			fence_array->fences[i]->seqno == DUMMY_SEQNO)) {
-			pr_err("fence array already populated, spec fd:%d status:%d flags:0x%x\n",
+			pr_err("fence array already populated, spec fd:%d status:%d flags:0x%lx\n",
 				sync_bind_info->out_bind_fd, dma_fence_get_status(fence),
 				fence->flags);
 			ret = -EINVAL;
@@ -491,7 +492,11 @@ static int spec_sync_register_device(void)
 	struct dummy_spec_fence *dummy_fence_p = NULL;
 	int ret;
 
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+	sync_dev.dev_class = class_create(CLASS_NAME);
+#else
 	sync_dev.dev_class = class_create(THIS_MODULE, CLASS_NAME);
+#endif
 	if (sync_dev.dev_class == NULL) {
 		pr_err("%s: class_create fail.\n", __func__);
 		goto res_err;
