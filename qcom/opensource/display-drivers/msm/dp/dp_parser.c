@@ -738,7 +738,7 @@ static void dp_parser_qos(struct dp_parser *parser)
 	parser->qos_cpu_mask = mask;
 	parser->qos_cpu_latency = latency;
 
-	DP_DEBUG("qos parsing successful. mask:%x latency:%ld\n", mask, latency);
+	DP_DEBUG("qos parsing successful. mask:%x latency:%u\n", mask, latency);
 }
 
 static void dp_parser_fec(struct dp_parser *parser)

@@ -265,7 +265,7 @@ static inline void convert_to_drm_mode(const struct dp_display_mode *dp_mode,
 {
 }
 
-static int dp_connector_install_properties(void *display,
+static inline int dp_connector_install_properties(void *display,
 		struct drm_connector *conn)
 {
 	return 0;

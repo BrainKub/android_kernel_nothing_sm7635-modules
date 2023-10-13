@@ -617,7 +617,7 @@ int sde_fence_update_hw_fences_txq(struct sde_fence_context *ctx, bool vid_mode,
 		/* avoid updating txq more than once and avoid repeating the same fence twice */
 		txq_updated = fc->txq_updated_fence = true;
 
-		SDE_DEBUG("update txq fence:0x%pK ctx:%llu seqno:%llu f:0x%llx ctl:%d vid:%d\n",
+		SDE_DEBUG("update txq fence:0x%pK ctx:%llu seqno:%llu f:0x%lx ctl:%d vid:%d\n",
 			fence, fence->context, fence->seqno, fence->flags, ctl_id, vid_mode);
 
 		/* We will update TxQ one time per frame */
@@ -763,7 +763,7 @@ void sde_fence_dump(struct dma_fence *fence)
 		fence->ops->timeline_value_str(fence, timeline_str, TIMELINE_VAL_LENGTH);
 
 	SDE_ERROR(
-		"fence drv name:%s timeline name:%s seqno:0x%llx timeline:%s signaled:0x%x status:%d flags:0x%x\n",
+		"fence drv name:%s timeline name:%s seqno:0x%llx timeline:%s signaled:0x%x status:%d flags:0x%lx\n",
 		fence->ops->get_driver_name(fence),
 		fence->ops->get_timeline_name(fence),
 		fence->seqno, timeline_str,

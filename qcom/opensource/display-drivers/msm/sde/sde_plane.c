@@ -1692,7 +1692,7 @@ static int sde_plane_rot_atomic_check(struct drm_plane *plane,
 			!psde->pipe_sblk->in_rot_format_list ||
 			!(psde->features & BIT(SDE_SSPP_TRUE_INLINE_ROT))) {
 			SDE_ERROR_PLANE(psde,
-			    "wrong config rt:%d/%d nrt:%d fmt:%d h:%d 0x%x\n",
+			    "wrong config rt:%d/%d nrt:%d fmt:%d h:%d 0x%llx\n",
 				!psde->pipe_sblk->in_rot_maxdwnscale_rt_num,
 				!psde->pipe_sblk->in_rot_maxdwnscale_rt_denom,
 				!psde->pipe_sblk->in_rot_maxdwnscale_nrt,
@@ -2441,12 +2441,12 @@ static int _sde_atomic_check_pre_downscale(struct sde_plane *psde,
 
 	if (pd_x && !_sde_plane_has_pre_downscale(psde)) {
 		SDE_ERROR_PLANE(psde,
-			"hw does not support pre-downscale X: 0x%x\n",
+			"hw does not support pre-downscale X: 0x%llx\n",
 			psde->features);
 		ret = -EINVAL;
 	} else if (pd_y && !(psde->features & BIT(SDE_SSPP_PREDOWNSCALE_Y))) {
 		SDE_ERROR_PLANE(psde,
-			"hw does not support pre-downscale Y: 0x%x\n",
+			"hw does not support pre-downscale Y: 0x%llx\n",
 			psde->features);
 		ret = -EINVAL;
 	} else if (!min_ratio_numer || !min_ratio_denom) {

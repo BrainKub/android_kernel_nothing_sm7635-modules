@@ -178,7 +178,7 @@ static void dp_catalog_panel_config_msa_v420(struct dp_catalog_panel *panel,
 		nvid_off = DP1_SOFTWARE_NVID - DP_SOFTWARE_NVID;
 	}
 
-	DP_DEBUG("pclk=%ld, lclk=%ld, mvid=0x%x, nvid=0x%x\n", stream_rate_khz, rate, mvid, nvid);
+	DP_DEBUG("pclk=%u, lclk=%u, mvid=0x%x, nvid=0x%x\n", stream_rate_khz, rate, mvid, nvid);
 	dp_write(DP_SOFTWARE_MVID + mvid_off, mvid);
 	dp_write(DP_SOFTWARE_NVID + nvid_off, nvid);
 }

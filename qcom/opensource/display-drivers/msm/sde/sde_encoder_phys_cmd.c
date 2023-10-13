@@ -280,7 +280,7 @@ void sde_encoder_restore_tearcheck_rd_ptr(struct sde_encoder_phys *phys_enc)
 			mode->vtotal, panel_scan_line, qsync_timeout_lines, latency_margin_lines,
 			restored_rd_ptr_lines, info[0].rd_ptr_line_count - mode->vdisplay,
 			ktime_to_us(time_into_frame_ns));
-	SDE_DEBUG_CMDENC(cmd_enc, "scan_line:%u rest_rd_ptr:%u rd_ptr:%u frame_ns:%u\n",
+	SDE_DEBUG_CMDENC(cmd_enc, "scan_line:%u rest_rd_ptr:%u rd_ptr:%u frame_ns:%llu\n",
 			panel_scan_line, restored_rd_ptr_lines,
 			info[0].rd_ptr_line_count - mode->vdisplay,
 			ktime_to_us(time_into_frame_ns));

@@ -560,7 +560,7 @@ static int msm_smmu_probe(struct platform_device *pdev)
 	if (!client->dev->dma_parms)
 		client->dev->dma_parms = devm_kzalloc(client->dev,
 				sizeof(*client->dev->dma_parms), GFP_KERNEL);
-	dma_set_max_seg_size(client->dev, DMA_BIT_MASK(32));
+	dma_set_max_seg_size(client->dev, (unsigned int)DMA_BIT_MASK(32));
 	dma_set_seg_boundary(client->dev, (unsigned long)DMA_BIT_MASK(64));
 
 	iommu_set_fault_handler(client->domain,

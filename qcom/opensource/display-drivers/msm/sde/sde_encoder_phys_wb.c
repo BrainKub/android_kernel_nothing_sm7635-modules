@@ -1176,7 +1176,7 @@ static int _sde_encoder_phys_wb_validate_output_fmt(struct sde_encoder_phys *phy
 
 	fmt = sde_get_sde_format_ext(fb->format->format, fb->modifier);
 	if (!fmt) {
-		SDE_ERROR("[enc:%d wb:%d] invalid output pixel format:0x%x mod:0x%x\n",
+		SDE_ERROR("[enc:%d wb:%d] invalid output pixel format:0x%x mod:0x%llx\n",
 				DRMID(phys_enc->parent), WBID(wb_enc),
 				fb->format->format, fb->modifier);
 		return -EINVAL;
@@ -1188,7 +1188,7 @@ static int _sde_encoder_phys_wb_validate_output_fmt(struct sde_encoder_phys *phy
 
 	ret = sde_format_validate_fmt(&sde_kms->base, fmt, format_list);
 	if (ret) {
-		SDE_ERROR("[enc:%d wb:%d] unsupported format for wb rotate:%d fmt:0x%x mod:0x%x\n",
+		SDE_ERROR("[enc:%d wb:%d] unsupport format for wb rotate:%d fmt:0x%x mod:0x%llx\n",
 				DRMID(phys_enc->parent), WBID(wb_enc), rotation_type,
 				fb->format->format, fb->modifier);
 		return ret;
@@ -1272,7 +1272,7 @@ static int sde_encoder_phys_wb_atomic_check(struct sde_encoder_phys *phys_enc,
 
 	fmt = sde_get_sde_format_ext(fb->format->format, fb->modifier);
 	if (!fmt) {
-		SDE_ERROR("[enc:%d wb:%d] invalid output pixel format:0x%x mod:0x%x\n",
+		SDE_ERROR("[enc:%d wb:%d] invalid output pixel format:0x%x mod:0x%llx\n",
 				DRMID(phys_enc->parent), WBID(wb_enc),
 				fb->format->format, fb->modifier);
 		return -EINVAL;
@@ -1285,7 +1285,7 @@ static int sde_encoder_phys_wb_atomic_check(struct sde_encoder_phys *phys_enc,
 
         rc = _sde_encoder_phys_wb_validate_output_fmt(phys_enc, fb, rotation_type);
 	if (rc) {
-		SDE_ERROR("[enc:%d wb:%d] output fmt failed fb:%u fmt:0x%x mod:0x%x rot:%d",
+		SDE_ERROR("[enc:%d wb:%d] output fmt failed fb:%u fmt:0x%x mod:0x%llx rot:%d",
 				 DRMID(phys_enc->parent), WBID(wb_enc), fb->base.id,
 				 fb->format->format, fb->modifier, rotation_type);
 		return rc;

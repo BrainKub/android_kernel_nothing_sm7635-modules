@@ -832,7 +832,7 @@ static void _dp_panel_calc_tu(struct dp_tu_calc_input *in,
 
 	if (HBLANK_MARGIN_EXTRA != 0) {
 		HBLANK_MARGIN += HBLANK_MARGIN_EXTRA;
-		DP_DEBUG("Info: increase HBLANK_MARGIN to %d. (PLUS%d)\n", HBLANK_MARGIN,
+		DP_DEBUG("Info: increase HBLANK_MARGIN to %lld. (PLUS%lld)\n", HBLANK_MARGIN,
 			HBLANK_MARGIN_EXTRA);
 	}
 
@@ -3106,13 +3106,13 @@ int dp_panel_sink_crc_enable(struct dp_panel *dp_panel, bool enable)
 	if (dp_panel->link_info.capabilities & DP_LINK_CAP_CRC) {
 		ret = drm_dp_dpcd_readb(drm_aux, DP_TEST_SINK, &buf);
 		if (ret != 1) {
-			DP_ERR("failed to read CRC cap, ret:%d\n", ret);
+			DP_ERR("failed to read CRC cap, ret:%zd\n", ret);
 			return -EIO;
 		}
 
 		ret = drm_dp_dpcd_writeb(drm_aux, DP_TEST_SINK, buf | DP_TEST_SINK_START);
 		if (ret != 1) {
-			DP_ERR("failed to enable Sink CRC, ret:%d\n", ret);
+			DP_ERR("failed to enable Sink CRC, ret:%zd\n", ret);
 			return -EIO;
 		}
 

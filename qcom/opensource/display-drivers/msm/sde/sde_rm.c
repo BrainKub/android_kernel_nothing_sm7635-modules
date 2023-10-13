@@ -2318,7 +2318,7 @@ static int _sde_rm_get_hw_blk_for_cont_splash(struct sde_rm *rm,
 					splash_display->pipe_info.bordercolor) {
 				splash_display->lm_ids[splash_display->lm_cnt++] =
 					iter_lm.blk->id;
-				SDE_DEBUG("lm_cnt=%d lm_id %d pipe_cnt%d\n",
+				SDE_DEBUG("lm_cnt=%d lm_id %d pipe_cnt%ld\n",
 						splash_display->lm_cnt,
 						iter_lm.blk->id - LM_0,
 						pipes_per_lm);
@@ -2523,7 +2523,7 @@ static int _sde_rm_populate_requirements(
 
 	SDE_DEBUG("top_ctrl: 0x%llX num_h_tiles: %d\n", reqs->top_ctrl,
 			reqs->hw_res.display_num_of_h_tiles);
-	SDE_DEBUG("num_lm: %d num_ctl: %d topology: %d split_display: %d mask: 0x%llX\n",
+	SDE_DEBUG("num_lm: %d num_ctl: %d topology: %d split_display: %d mask: 0x%X\n",
 			reqs->topology->num_lm, reqs->topology->num_ctl,
 			reqs->topology->top_name,
 			reqs->topology->needs_split_display, reqs->conn_lm_mask);

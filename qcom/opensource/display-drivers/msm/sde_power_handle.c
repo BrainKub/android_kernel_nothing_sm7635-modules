@@ -1027,7 +1027,7 @@ int sde_power_clk_set_rate(struct sde_power_handle *phandle, char *clock_name,
 
 			mp->clk_config[i].rate = rate;
 			mp->clk_config[i].mmrm.flags = flags;
-			pr_debug("set rate clk:%s rate:%lu flags:0x%x\n",
+			pr_debug("set rate clk:%s rate:%llu flags:0x%x\n",
 				clock_name, rate, flags);
 
 			SDE_ATRACE_BEGIN("sde_clk_set_rate");

@@ -629,7 +629,7 @@ void sde_setup_fp16_gcv1(struct sde_hw_pipe *ctx,
 	fp16_gc = (struct drm_msm_fp16_gc *)(hw_cfg->payload);
 	if (fp16_gc && (hw_cfg->len != sizeof(struct drm_msm_fp16_gc) ||
 			fp16_gc->mode == FP16_GC_MODE_INVALID)) {
-		DRM_ERROR("invalid hw_cfg payload\tpipe: %d\tindex: %d\tlen: %d\tmode: %d",
+		DRM_ERROR("invalid hw_cfg payload\tpipe: %d\tindex: %d\tlen: %d\tmode: %lld",
 				ctx->idx, index, hw_cfg->len, fp16_gc->mode);
 		return;
 	}

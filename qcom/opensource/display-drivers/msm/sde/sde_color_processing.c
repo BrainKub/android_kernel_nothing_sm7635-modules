@@ -1332,7 +1332,7 @@ static int _sde_cp_cache_range_property(struct drm_crtc *crtc,
 	if (!cstate->cp_range_payload[prop_node->feature].addr ||
 		cstate->cp_range_payload[prop_node->feature].len
 		!= blob_ptr->length) {
-		DRM_ERROR("invalid addr %pK exp len %d act %d feature is %d\n",
+		DRM_ERROR("invalid addr %llu exp len %zu act %d feature is %d\n",
 			cstate->cp_range_payload[prop_node->feature].addr,
 			blob_ptr->length,
 			cstate->cp_range_payload[prop_node->feature].len,
@@ -2674,7 +2674,7 @@ int sde_cp_crtc_set_property(struct drm_crtc *crtc,
 
 	if (cstate->cp_prop_cnt >= ARRAY_SIZE(cstate->cp_dirty_list) ||
 	    prop_node->feature >= SDE_CP_CRTC_MAX_FEATURES) {
-		DRM_ERROR("invalid cnt %d exp %d feature %d\n",
+		DRM_ERROR("invalid cnt %d exp %ld feature %d\n",
 		    cstate->cp_prop_cnt, ARRAY_SIZE(cstate->cp_dirty_list),
 		    prop_node->feature);
 		return -EINVAL;

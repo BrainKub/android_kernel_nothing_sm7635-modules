@@ -714,7 +714,7 @@ static unsigned long dsi_pll_byteclk_recalc_rate(struct clk_hw *hw, unsigned lon
 	 * calculate clock rates that were set as part of UEFI.
 	 */
 	if (pll->byteclk_rate != 0) {
-		DSI_PLL_DBG(pll, "returning byte clk rate = %lld %lld\n", pll->byteclk_rate,
+		DSI_PLL_DBG(pll, "returning byte clk rate = %lld %ld\n", pll->byteclk_rate,
 				parent_rate);
 		return  pll->byteclk_rate;
 	}
@@ -754,7 +754,7 @@ static unsigned long dsi_pll_pclk_recalc_rate(struct clk_hw *hw, unsigned long p
 	 * calculate the clock rates that were set as part of UEFI.
 	 */
 	if (pll->pclk_rate != 0) {
-		DSI_PLL_DBG(pll, "returning pclk rate = %lld %lld\n", pll->pclk_rate, parent_rate);
+		DSI_PLL_DBG(pll, "returning pclk rate = %lld %ld\n", pll->pclk_rate, parent_rate);
 		return pll->pclk_rate;
 	}
 
@@ -1173,7 +1173,7 @@ static int dsi_pll_4nm_vco_set_rate(struct dsi_pll_resource *pll_res)
 		return -EINVAL;
 	}
 
-	DSI_PLL_DBG(pll_res, "rate=%lu\n", pll_res->vco_rate);
+	DSI_PLL_DBG(pll_res, "rate=%llu\n", pll_res->vco_rate);
 
 	pll_res->vco_current_rate = pll_res->vco_rate;
 
@@ -1407,11 +1407,11 @@ static int dsi_pll_4nm_dynamic_clk_vco_set_rate(struct dsi_pll_resource *rsc)
 
 	rc = dsi_pll_read_stored_trim_codes(rsc, rate);
 	if (rc) {
-		DSI_PLL_ERR(rsc, "cannot find pll codes rate=%ld\n", rate);
+		DSI_PLL_ERR(rsc, "cannot find pll codes rate=%u\n", rate);
 		return -EINVAL;
 	}
 
-	DSI_PLL_DBG(rsc, "ndx=%d, rate=%lu\n", rsc->index, rate);
+	DSI_PLL_DBG(rsc, "ndx=%d, rate=%u\n", rsc->index, rate);
 	rsc->vco_current_rate = rate;
 
 	dsi_pll_calc_dec_frac(pll, rsc);
