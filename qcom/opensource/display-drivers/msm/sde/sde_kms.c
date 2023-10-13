@@ -30,6 +30,7 @@
 #include <linux/soc/qcom/panel_event_notifier.h>
 #include <drm/drm_atomic_uapi.h>
 #include <drm/drm_probe_helper.h>
+#include <linux/version.h>
 
 #include "msm_drv.h"
 #include "msm_mmu.h"
@@ -56,7 +57,11 @@
 #include "sde_vm.h"
 #include "sde_fence.h"
 
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+#include <linux/firmware/qcom/qcom_scm.h>
+#else
 #include <linux/qcom_scm.h>
+#endif
 #include <linux/qcom-iommu-util.h>
 #include "soc/qcom/secure_buffer.h"
 #include <linux/qtee_shmbridge.h>
@@ -774,14 +779,16 @@ static int _sde_kms_release_shared_buffer(unsigned long mem_addr,
 	pfn_start = mem_addr >> PAGE_SHIFT;
 	pfn_end = (mem_addr + splash_buffer_size) >> PAGE_SHIFT;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0))
-	memblock_free((unsigned int*)mem_addr, splash_buffer_size);
-#else
-	ret = memblock_free(mem_addr, splash_buffer_size);
-	if (ret) {
-		SDE_ERROR("continuous splash memory free failed:%d\n", ret);
-		return ret;
-	}
+#if (KERNEL_VERSION(6, 3, 0) > LINUX_VERSION_CODE)
+	#if (KERNEL_VERSION(5, 19, 0) <= LINUX_VERSION_CODE)
+		memblock_free((unsigned int *)mem_addr, splash_buffer_size);
+	#else
+		ret = memblock_free(mem_addr, splash_buffer_size);
+		if (ret) {
+			SDE_ERROR("continuous splash memory free failed:%d\n", ret);
+			return ret;
+		}
+	#endif
 #endif
 
 	for (pfn_idx = pfn_start; pfn_idx < pfn_end; pfn_idx++)
