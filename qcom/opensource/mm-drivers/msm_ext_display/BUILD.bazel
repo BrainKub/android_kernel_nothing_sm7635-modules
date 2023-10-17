@@ -7,4 +7,10 @@ package(
     ],
 )
 
+ddk_headers(
+    name = "msm_ext_display_headers",
+    hdrs = glob(["include/*.h"]),
+    includes = ["include"]
+)
+
 define_msm_ext_display()

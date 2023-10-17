@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
  * Copyright (c) 2016-2021, The Linux Foundation. All rights reserved.
  */
 
@@ -15,7 +15,7 @@
 #include <linux/types.h>
 #include <linux/of_platform.h>
 #include <linux/extcon-provider.h>
-#include <linux/soc/qcom/msm_ext_display.h>
+#include <msm_ext_display.h>
 #include <linux/extcon-provider.h>
 
 struct msm_ext_disp_list {

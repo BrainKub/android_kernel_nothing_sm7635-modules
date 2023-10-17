@@ -20,7 +20,7 @@
 #include <linux/dma-fence-array.h>
 #include <linux/sync_file.h>
 #include <uapi/sync_fence/qcom_sync_file.h>
-#include <linux/soc/qcom/qcom_sync_file.h>
+#include <qcom_sync_file.h>
 #include <linux/version.h>
 
 #define CLASS_NAME	"sync"
