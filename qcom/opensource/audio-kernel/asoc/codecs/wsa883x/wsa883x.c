@@ -192,7 +192,6 @@ static struct regmap_irq_chip wsa883x_regmap_irq_chip = {
 	.num_regs = 2,
 	.status_base = WSA883X_INTR_STATUS0,
 	.mask_base = WSA883X_INTR_MASK0,
-	.type_base = WSA883X_INTR_LEVEL0,
 	.ack_base = WSA883X_INTR_CLEAR0,
 	.use_ack = 1,
 	.runtime_pm = false,

@@ -92,7 +92,6 @@ static struct regmap_irq_chip rouleur_regmap_irq_chip = {
 	.mask_base = ROULEUR_DIG_SWR_INTR_MASK_0,
 	.ack_base = ROULEUR_DIG_SWR_INTR_CLEAR_0,
 	.use_ack = 1,
-	.type_base = ROULEUR_DIG_SWR_INTR_LEVEL_0,
 	.runtime_pm = false,
 	.handle_post_irq = rouleur_handle_post_irq,
 	.irq_drv_data = NULL,

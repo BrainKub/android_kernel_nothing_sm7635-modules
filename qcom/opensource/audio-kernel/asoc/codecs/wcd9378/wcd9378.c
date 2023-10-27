@@ -255,7 +255,6 @@ static struct regmap_irq_chip wcd9378_regmap_irq_chip = {
 	.num_regs = 3,
 	.status_base = SWRS_SCP_SDCA_INTSTAT_1,
 	.unmask_base = SWRS_SCP_SDCA_INTMASK_1,
-	.type_base = SWRS_SCP_SDCA_INTRTYPE_1,
 	.ack_base = SWRS_SCP_SDCA_INTSTAT_1,
 	.use_ack = 1,
 	.runtime_pm = false,
