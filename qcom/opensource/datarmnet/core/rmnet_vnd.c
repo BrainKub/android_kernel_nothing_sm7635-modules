@@ -26,6 +26,7 @@
 #include <linux/ethtool.h>
 #include <net/pkt_sched.h>
 #include <net/ipv6.h>
+#include <net/gso.h>
 #include "rmnet_config.h"
 #include "rmnet_handlers.h"
 #include "rmnet_private.h"
