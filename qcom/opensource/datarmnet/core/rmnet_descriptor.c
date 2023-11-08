@@ -289,7 +289,14 @@ int rmnet_frag_descriptor_add_frag(struct rmnet_frag_descriptor *frag_desc,
 
 	INIT_LIST_HEAD(&frag->list);
 	get_page(p);
+#if (KERNEL_VERSION(6, 5, 0) > LINUX_VERSION_CODE)
+	/* Needed kernel version check for compatibility */
+	__skb_frag_set_page(&frag->frag, p);
+	skb_frag_size_set(&frag->frag, len);
+	skb_frag_off_set(&frag->frag, page_offset);
+#else
 	skb_frag_fill_page_desc(&frag->frag, p, page_offset, len);
+#endif
 	list_add_tail(&frag->list, &frag_desc->frags);
 	frag_desc->len += len;
 	return 0;
