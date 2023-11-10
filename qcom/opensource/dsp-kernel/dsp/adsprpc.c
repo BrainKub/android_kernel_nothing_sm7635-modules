@@ -25,7 +25,6 @@
 #include <linux/arch_topology.h>
 #include <linux/hash.h>
 #include <linux/msm_ion.h>
-#include <linux/qcom_scm.h>
 #include <linux/ipc_logging.h>
 #include <linux/remoteproc/qcom_rproc.h>
 #include <linux/scatterlist.h>
@@ -57,6 +56,13 @@
 #include <asm/arch_timer.h>
 #include <linux/genalloc.h>
 #include <soc/qcom/socinfo.h>
+#include <linux/version.h>
+
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+#include <linux/firmware/qcom/qcom_scm.h>
+#else
+#include <linux/qcom_scm.h>
+#endif
 
 #ifdef CONFIG_HIBERNATION
 #include <linux/suspend.h>
@@ -8289,8 +8295,13 @@ static int fastrpc_cb_probe(struct device *dev)
 			goto iommu_map_bail;
 		}
 		/* Map the allocated memory with fixed IOVA and is shared to remote subsystem */
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+		err = iommu_map_sg(domain, frpc_gen_addr_pool[0], sgt.sgl,
+					sgt.nents, IOMMU_READ | IOMMU_WRITE | IOMMU_CACHE, GFP_KERNEL);
+#else
 		err = iommu_map_sg(domain, frpc_gen_addr_pool[0], sgt.sgl,
 					sgt.nents, IOMMU_READ | IOMMU_WRITE | IOMMU_CACHE);
+#endif
 		if (err < 0) {
 			ADSPRPC_ERR("iommu_map_sg failed with err %d", err);
 			goto iommu_map_bail;
@@ -9141,7 +9152,11 @@ static int __init fastrpc_device_init(void)
 				NUM_DEVICES));
 	if (err)
 		goto cdev_init_bail;
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+	me->class = class_create("fastrpc");
+#else
 	me->class = class_create(THIS_MODULE, "fastrpc");
+#endif
 	VERIFY(err, !IS_ERR(me->class));
 	if (err)
 		goto class_create_bail;
