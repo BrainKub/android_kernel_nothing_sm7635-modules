@@ -8,6 +8,7 @@
 #include <linux/pm_runtime.h>
 #include <linux/version.h>
 #if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+#include <linux/pinctrl/consumer.h>
 #include <linux/pinctrl/pinctrl.h>
 #endif
 #include "dp_power.h"

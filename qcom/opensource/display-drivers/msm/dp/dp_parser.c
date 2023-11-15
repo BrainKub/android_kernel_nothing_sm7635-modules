@@ -6,7 +6,10 @@
 
 #include <linux/of_gpio.h>
 #include <linux/of_platform.h>
-
+#include <linux/version.h>
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+#include <linux/pinctrl/consumer.h>
+#endif
 #include "dp_parser.h"
 #include "dp_debug.h"
 
