@@ -807,7 +807,11 @@ int dp_connector_install_properties(void *display, struct drm_connector *conn)
 	 */
 	if (!base_conn->colorspace_property) {
 		/* This is the base connector. create the drm property */
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+		rc = drm_mode_create_dp_colorspace_property(base_conn, 0);
+#else
 		rc = drm_mode_create_dp_colorspace_property(base_conn);
+#endif
 		if (rc)
 			return rc;
 	} else {
