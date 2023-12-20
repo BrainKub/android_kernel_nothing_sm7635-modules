@@ -971,6 +971,32 @@ static int fastrpc_mmap_remove(struct fastrpc_file *fl, int fd, uintptr_t va,
 	return -ETOOMANYREFS;
 }
 
+static void dma_buf_unmap_attachment_wrap(struct fastrpc_mmap *map)
+{
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,2,0))
+	dma_buf_unmap_attachment_unlocked(map->attach, map->table,
+		DMA_BIDIRECTIONAL);
+#else
+	dma_buf_unmap_attachment(map->attach, map->table,
+		DMA_BIDIRECTIONAL);
+#endif
+}
+
+static int dma_buf_map_attachment_wrap(struct fastrpc_mmap *map)
+{
+	int err = 0;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,2,0))
+	VERIFY(err, !IS_ERR_OR_NULL(map->table =
+		dma_buf_map_attachment_unlocked(map->attach,
+		DMA_BIDIRECTIONAL)));
+#else
+	VERIFY(err, !IS_ERR_OR_NULL(map->table =
+		dma_buf_map_attachment(map->attach,
+		DMA_BIDIRECTIONAL)));
+#endif
+	return err;
+}
+
 static void fastrpc_mmap_free(struct fastrpc_mmap *map, uint32_t flags)
 {
 	struct fastrpc_apps *me = &gfa;
@@ -1041,8 +1067,7 @@ static void fastrpc_mmap_free(struct fastrpc_mmap *map, uint32_t flags)
 	} else if (map->flags == FASTRPC_MAP_FD_NOMAP) {
 		trace_fastrpc_dma_unmap(cid, map->phys, map->size);
 		if (!IS_ERR_OR_NULL(map->table))
-			dma_buf_unmap_attachment(map->attach, map->table,
-					DMA_BIDIRECTIONAL);
+			dma_buf_unmap_attachment_wrap(map);
 		if (!IS_ERR_OR_NULL(map->attach))
 			dma_buf_detach(map->buf, map->attach);
 		if (!IS_ERR_OR_NULL(map->buf))
@@ -1075,8 +1100,7 @@ static void fastrpc_mmap_free(struct fastrpc_mmap *map, uint32_t flags)
 		}
 		trace_fastrpc_dma_unmap(cid, map->phys, map->size);
 		if (!IS_ERR_OR_NULL(map->table))
-			dma_buf_unmap_attachment(map->attach, map->table,
-					DMA_BIDIRECTIONAL);
+			dma_buf_unmap_attachment_wrap(map);
 		if (!IS_ERR_OR_NULL(map->attach))
 			dma_buf_detach(map->buf, map->attach);
 		if (!IS_ERR_OR_NULL(map->buf))
@@ -1315,9 +1339,7 @@ static int fastrpc_mmap_create(struct fastrpc_file *fl, int fd, struct dma_buf *
 		}
 
 		map->attach->dma_map_attrs |= DMA_ATTR_SKIP_CPU_SYNC;
-		VERIFY(err, !IS_ERR_OR_NULL(map->table =
-			dma_buf_map_attachment(map->attach,
-				DMA_BIDIRECTIONAL)));
+		err = dma_buf_map_attachment_wrap(map);
 		if (err) {
 			ADSPRPC_ERR(
 			"dma_buf_map_attachment for fd %d for len 0x%zx failed on device %s ret %ld\n",
@@ -1415,9 +1437,7 @@ static int fastrpc_mmap_create(struct fastrpc_file *fl, int fd, struct dma_buf *
 		if (!sess->smmu.coherent)
 			map->attach->dma_map_attrs |= DMA_ATTR_SKIP_CPU_SYNC;
 
-		VERIFY(err, !IS_ERR_OR_NULL(map->table =
-			dma_buf_map_attachment(map->attach,
-				DMA_BIDIRECTIONAL)));
+		err = dma_buf_map_attachment_wrap(map);
 		if (err) {
 			ADSPRPC_ERR(
 			"dma_buf_map_attachment for fd %d failed for len 0x%zx on device %s ret %ld\n",
