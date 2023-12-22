@@ -13600,7 +13600,7 @@ static const tIEDefn IES_RadioMeasurementReport[] = {
 	{ offsetof(tDot11fRadioMeasurementReport, MeasurementReport),
 	offsetof(tDot11fIEMeasurementReport, present),
 	offsetof(tDot11fRadioMeasurementReport, num_MeasurementReport),
-	"MeasurementReport", 1, 5, 60, SigIeMeasurementReport, {0, 0, 0, 0, 0},
+	"MeasurementReport", 8, 5, 60, SigIeMeasurementReport, {0, 0, 0, 0, 0},
 	0, DOT11F_EID_MEASUREMENTREPORT, 0, 1, },
 	{0, 0, 0, NULL, 0, 0, 0, 0, {0, 0, 0, 0, 0}, 0, 0xff, 0, },};
 

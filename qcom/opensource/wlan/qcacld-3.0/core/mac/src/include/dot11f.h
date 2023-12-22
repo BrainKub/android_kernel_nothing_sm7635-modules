@@ -11913,7 +11913,7 @@ typedef struct sDot11fRadioMeasurementReport{
 	tDot11fFfAction                   Action;
 	tDot11fFfDialogToken              DialogToken;
 	uint16_t                          num_MeasurementReport;
-	tDot11fIEMeasurementReport        MeasurementReport[1];
+	tDot11fIEMeasurementReport        MeasurementReport[8];
 } tDot11fRadioMeasurementReport;
 
 #define DOT11F_RADIOMEASUREMENTREPORT (24)
