@@ -55,10 +55,6 @@
 #endif
 #include "misc/qseecomi.h"
 
-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(6,0,0))
-#define KERNEL_VERSION_LEGACY
-#endif
-
 #define QSEECOM_DEV			"qseecom"
 #define QSEOS_VERSION_14		0x14
 #define QSEEE_VERSION_00		0x400000
@@ -480,6 +476,15 @@ static struct qseecom_key_id_usage_desc key_id_array[] = {
 	},
 };
 
+struct qseecom_dma_buf_vmap_data {
+#if (KERNEL_VERSION(6, 0, 0) <= LINUX_VERSION_CODE)
+	struct iosys_map map;
+#elif (KERNEL_VERSION(5, 15, 0) <= LINUX_VERSION_CODE)
+	struct dma_buf_map map;
+#endif
+	void *vaddr;
+};
+
 /* Function proto types */
 static int qsee_vote_for_clock(struct qseecom_dev_handle *, int32_t);
 static void qsee_disable_clock_vote(struct qseecom_dev_handle *, int32_t);
@@ -552,6 +557,73 @@ static char *__qseecom_alloc_tzbuf(uint32_t size,
 static void __qseecom_free_tzbuf(struct qtee_shm *shm)
 {
 	qtee_shmbridge_free_shm(shm);
+}
+
+static void qseecom_dma_buf_map_init_vaddr_wrapper(void *vaddr,
+				struct qseecom_dma_buf_vmap_data *vmap)
+{
+#if (KERNEL_VERSION(6, 0, 0) <= LINUX_VERSION_CODE)
+	vmap->map = (struct iosys_map) IOSYS_MAP_INIT_VADDR(vaddr);
+#elif (KERNEL_VERSION(5, 15, 0) <= LINUX_VERSION_CODE)
+	vmap->map = (struct dma_buf_map) DMA_BUF_MAP_INIT_VADDR(vaddr);
+#else
+	pr_info("not required to initialize\n");
+#endif
+}
+
+static int qseecom_dma_buf_vmap_wrapper(struct dma_buf *dmabuf,
+				struct qseecom_dma_buf_vmap_data *vmap)
+{
+	int ret = 0;
+
+#if (KERNEL_VERSION(6, 2, 0) <= LINUX_VERSION_CODE)
+	ret = dma_buf_vmap_unlocked(dmabuf, &vmap->map);
+	vmap->vaddr = vmap->map.vaddr;
+#elif (KERNEL_VERSION(5, 15, 0) <= LINUX_VERSION_CODE)
+	ret = dma_buf_vmap(dmabuf, &vmap->map);
+	vmap->vaddr = vmap->map.vaddr;
+#else
+	vmap->vaddr = dma_buf_vmap(dmabuf);
+	if (!vmap->vaddr)
+		ret = -EINVAL;
+#endif
+	return ret;
+}
+
+static void qseecom_dma_buf_vunmap_wrapper(struct dma_buf *dmabuf,
+				struct qseecom_dma_buf_vmap_data *vmap)
+{
+#if (KERNEL_VERSION(6, 2, 0) <= LINUX_VERSION_CODE)
+	dma_buf_vunmap_unlocked(dmabuf, &vmap->map);
+#elif (KERNEL_VERSION(5, 15, 0) <= LINUX_VERSION_CODE)
+	dma_buf_vunmap(dmabuf, &vmap->map);
+#else
+	dma_buf_vunmap(dmabuf, vmap->vaddr);
+#endif
+}
+
+static struct sg_table *qseecom_dma_buf_map_attachment_wrapper(
+				struct dma_buf_attachment *attachment,
+				enum dma_data_direction  direction)
+{
+	struct sg_table *sg_table;
+#if (KERNEL_VERSION(6, 2, 0) <= LINUX_VERSION_CODE)
+	sg_table = dma_buf_map_attachment_unlocked(attachment, direction);
+#else
+	sg_table = dma_buf_map_attachment(attachment, direction);
+#endif
+	return sg_table;
+}
+
+static void qseecom_dma_buf_unmap_attachment_wrapper(struct dma_buf_attachment *attach,
+				struct sg_table *sg_table,
+				enum dma_data_direction direction)
+{
+#if (KERNEL_VERSION(6, 2, 0) <= LINUX_VERSION_CODE)
+	dma_buf_unmap_attachment_unlocked(attach, sg_table, direction);
+#else
+	dma_buf_unmap_attachment(attach, sg_table, direction);
+#endif
 }
 
 static int qseecom_scm_call2(uint32_t svc_id, uint32_t tz_cmd_id,
@@ -1377,10 +1449,10 @@ static int qseecom_dmabuf_map(int ion_fd, struct sg_table **sgt,
 		goto err_put;
 	}
 
-	new_sgt = dma_buf_map_attachment(new_attach, DMA_BIDIRECTIONAL);
+	new_sgt = qseecom_dma_buf_map_attachment_wrapper(new_attach, DMA_BIDIRECTIONAL);
 	if (IS_ERR_OR_NULL(new_sgt)) {
 		ret = PTR_ERR(new_sgt);
-		pr_err("dma_buf_map_attachment for ion_fd %d failed ret = %d\n",
+		pr_err("qseecom_dma_buf_map_attachment_wrapper for ion_fd %d failed ret = %d\n",
 				ion_fd, ret);
 		goto err_detach;
 	}
@@ -1396,7 +1468,7 @@ static int qseecom_dmabuf_map(int ion_fd, struct sg_table **sgt,
 	return ret;
 
 err_unmap_attachment:
-	dma_buf_unmap_attachment(new_attach, new_sgt, DMA_BIDIRECTIONAL);
+	qseecom_dma_buf_unmap_attachment_wrapper(new_attach, new_sgt, DMA_BIDIRECTIONAL);
 err_detach:
 	dma_buf_detach(new_dma_buf, new_attach);
 err_put:
@@ -1409,7 +1481,7 @@ static void qseecom_dmabuf_unmap(struct sg_table *sgt,
 			struct dma_buf_attachment *attach,
 			struct dma_buf *dmabuf)
 {
-	dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
+	qseecom_dma_buf_unmap_attachment_wrapper(attach, sgt, DMA_BIDIRECTIONAL);
 	dma_buf_detach(dmabuf, attach);
 	dma_buf_put(dmabuf);
 }
@@ -1423,11 +1495,7 @@ static int qseecom_vaddr_map(int ion_fd,
 {
 	struct dma_buf *new_dma_buf = NULL;
 	struct dma_buf_attachment *new_attach = NULL;
-#ifdef KERNEL_VERSION_LEGACY
-	struct dma_buf_map new_dma_buf_map = {0};
-#else
-	struct iosys_map new_dma_buf_map = {0};
-#endif
+	struct qseecom_dma_buf_vmap_data new_dma_buf_map = {0};
 	struct sg_table *new_sgt = NULL;
 	void *new_va = NULL;
 	int ret = 0;
@@ -1444,10 +1512,10 @@ static int qseecom_vaddr_map(int ion_fd,
 	*sb_length = new_sgt->sgl->length;
 	//Invalidate the Buffer
 	dma_buf_begin_cpu_access(new_dma_buf, DMA_BIDIRECTIONAL);
-	ret = dma_buf_vmap(new_dma_buf, &new_dma_buf_map);
+	ret = qseecom_dma_buf_vmap_wrapper(new_dma_buf, &new_dma_buf_map);
 	new_va = ret ? NULL : new_dma_buf_map.vaddr;
 	if (!new_va) {
-		pr_err("dma_buf_vmap failed\n");
+		pr_err("qseecom_dma_buf_vmap_wrapper failed\n");
 		ret = -ENOMEM;
 		goto err_unmap;
 	}
@@ -1471,16 +1539,15 @@ static void qseecom_vaddr_unmap(void *vaddr, struct sg_table *sgt,
 		struct dma_buf_attachment *attach,
 		struct dma_buf *dmabuf)
 {
-#ifdef KERNEL_VERSION_LEGACY
-	struct dma_buf_map  dmabufmap = DMA_BUF_MAP_INIT_VADDR(vaddr);
-#else
-	struct iosys_map  dmabufmap = IOSYS_MAP_INIT_VADDR(vaddr);
-#endif
+	struct qseecom_dma_buf_vmap_data dmabufmap = {0};
+
+	//Initialize dmabuf map
+	qseecom_dma_buf_map_init_vaddr_wrapper(vaddr, &dmabufmap);
 
 	if (!dmabuf || !vaddr || !sgt || !attach)
 		return;
-	pr_err("Trying to unmap vaddr");
-	dma_buf_vunmap(dmabuf, &dmabufmap);
+	pr_debug("Trying to unmap vaddr\n");
+	qseecom_dma_buf_vunmap_wrapper(dmabuf, &dmabufmap);
 	dma_buf_end_cpu_access(dmabuf, DMA_BIDIRECTIONAL);
 	qseecom_dmabuf_unmap(sgt, attach, dmabuf);
 }
