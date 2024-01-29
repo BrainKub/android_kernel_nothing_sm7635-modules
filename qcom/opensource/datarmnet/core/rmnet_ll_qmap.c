@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -60,7 +61,7 @@ struct qmap_ll_switch {
 	u8			reserved;
 	u8			request_type;
 	u8			num_bearers;
-	struct qmap_ll_bearer	bearer[0];
+	struct qmap_ll_bearer	bearer[];
 } __aligned(1);
 
 struct qmap_ll_switch_resp {
@@ -68,7 +69,7 @@ struct qmap_ll_switch_resp {
 	u8			cmd_ver;
 	u8			reserved[2];
 	u8			num_bearers;
-	struct qmap_ll_bearer	bearer[0];
+	struct qmap_ll_bearer	bearer[];
 } __aligned(1);
 
 struct qmap_ll_switch_status {
@@ -76,7 +77,7 @@ struct qmap_ll_switch_status {
 	u8			cmd_ver;
 	u8			reserved[2];
 	u8			num_bearers;
-	struct qmap_ll_bearer	bearer[0];
+	struct qmap_ll_bearer	bearer[];
 } __aligned(1);
 
 /*
