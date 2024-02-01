@@ -1264,7 +1264,7 @@ static int _disp_tme_log_stats(size_t count)
 
 	log_start.size -= log_len;
 	log_start.offset += log_len;
-	pr_debug("log_len: %d, log_start.offset: %#x, log_start.size: %#x\n",
+	pr_debug("log_len: %d, log_start.offset: %#x, log_start.size: %zu\n",
 			log_len, log_start.offset, log_start.size);
 
 	if (log_start.size)
