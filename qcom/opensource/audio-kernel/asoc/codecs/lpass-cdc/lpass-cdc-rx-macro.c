@@ -2217,7 +2217,7 @@ static int lpass_cdc_rx_macro_get_compander(struct snd_kcontrol *kcontrol,
 {
 	struct snd_soc_component *component =
 				snd_soc_kcontrol_component(kcontrol);
-	int comp = ((struct soc_multi_mixer_control *)
+	int comp = ((struct soc_mixer_control *)
 		    kcontrol->private_value)->shift;
 	struct device *rx_dev = NULL;
 	struct lpass_cdc_rx_macro_priv *rx_priv = NULL;
@@ -2234,7 +2234,7 @@ static int lpass_cdc_rx_macro_set_compander(struct snd_kcontrol *kcontrol,
 {
 	struct snd_soc_component *component =
 				snd_soc_kcontrol_component(kcontrol);
-	int comp = ((struct soc_multi_mixer_control *)
+	int comp = ((struct soc_mixer_control *)
 		    kcontrol->private_value)->shift;
 	int value = ucontrol->value.integer.value[0];
 	struct device *rx_dev = NULL;
@@ -2956,9 +2956,9 @@ static int lpass_cdc_rx_macro_iir_enable_audio_mixer_get(struct snd_kcontrol *kc
 {
 	struct snd_soc_component *component =
 				snd_soc_kcontrol_component(kcontrol);
-	int iir_idx = ((struct soc_multi_mixer_control *)
+	int iir_idx = ((struct soc_mixer_control *)
 					kcontrol->private_value)->reg;
-	int band_idx = ((struct soc_multi_mixer_control *)
+	int band_idx = ((struct soc_mixer_control *)
 					kcontrol->private_value)->shift;
 	/* IIR filter band registers are at integer multiples of 0x80 */
 	u16 iir_reg = LPASS_CDC_RX_SIDETONE_IIR0_IIR_CTL + 0x80 * iir_idx;
@@ -2978,9 +2978,9 @@ static int lpass_cdc_rx_macro_iir_enable_audio_mixer_put(struct snd_kcontrol *kc
 {
 	struct snd_soc_component *component =
 				snd_soc_kcontrol_component(kcontrol);
-	int iir_idx = ((struct soc_multi_mixer_control *)
+	int iir_idx = ((struct soc_mixer_control *)
 					kcontrol->private_value)->reg;
-	int band_idx = ((struct soc_multi_mixer_control *)
+	int band_idx = ((struct soc_mixer_control *)
 					kcontrol->private_value)->shift;
 	bool iir_band_en_status = 0;
 	int value = ucontrol->value.integer.value[0];
@@ -3665,7 +3665,7 @@ static int lpass_cdc_rx_macro_fir_coeff_num_get(struct snd_kcontrol *kcontrol,
 {
 	struct snd_soc_component *component =
 				snd_soc_kcontrol_component(kcontrol);
-	unsigned int path_idx = ((struct soc_multi_mixer_control *)
+	unsigned int path_idx = ((struct soc_mixer_control *)
 				kcontrol->private_value)->shift;
 	struct device *rx_dev = NULL;
 	struct lpass_cdc_rx_macro_priv *rx_priv = NULL;
@@ -3694,7 +3694,7 @@ static int lpass_cdc_rx_macro_fir_coeff_num_put(struct snd_kcontrol *kcontrol,
 {
 	struct snd_soc_component *component =
 				snd_soc_kcontrol_component(kcontrol);
-	unsigned int path_idx = ((struct soc_multi_mixer_control *)
+	unsigned int path_idx = ((struct soc_mixer_control *)
 				kcontrol->private_value)->shift;
 	u8 fir_total_coeff_num = ucontrol->value.bytes.data[0];
 	struct device *rx_dev = NULL;
