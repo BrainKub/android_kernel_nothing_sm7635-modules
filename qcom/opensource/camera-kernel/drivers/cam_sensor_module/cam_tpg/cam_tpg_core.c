@@ -584,7 +584,7 @@ static int cam_tpg_cmd_buf_parse(
 		struct tpg_command_header_t *cmd_header = NULL;
 
 		cmd_desc = (struct cam_cmd_buf_desc *)
-			((uint32_t *)&packet->payload +
+			((uint32_t *)&packet->payload_flex +
 			(packet->cmd_buf_offset / 4) +
 			(i * (sizeof(struct cam_cmd_buf_desc)/4)));
 

@@ -1097,7 +1097,7 @@ int32_t cam_cmd_buf_parser(struct csiphy_device *csiphy_dev,
 
 	if (csl_packet->num_cmd_buf)
 		cmd_desc = (struct cam_cmd_buf_desc *)
-			((uint32_t *)&csl_packet->payload +
+			((uint32_t *)&csl_packet->payload_flex +
 			csl_packet->cmd_buf_offset / 4);
 	else {
 		CAM_ERR(CAM_CSIPHY, "num_cmd_buffer = %d", csl_packet->num_cmd_buf);

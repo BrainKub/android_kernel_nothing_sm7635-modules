@@ -137,7 +137,7 @@ static int cam_cre_mgr_process_cmd_io_buf_req(struct cam_cre_hw_mgr *hw_mgr,
 	struct   cam_buf_io_cfg *io_cfg_ptr = NULL;
 	struct   cam_cre_io_buf_info *acq_io_buf;
 
-	io_cfg_ptr = (struct cam_buf_io_cfg *)((uint32_t *)&packet->payload +
+	io_cfg_ptr = (struct cam_buf_io_cfg *)((uint32_t *)&packet->payload_flex +
 			packet->io_configs_offset / 4);
 
 	cre_request = ctx_data->req_list[req_idx];
@@ -322,11 +322,11 @@ static int cam_cre_mgr_calculate_num_path(
 	int i, path_index = 0;
 
 	for (i = 0; i < CAM_CRE_MAX_PER_PATH_VOTES; i++) {
-		if ((clk_info->axi_path[i].path_data_type <
+		if ((clk_info->axi_path_flex[i].path_data_type <
 			CAM_AXI_PATH_DATA_CRE_START_OFFSET) ||
-			(clk_info->axi_path[i].path_data_type >
+			(clk_info->axi_path_flex[i].path_data_type >
 			CAM_AXI_PATH_DATA_CRE_MAX_OFFSET) ||
-			((clk_info->axi_path[i].path_data_type -
+			((clk_info->axi_path_flex[i].path_data_type -
 			CAM_AXI_PATH_DATA_CRE_START_OFFSET) >=
 			CAM_CRE_MAX_PER_PATH_VOTES)) {
 			CAM_DBG(CAM_CRE,
@@ -337,18 +337,18 @@ static int cam_cre_mgr_calculate_num_path(
 			continue;
 		}
 
-		path_index = clk_info->axi_path[i].path_data_type -
+		path_index = clk_info->axi_path_flex[i].path_data_type -
 			CAM_AXI_PATH_DATA_CRE_START_OFFSET;
 
 		CAM_DBG(CAM_CRE,
 			"clk_info: i[%d]: [%s %s] bw [%lld %lld] num_path: %d",
 			i,
 			cam_cpas_axi_util_trans_type_to_string(
-			clk_info->axi_path[i].transac_type),
+			clk_info->axi_path_flex[i].transac_type),
 			cam_cpas_axi_util_path_type_to_string(
-			clk_info->axi_path[i].path_data_type),
-			clk_info->axi_path[i].camnoc_bw,
-			clk_info->axi_path[i].mnoc_ab_bw,
+			clk_info->axi_path_flex[i].path_data_type),
+			clk_info->axi_path_flex[i].camnoc_bw,
+			clk_info->axi_path_flex[i].mnoc_ab_bw,
 			clk_info->num_paths);
 	}
 	return 0;
@@ -369,7 +369,7 @@ static int cam_cre_update_cpas_vote(struct cam_cre_hw_mgr *hw_mgr,
 
 	bw_update.axi_vote.num_paths = clk_info->num_paths;
 	memcpy(&bw_update.axi_vote.axi_path[0],
-		&clk_info->axi_path[0],
+		&clk_info->axi_path_flex[0],
 		bw_update.axi_vote.num_paths *
 		sizeof(struct cam_cpas_axi_per_path_bw_vote));
 
@@ -404,11 +404,11 @@ static int cam_cre_mgr_remove_bw(struct cam_cre_hw_mgr *hw_mgr, int ctx_id)
 			continue;
 		}
 
-		hw_mgr_clk_info->axi_path[path_index].camnoc_bw -=
+		hw_mgr_clk_info->axi_path_flex[path_index].camnoc_bw -=
 			ctx_data->clk_info.axi_path[i].camnoc_bw;
-		hw_mgr_clk_info->axi_path[path_index].mnoc_ab_bw -=
+		hw_mgr_clk_info->axi_path_flex[path_index].mnoc_ab_bw -=
 			ctx_data->clk_info.axi_path[i].mnoc_ab_bw;
-		hw_mgr_clk_info->axi_path[path_index].mnoc_ib_bw -=
+		hw_mgr_clk_info->axi_path_flex[path_index].mnoc_ib_bw -=
 			ctx_data->clk_info.axi_path[i].mnoc_ib_bw;
 	}
 
@@ -428,18 +428,18 @@ static bool cam_cre_update_bw_v2(struct cam_cre_hw_mgr *hw_mgr,
 
 	for (i = 0; i < clk_info->num_paths; i++)
 		CAM_DBG(CAM_CRE, "clk_info camnoc = %lld busy = %d",
-			clk_info->axi_path[i].camnoc_bw, busy);
+			clk_info->axi_path_flex[i].camnoc_bw, busy);
 
 	if (clk_info->num_paths == ctx_data->clk_info.num_paths) {
 		update_required = false;
 		for (i = 0; i < clk_info->num_paths; i++) {
-			if ((clk_info->axi_path[i].transac_type ==
+			if ((clk_info->axi_path_flex[i].transac_type ==
 			ctx_data->clk_info.axi_path[i].transac_type) &&
-				(clk_info->axi_path[i].path_data_type ==
+				(clk_info->axi_path_flex[i].path_data_type ==
 			ctx_data->clk_info.axi_path[i].path_data_type) &&
-				(clk_info->axi_path[i].camnoc_bw ==
+				(clk_info->axi_path_flex[i].camnoc_bw ==
 			ctx_data->clk_info.axi_path[i].camnoc_bw) &&
-				(clk_info->axi_path[i].mnoc_ab_bw ==
+				(clk_info->axi_path_flex[i].mnoc_ab_bw ==
 			ctx_data->clk_info.axi_path[i].mnoc_ab_bw)) {
 				continue;
 			} else {
@@ -472,11 +472,11 @@ static bool cam_cre_update_bw_v2(struct cam_cre_hw_mgr *hw_mgr,
 			continue;
 		}
 
-		hw_mgr_clk_info->axi_path[path_index].camnoc_bw -=
+		hw_mgr_clk_info->axi_path_flex[path_index].camnoc_bw -=
 			ctx_data->clk_info.axi_path[i].camnoc_bw;
-		hw_mgr_clk_info->axi_path[path_index].mnoc_ab_bw -=
+		hw_mgr_clk_info->axi_path_flex[path_index].mnoc_ab_bw -=
 			ctx_data->clk_info.axi_path[i].mnoc_ab_bw;
-		hw_mgr_clk_info->axi_path[path_index].mnoc_ib_bw -=
+		hw_mgr_clk_info->axi_path_flex[path_index].mnoc_ib_bw -=
 			ctx_data->clk_info.axi_path[i].mnoc_ib_bw;
 	}
 
@@ -484,7 +484,7 @@ static bool cam_cre_update_bw_v2(struct cam_cre_hw_mgr *hw_mgr,
 		cam_cre_mgr_calculate_num_path(clk_info, ctx_data);
 
 	memcpy(&ctx_data->clk_info.axi_path[0],
-		&clk_info->axi_path[0],
+		&clk_info->axi_path_flex[0],
 		clk_info->num_paths * sizeof(struct cam_cpas_axi_per_path_bw_vote));
 
 	/*
@@ -505,26 +505,26 @@ static bool cam_cre_update_bw_v2(struct cam_cre_hw_mgr *hw_mgr,
 			continue;
 		}
 
-		hw_mgr_clk_info->axi_path[path_index].path_data_type =
+		hw_mgr_clk_info->axi_path_flex[path_index].path_data_type =
 			ctx_data->clk_info.axi_path[i].path_data_type;
-		hw_mgr_clk_info->axi_path[path_index].transac_type =
+		hw_mgr_clk_info->axi_path_flex[path_index].transac_type =
 			ctx_data->clk_info.axi_path[i].transac_type;
-		hw_mgr_clk_info->axi_path[path_index].camnoc_bw +=
+		hw_mgr_clk_info->axi_path_flex[path_index].camnoc_bw +=
 			ctx_data->clk_info.axi_path[i].camnoc_bw;
-		hw_mgr_clk_info->axi_path[path_index].mnoc_ab_bw +=
+		hw_mgr_clk_info->axi_path_flex[path_index].mnoc_ab_bw +=
 			ctx_data->clk_info.axi_path[i].mnoc_ab_bw;
-		hw_mgr_clk_info->axi_path[path_index].mnoc_ib_bw +=
+		hw_mgr_clk_info->axi_path_flex[path_index].mnoc_ib_bw +=
 			ctx_data->clk_info.axi_path[i].mnoc_ib_bw;
 		CAM_DBG(CAM_CRE,
 			"Consolidate Path Vote : Dev[%s] i[%d] path_idx[%d] : [%s %s] [%lld %lld]",
 			ctx_data->cre_acquire.dev_name,
 			i, path_index,
 			cam_cpas_axi_util_trans_type_to_string(
-			hw_mgr_clk_info->axi_path[path_index].transac_type),
+			hw_mgr_clk_info->axi_path_flex[path_index].transac_type),
 			cam_cpas_axi_util_path_type_to_string(
-			hw_mgr_clk_info->axi_path[path_index].path_data_type),
-			hw_mgr_clk_info->axi_path[path_index].camnoc_bw,
-			hw_mgr_clk_info->axi_path[path_index].mnoc_ab_bw);
+			hw_mgr_clk_info->axi_path_flex[path_index].path_data_type),
+			hw_mgr_clk_info->axi_path_flex[path_index].camnoc_bw,
+			hw_mgr_clk_info->axi_path_flex[path_index].mnoc_ab_bw);
 	}
 
 	if (hw_mgr_clk_info->num_paths < ctx_data->clk_info.num_paths)
@@ -555,12 +555,12 @@ static bool cam_cre_check_bw_update(struct cam_cre_hw_mgr *hw_mgr,
 		CAM_DBG(CAM_CRE,
 			"Final path_type: %s, transac_type: %s, camnoc_bw = %lld mnoc_ab_bw = %lld, mnoc_ib_bw = %lld, device: %s",
 			cam_cpas_axi_util_path_type_to_string(
-			hw_mgr_clk_info->axi_path[i].path_data_type),
+			hw_mgr_clk_info->axi_path_flex[i].path_data_type),
 			cam_cpas_axi_util_trans_type_to_string(
-			hw_mgr_clk_info->axi_path[i].transac_type),
-			hw_mgr_clk_info->axi_path[i].camnoc_bw,
-			hw_mgr_clk_info->axi_path[i].mnoc_ab_bw,
-			hw_mgr_clk_info->axi_path[i].mnoc_ib_bw,
+			hw_mgr_clk_info->axi_path_flex[i].transac_type),
+			hw_mgr_clk_info->axi_path_flex[i].camnoc_bw,
+			hw_mgr_clk_info->axi_path_flex[i].mnoc_ab_bw,
+			hw_mgr_clk_info->axi_path_flex[i].mnoc_ib_bw,
 			ctx_data->cre_acquire.dev_name);
 	}
 
@@ -1445,7 +1445,7 @@ static bool cam_cre_mgr_is_valid_inconfig(struct cam_packet *packet)
 	bool in_config_valid = false;
 	struct cam_buf_io_cfg *io_cfg_ptr = NULL;
 
-	io_cfg_ptr = (struct cam_buf_io_cfg *) ((uint32_t *) &packet->payload +
+	io_cfg_ptr = (struct cam_buf_io_cfg *) ((uint32_t *) &packet->payload_flex +
 					packet->io_configs_offset/4);
 
 	for (i = 0 ; i < packet->num_io_configs; i++)
@@ -1472,7 +1472,7 @@ static bool cam_cre_mgr_is_valid_outconfig(struct cam_packet *packet)
 	bool out_config_valid = false;
 	struct cam_buf_io_cfg *io_cfg_ptr = NULL;
 
-	io_cfg_ptr = (struct cam_buf_io_cfg *) ((uint32_t *) &packet->payload +
+	io_cfg_ptr = (struct cam_buf_io_cfg *) ((uint32_t *) &packet->payload_flex +
 					packet->io_configs_offset/4);
 
 	for (i = 0 ; i < packet->num_io_configs; i++)
@@ -2127,14 +2127,14 @@ static int cam_cre_packet_generic_blob_handler(void *user_data,
 		clk_info_v2->num_paths = soc_req->num_paths;
 
 		for (i = 0; i < soc_req->num_paths; i++) {
-			clk_info_v2->axi_path[i].usage_data = soc_req->axi_path[i].usage_data;
-			clk_info_v2->axi_path[i].transac_type = soc_req->axi_path[i].transac_type;
-			clk_info_v2->axi_path[i].path_data_type =
-				soc_req->axi_path[i].path_data_type;
-			clk_info_v2->axi_path[i].vote_level = 0;
-			clk_info_v2->axi_path[i].camnoc_bw = soc_req->axi_path[i].camnoc_bw;
-			clk_info_v2->axi_path[i].mnoc_ab_bw = soc_req->axi_path[i].mnoc_ab_bw;
-			clk_info_v2->axi_path[i].mnoc_ib_bw = soc_req->axi_path[i].mnoc_ib_bw;
+			clk_info_v2->axi_path_flex[i].usage_data = soc_req->axi_path_flex[i].usage_data;
+			clk_info_v2->axi_path_flex[i].transac_type = soc_req->axi_path_flex[i].transac_type;
+			clk_info_v2->axi_path_flex[i].path_data_type =
+				soc_req->axi_path_flex[i].path_data_type;
+			clk_info_v2->axi_path_flex[i].vote_level = 0;
+			clk_info_v2->axi_path_flex[i].camnoc_bw = soc_req->axi_path_flex[i].camnoc_bw;
+			clk_info_v2->axi_path_flex[i].mnoc_ab_bw = soc_req->axi_path_flex[i].mnoc_ab_bw;
+			clk_info_v2->axi_path_flex[i].mnoc_ib_bw = soc_req->axi_path_flex[i].mnoc_ib_bw;
 		}
 
 		/* Use v1 structure for clk fields */
@@ -2169,7 +2169,7 @@ static int cam_cre_process_generic_cmd_buffer(
 	cmd_generic_blob.io_buf_addr = io_buf_addr;
 
 	cmd_desc = (struct cam_cmd_buf_desc *)
-		((uint32_t *) &packet->payload + packet->cmd_buf_offset/4);
+		((uint32_t *) &packet->payload_flex + packet->cmd_buf_offset/4);
 
 	for (i = 0; i < packet->num_cmd_buf; i++) {
 		rc = cam_packet_util_validate_cmd_desc(&cmd_desc[i]);
