@@ -3224,27 +3224,27 @@ static int cam_tfe_mgr_config_hw(void *hw_mgr_priv,
 		if (cmd->flags == CAM_ISP_UNUSED_BL || cmd->flags >= CAM_ISP_BL_MAX)
 			CAM_ERR(CAM_ISP, "Unexpected BL type %d", cmd->flags);
 
-		cdm_cmd->cmd[i - skip].bl_addr.mem_handle = cmd->handle;
-		cdm_cmd->cmd[i - skip].offset = cmd->offset;
-		cdm_cmd->cmd[i - skip].len = cmd->len;
-		cdm_cmd->cmd[i - skip].arbitrate = false;
+		cdm_cmd->cmd_flex[i - skip].bl_addr.mem_handle = cmd->handle;
+		cdm_cmd->cmd_flex[i - skip].offset = cmd->offset;
+		cdm_cmd->cmd_flex[i - skip].len = cmd->len;
+		cdm_cmd->cmd_flex[i - skip].arbitrate = false;
 
 		if (g_tfe_hw_mgr.debug_cfg.enable_cdm_cmd_check) {
 			CAM_INFO_RATE_LIMIT(CAM_ISP, "Enter cdm cmd_buf validation");
 			rc = cam_packet_util_get_cmd_mem_addr(
-				cdm_cmd->cmd[i - skip].bl_addr.mem_handle, &buf_addr, &len);
+				cdm_cmd->cmd_flex[i - skip].bl_addr.mem_handle, &buf_addr, &len);
 			if (rc) {
 				CAM_ERR(CAM_ISP,
 					"Failed to get buf_addr and len for mem_handle: %d ctx id: %u request id: %llu",
-					cdm_cmd->cmd[i - skip].bl_addr.mem_handle,
+					cdm_cmd->cmd_flex[i - skip].bl_addr.mem_handle,
 					ctx->ctx_index, cfg->request_id);
 				continue;
 			}
 
 			buf_start = (uint32_t *)((uint8_t *) buf_addr +
-				cdm_cmd->cmd[i - skip].offset);
+				cdm_cmd->cmd_flex[i - skip].offset);
 			buf_end = (uint32_t *)((uint8_t *) buf_start +
-				cdm_cmd->cmd[i - skip].len - 1);
+				cdm_cmd->cmd_flex[i - skip].len - 1);
 			cmd_type = ((uint32_t)(*buf_start) >> CAM_CDM_COMMAND_OFFSET);
 			if ((i == 0) && (cmd_type != CAM_CDM_CMD_CHANGE_BASE)) {
 				CAM_ERR(CAM_ISP,
@@ -3285,15 +3285,15 @@ static int cam_tfe_mgr_config_hw(void *hw_mgr_priv,
 	for (i = 0; i < cdm_cmd->cmd_arrary_count; i++) {
 		if (cdm_cmd->type == CAM_CDM_BL_CMD_TYPE_MEM_HANDLE) {
 			ctx->last_submit_bl_cmd.cmd[i].mem_handle =
-				cdm_cmd->cmd[i].bl_addr.mem_handle;
+				cdm_cmd->cmd_flex[i].bl_addr.mem_handle;
 
 			rc = cam_mem_get_io_buf(
-				cdm_cmd->cmd[i].bl_addr.mem_handle,
+				cdm_cmd->cmd_flex[i].bl_addr.mem_handle,
 				g_tfe_hw_mgr.mgr_common.cmd_iommu_hdl,
 				&ctx->last_submit_bl_cmd.cmd[i].hw_addr,
 				&ctx->last_submit_bl_cmd.cmd[i].len, NULL, NULL);
 		} else if (cdm_cmd->type == CAM_CDM_BL_CMD_TYPE_HW_IOVA) {
-			if (!cdm_cmd->cmd[i].bl_addr.hw_iova) {
+			if (!cdm_cmd->cmd_flex[i].bl_addr.hw_iova) {
 				CAM_ERR(CAM_CDM, "Submitted Hw bl hw_iova is invalid %d:%d",
 					i, cdm_cmd->cmd_arrary_count);
 				rc = -EINVAL;
@@ -3301,17 +3301,17 @@ static int cam_tfe_mgr_config_hw(void *hw_mgr_priv,
 			}
 			rc = 0;
 			ctx->last_submit_bl_cmd.cmd[i].hw_addr =
-				(uint64_t)cdm_cmd->cmd[i].bl_addr.hw_iova;
+				(uint64_t)cdm_cmd->cmd_flex[i].bl_addr.hw_iova;
 			ctx->last_submit_bl_cmd.cmd[i].len =
-				cdm_cmd->cmd[i].len + cdm_cmd->cmd[i].offset;
+				cdm_cmd->cmd_flex[i].len + cdm_cmd->cmd_flex[i].offset;
 			ctx->last_submit_bl_cmd.cmd[i].mem_handle = 0;
 		} else
 			CAM_INFO(CAM_ISP, "submitted invalid bl cmd addr type :%d for Bl(%d)",
 				cdm_cmd->type, i);
 
-		ctx->last_submit_bl_cmd.cmd[i].offset = cdm_cmd->cmd[i].offset;
+		ctx->last_submit_bl_cmd.cmd[i].offset = cdm_cmd->cmd_flex[i].offset;
 		ctx->last_submit_bl_cmd.cmd[i].type = cdm_cmd->type;
-		ctx->last_submit_bl_cmd.cmd[i].input_len = cdm_cmd->cmd[i].len;
+		ctx->last_submit_bl_cmd.cmd[i].input_len = cdm_cmd->cmd_flex[i].len;
 	}
 
 	if (!cfg->init_packet && !hw_update_data->mup_en)

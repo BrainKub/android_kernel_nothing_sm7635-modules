@@ -663,11 +663,11 @@ static int cam_ope_dump_bls(struct cam_ope_request *ope_req,
 
 	cdm_cmd = ope_req->cdm_cmd;
 	for (i = 0; i < cdm_cmd->cmd_arrary_count; i++) {
-		rc = cam_mem_get_io_buf(cdm_cmd->cmd[i].bl_addr.mem_handle,
+		rc = cam_mem_get_io_buf(cdm_cmd->cmd_flex[i].bl_addr.mem_handle,
 				ope_hw_mgr->iommu_hdl, &iova_addr, &size, NULL, NULL);
 		if (rc) {
 			CAM_ERR(CAM_OPE, "get io buf fail 0x%x",
-				cdm_cmd->cmd[i].bl_addr.mem_handle);
+				cdm_cmd->cmd_flex[i].bl_addr.mem_handle);
 			return rc;
 		}
 		if (dump->num_bls >= OPE_MAX_CDM_BLS) {
@@ -675,10 +675,10 @@ static int cam_ope_dump_bls(struct cam_ope_request *ope_req,
 			return -EINVAL;
 		}
 		dump->bl_entries[dump->num_bls].base =
-			(uint32_t)iova_addr + cdm_cmd->cmd[i].offset;
-		dump->bl_entries[dump->num_bls].len = cdm_cmd->cmd[i].len;
+			(uint32_t)iova_addr + cdm_cmd->cmd_flex[i].offset;
+		dump->bl_entries[dump->num_bls].len = cdm_cmd->cmd_flex[i].len;
 		dump->bl_entries[dump->num_bls].arbitration =
-			cdm_cmd->cmd[i].arbitrate;
+			cdm_cmd->cmd_flex[i].arbitrate;
 		dump->num_bls++;
 	}
 	return 0;

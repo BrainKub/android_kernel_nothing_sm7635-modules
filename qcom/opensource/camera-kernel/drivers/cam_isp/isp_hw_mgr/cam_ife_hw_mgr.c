@@ -7363,28 +7363,28 @@ skip_bw_clk_update:
 				}
 			}
 
-			cdm_cmd->cmd[i - skip].bl_addr.mem_handle = cmd->handle;
-			cdm_cmd->cmd[i - skip].offset = cmd->offset;
-			cdm_cmd->cmd[i - skip].len = cmd->len;
-			cdm_cmd->cmd[i - skip].arbitrate = false;
+			cdm_cmd->cmd_flex[i - skip].bl_addr.mem_handle = cmd->handle;
+			cdm_cmd->cmd_flex[i - skip].offset = cmd->offset;
+			cdm_cmd->cmd_flex[i - skip].len = cmd->len;
+			cdm_cmd->cmd_flex[i - skip].arbitrate = false;
 
 			if (g_ife_hw_mgr.debug_cfg.enable_cdm_cmd_check) {
 				CAM_INFO_RATE_LIMIT(CAM_ISP, "Enter cdm cmd_buf validation");
 				rc = cam_packet_util_get_cmd_mem_addr(
-					cdm_cmd->cmd[i - skip].bl_addr.mem_handle,
+					cdm_cmd->cmd_flex[i - skip].bl_addr.mem_handle,
 					&buf_addr, &len);
 				if (rc) {
 					CAM_ERR(CAM_ISP,
 						"Failed to get buf_addr and len for mem_handle: %d ctx id: %u request id: %llu",
-						cdm_cmd->cmd[i - skip].bl_addr.mem_handle,
+						cdm_cmd->cmd_flex[i - skip].bl_addr.mem_handle,
 						ctx->ctx_index, cfg->request_id);
 					continue;
 				}
 
 				buf_start = (uint32_t *)((uint8_t *) buf_addr +
-					cdm_cmd->cmd[i - skip].offset);
+					cdm_cmd->cmd_flex[i - skip].offset);
 				buf_end = (uint32_t *)((uint8_t *) buf_start +
-					cdm_cmd->cmd[i - skip].len - 1);
+					cdm_cmd->cmd_flex[i - skip].len - 1);
 				cmd_type = ((uint32_t)(*buf_start) >> CAM_CDM_COMMAND_OFFSET);
 				if ((i == 0) && (cmd_type != CAM_CDM_CMD_CHANGE_BASE)) {
 					CAM_ERR(CAM_ISP,

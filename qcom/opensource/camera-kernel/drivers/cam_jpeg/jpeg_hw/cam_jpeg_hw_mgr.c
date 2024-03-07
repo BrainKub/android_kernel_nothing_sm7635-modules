@@ -295,11 +295,11 @@ static int cam_jpeg_process_next_hw_update(void *priv, void *data,
 		p_cfg_req);
 
 	cmd = (config_args->hw_update_entries + cdm_cfg_to_insert);
-	cdm_cmd->cmd[cdm_cmd->cmd_arrary_count].bl_addr.mem_handle =
+	cdm_cmd->cmd_flex[cdm_cmd->cmd_arrary_count].bl_addr.mem_handle =
 		cmd->handle;
-	cdm_cmd->cmd[cdm_cmd->cmd_arrary_count].offset =
+	cdm_cmd->cmd_flex[cdm_cmd->cmd_arrary_count].offset =
 		cmd->offset;
-	cdm_cmd->cmd[cdm_cmd->cmd_arrary_count].len =
+	cdm_cmd->cmd_flex[cdm_cmd->cmd_arrary_count].len =
 		cmd->len;
 	CAM_DBG(CAM_JPEG, "Entry: %d, hdl: 0x%x, offset: 0x%x, len: %d",
 		cdm_cmd->cmd_arrary_count,
@@ -711,16 +711,16 @@ static int cam_jpeg_insert_cdm_change_base(
 		ch_base_iova_addr, mem_cam_base);
 
 	cdm_cmd = ctx_data->cdm_cmd;
-	cdm_cmd->cmd[cdm_cmd->cmd_arrary_count].bl_addr.mem_handle =
+	cdm_cmd->cmd_flex[cdm_cmd->cmd_arrary_count].bl_addr.mem_handle =
 		config_args->hw_update_entries[CAM_JPEG_CHBASE_CMD_BUFF_IDX].handle;
-	cdm_cmd->cmd[cdm_cmd->cmd_arrary_count].offset =
+	cdm_cmd->cmd_flex[cdm_cmd->cmd_arrary_count].offset =
 		config_args->hw_update_entries[CAM_JPEG_CHBASE_CMD_BUFF_IDX].offset;
-	cdm_cmd->cmd[cdm_cmd->cmd_arrary_count].len = size * sizeof(uint32_t);
+	cdm_cmd->cmd_flex[cdm_cmd->cmd_arrary_count].len = size * sizeof(uint32_t);
 	CAM_DBG(CAM_JPEG, "Entry: %d, hdl: 0x%x, offset: 0x%x, len: %d, addr: 0x%p",
 		cdm_cmd->cmd_arrary_count,
-		cdm_cmd->cmd[cdm_cmd->cmd_arrary_count].bl_addr.mem_handle,
-		cdm_cmd->cmd[cdm_cmd->cmd_arrary_count].offset,
-		cdm_cmd->cmd[cdm_cmd->cmd_arrary_count].len,
+		cdm_cmd->cmd_flex[cdm_cmd->cmd_arrary_count].bl_addr.mem_handle,
+		cdm_cmd->cmd_flex[cdm_cmd->cmd_arrary_count].offset,
+		cdm_cmd->cmd_flex[cdm_cmd->cmd_arrary_count].len,
 		(void *)iova_addr);
 	cdm_cmd->cmd_arrary_count++;
 	cdm_cmd->gen_irq_arb = false;
