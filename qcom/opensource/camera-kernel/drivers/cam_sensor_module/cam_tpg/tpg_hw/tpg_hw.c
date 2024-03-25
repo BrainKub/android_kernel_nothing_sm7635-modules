@@ -5,6 +5,7 @@
  */
 
 #include "tpg_hw.h"
+#include "cam_io_util.h"
 
 #define BYTES_PER_REGISTER           4
 #define NUM_REGISTER_PER_LINE        4
@@ -14,43 +15,6 @@
 #define MAX_WAITING_QUEUE_DEPTH     32
 #define TIMEOUT_MULTIPLIER_PRESIL   5
 #define TIMEOUT_MULTIPLIER          1
-
-static int cam_io_tpg_dump(void __iomem *base_addr,
-	uint32_t start_offset, int size)
-{
-	char          line_str[128];
-	char         *p_str;
-	int           i;
-	uint32_t      data;
-
-	CAM_DBG(CAM_TPG, "addr=%pK offset=0x%x size=%d",
-		base_addr, start_offset, size);
-
-	if (!base_addr || (size <= 0))
-		return -EINVAL;
-
-	line_str[0] = '\0';
-	p_str = line_str;
-	for (i = 0; i < size; i++) {
-		if (i % NUM_REGISTER_PER_LINE == 0) {
-			snprintf(p_str, 12, "0x%08x: ",
-				REG_OFFSET(start_offset, i));
-			p_str += 11;
-		}
-		data = cam_io_r(base_addr + REG_OFFSET(start_offset, i));
-		snprintf(p_str, 9, "%08x ", data);
-		p_str += 8;
-		if ((i + 1) % NUM_REGISTER_PER_LINE == 0) {
-			CAM_DBG(CAM_TPG, "%s", line_str);
-			line_str[0] = '\0';
-			p_str = line_str;
-		}
-	}
-	if (line_str[0] != '\0')
-		CAM_ERR(CAM_TPG, "%s", line_str);
-
-	return 0;
-}
 
 int32_t cam_tpg_mem_dmp(struct cam_hw_soc_info *soc_info)
 {
@@ -64,8 +28,9 @@ int32_t cam_tpg_mem_dmp(struct cam_hw_soc_info *soc_info)
 		return rc;
 	}
 	addr = soc_info->reg_map[0].mem_base;
+	CAM_DBG(CAM_TPG, "TPG[%d] register dump", soc_info->index);
 	size = resource_size(soc_info->mem_block[0]);
-	rc = cam_io_tpg_dump(addr, 0, (size >> 2));
+	rc = cam_io_dump(addr, 0, (size >> 2));
 	if (rc < 0) {
 		CAM_ERR(CAM_TPG, "generating dump failed %d", rc);
 	}
