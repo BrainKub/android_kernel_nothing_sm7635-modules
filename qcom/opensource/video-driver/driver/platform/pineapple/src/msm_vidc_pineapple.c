@@ -2985,7 +2985,7 @@ static int msm_vidc_init_data(struct msm_vidc_core *core)
 	d_vpr_h("%s: initialize pineapple data\n", __func__);
 
 	core->platform->data = pineapple_data;
-	if (of_device_is_compatible(dev->of_node, "qcom,sm8650-vidc-v2")) {
+	if (of_device_is_compatible(dev->of_node, "qcom,sm7635-vidc-v2")) {
 		d_vpr_h("%s: update frequency table for pineapple v2\n", __func__);
 		core->platform->data.freq_tbl = pineapple_freq_table_v2;
 		core->platform->data.freq_tbl_size = ARRAY_SIZE(pineapple_freq_table_v2);

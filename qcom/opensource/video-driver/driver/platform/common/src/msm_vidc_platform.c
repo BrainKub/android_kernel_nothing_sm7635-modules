@@ -213,12 +213,12 @@ static struct v4l2_m2m_ops msm_v4l2_m2m_ops = {
 static const struct msm_vidc_compat_handle compat_handle[] = {
 #if defined(CONFIG_MSM_VIDC_PINEAPPLE)
 	{
-		.compat                     = "qcom,sm8650-vidc",
+		.compat                     = "qcom,sm7635-vidc",
 		.init_platform              = msm_vidc_init_platform_pineapple,
 		.init_iris                  = msm_vidc_init_iris33,
 	},
 	{
-		.compat                     = "qcom,sm8650-vidc-v2",
+		.compat                     = "qcom,sm7635-vidc-v2",
 		.init_platform              = msm_vidc_init_platform_pineapple,
 		.init_iris                  = msm_vidc_init_iris33,
 	},

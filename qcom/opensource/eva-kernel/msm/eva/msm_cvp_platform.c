@@ -200,7 +200,7 @@ static struct msm_cvp_common_data sm8550_tvm_common_data[] = {
 	}
 };
 
-static struct msm_cvp_common_data sm8650_common_data[] = {
+static struct msm_cvp_common_data sm7635_common_data[] = {
 	{
 		.key = "qcom,pm-qos-latency-us",
 		.value = 50,
@@ -409,9 +409,9 @@ static struct msm_cvp_platform_data sm8550_tvm_data = {
 	.vm_id = 2,
 };
 
-static struct msm_cvp_platform_data sm8650_data = {
-	.common_data = sm8650_common_data,
-	.common_data_length = ARRAY_SIZE(sm8650_common_data),
+static struct msm_cvp_platform_data sm7635_data = {
+	.common_data = sm7635_common_data,
+	.common_data_length = ARRAY_SIZE(sm7635_common_data),
 	.sku_version = 0,
 	.vpu_ver = VPU_VERSION_5,
 	.ubwc_config = kona_ubwc_data,	/*Reuse Kona setting*/
@@ -444,7 +444,7 @@ static const struct of_device_id msm_cvp_dt_match[] = {
 	},
 	{
 		.compatible = "qcom,pineapple-cvp",
-		.data = &sm8650_data,
+		.data = &sm7635_data,
 	},
 	{
 		.compatible = "qcom,cliffs-cvp",

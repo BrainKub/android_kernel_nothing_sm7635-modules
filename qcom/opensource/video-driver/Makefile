@@ -9,7 +9,7 @@ KBUILD_OPTIONS += VIDEO_ROOT=$(KERNEL_SRC)/$(M)
 KBUILD_OPTIONS += BOARD_PLATFORM=pineapple
 KBUILD_OPTIONS += $(VIDEO_SELECT)
 
-KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS=$(OUT_DIR)/../sm8650-modules/qcom/opensource/mmrm-driver/Module.symvers
+KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS=$(OUT_DIR)/../sm7635-modules/qcom/opensource/mmrm-driver/Module.symvers
 
 all: modules
 

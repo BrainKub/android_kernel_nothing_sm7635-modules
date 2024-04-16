@@ -13,7 +13,7 @@ M ?= $(shell pwd)
 
 ifeq ($(WLAN_ROOT),)
 KBUILD_OPTIONS += \
-    WLAN_ROOT=$(KERNEL_SRC)/$(M)/.kiwi_v2 \
+    WLAN_ROOT=$(KERNEL_SRC)/$(M) \
     WLAN_PLATFORM_ROOT=vendor/qcom/opensource/wlan/platform \
     WLAN_COMMON_ROOT=cmn \
     WLAN_COMMON_INC=$(KERNEL_SRC)/$(M)/cmn \
@@ -40,7 +40,7 @@ KBUILD_OPTIONS += \
     WLAN_CTRL_NAME=wlan
 endif
 
-KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS=$(OUT_DIR)/../sm8650-modules/qcom/opensource/wlan/platform/Module.symvers
+KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS=$(OUT_DIR)/../sm7635-modules/qcom/opensource/wlan/platform/Module.symvers
 
 all:
 	$(MAKE) -C $(KERNEL_SRC) M=$(M) modules $(KBUILD_OPTIONS)
