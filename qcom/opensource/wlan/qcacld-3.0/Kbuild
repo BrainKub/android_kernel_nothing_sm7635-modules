@@ -3355,6 +3355,8 @@ ccflags-y += $(INCS)
 
 ccflags-y += -include $(WLAN_ROOT)/configs/default_config.h
 
+ccflags-y += -D__ANDROID_COMMON_KERNEL__
+
 # CFG80211_MLO_KEY_OPERATION_SUPPORT
 # Used to indicate the Linux Kernel contains support for ML key operation
 # support.
