@@ -734,7 +734,7 @@ static int qseecom_scm_call2(uint32_t svc_id, uint32_t tz_cmd_id,
 				return -ENOMEM;
 			req = (struct qseecom_check_app_ireq *)req_buf;
 			pr_debug("Lookup app_name = %s\n", req->app_name);
-			strlcpy(tzbuf, req->app_name, sizeof(req->app_name));
+			strscpy(tzbuf, req->app_name, sizeof(req->app_name));
 			qtee_shmbridge_flush_shm_buf(&shm);
 			smc_id = TZ_OS_APP_LOOKUP_ID;
 			desc.arginfo = TZ_OS_APP_LOOKUP_ID_PARAM_ID;
@@ -2896,7 +2896,7 @@ static int qseecom_load_app(struct qseecom_dev_handle *data, void __user *argp)
 
 	req.qsee_cmd_id = QSEOS_APP_LOOKUP_COMMAND;
 	load_img_req.img_name[MAX_APP_NAME_SIZE-1] = '\0';
-	strlcpy(req.app_name, load_img_req.img_name, MAX_APP_NAME_SIZE);
+	strscpy(req.app_name, load_img_req.img_name, MAX_APP_NAME_SIZE);
 
 	ret = __qseecom_check_app_exists(req, &app_id);
 	if (ret < 0)
@@ -2947,7 +2947,7 @@ static int qseecom_load_app(struct qseecom_dev_handle *data, void __user *argp)
 			load_req.qsee_cmd_id = QSEOS_APP_START_COMMAND;
 			load_req.mdt_len = load_img_req.mdt_len;
 			load_req.img_len = load_img_req.img_len;
-			strlcpy(load_req.app_name, load_img_req.img_name,
+			strscpy(load_req.app_name, load_img_req.img_name,
 						MAX_APP_NAME_SIZE);
 			load_req.phy_addr = (uint32_t)pa;
 			cmd_buf = (void *)&load_req;
@@ -2956,7 +2956,7 @@ static int qseecom_load_app(struct qseecom_dev_handle *data, void __user *argp)
 			load_req_64bit.qsee_cmd_id = QSEOS_APP_START_COMMAND;
 			load_req_64bit.mdt_len = load_img_req.mdt_len;
 			load_req_64bit.img_len = load_img_req.img_len;
-			strlcpy(load_req_64bit.app_name, load_img_req.img_name,
+			strscpy(load_req_64bit.app_name, load_img_req.img_name,
 						MAX_APP_NAME_SIZE);
 			load_req_64bit.phy_addr = (uint64_t)pa;
 			cmd_buf = (void *)&load_req_64bit;
@@ -3046,10 +3046,10 @@ static int qseecom_load_app(struct qseecom_dev_handle *data, void __user *argp)
 		 * thread private data.
 		 */
 		if (!strcmp(load_img_req.img_name, "keymaste"))
-			strlcpy(entry->app_name, "keymaster",
+			strscpy(entry->app_name, "keymaster",
 					MAX_APP_NAME_SIZE);
 		else
-			strlcpy(entry->app_name, load_img_req.img_name,
+			strscpy(entry->app_name, load_img_req.img_name,
 					MAX_APP_NAME_SIZE);
 		entry->app_blocked = false;
 		entry->blocked_on_listener_id = 0;
@@ -3066,9 +3066,9 @@ static int qseecom_load_app(struct qseecom_dev_handle *data, void __user *argp)
 	data->client.app_id = app_id;
 	data->client.app_arch = load_img_req.app_arch;
 	if (!strcmp(load_img_req.img_name, "keymaste"))
-		strlcpy(data->client.app_name, "keymaster", MAX_APP_NAME_SIZE);
+		strscpy(data->client.app_name, "keymaster", MAX_APP_NAME_SIZE);
 	else
-		strlcpy(data->client.app_name, load_img_req.img_name,
+		strscpy(data->client.app_name, load_img_req.img_name,
 					MAX_APP_NAME_SIZE);
 	load_img_req.app_id = app_id;
 	if (copy_to_user(argp, &load_img_req, sizeof(load_img_req))) {
@@ -4874,7 +4874,7 @@ static int __qseecom_load_fw(struct qseecom_dev_handle *data, char *appname,
 		load_req.qsee_cmd_id = QSEOS_APP_START_COMMAND;
 		load_req.mdt_len = load_req.mdt_len;
 		load_req.img_len = load_req.img_len;
-		strlcpy(load_req.app_name, appname, MAX_APP_NAME_SIZE);
+		strscpy(load_req.app_name, appname, MAX_APP_NAME_SIZE);
 		load_req.phy_addr = (uint32_t)pa;
 		cmd_buf = (void *)&load_req;
 		cmd_len = sizeof(struct qseecom_load_app_ireq);
@@ -4882,7 +4882,7 @@ static int __qseecom_load_fw(struct qseecom_dev_handle *data, char *appname,
 		load_req_64bit.qsee_cmd_id = QSEOS_APP_START_COMMAND;
 		load_req_64bit.mdt_len = load_req.mdt_len;
 		load_req_64bit.img_len = load_req.img_len;
-		strlcpy(load_req_64bit.app_name, appname, MAX_APP_NAME_SIZE);
+		strscpy(load_req_64bit.app_name, appname, MAX_APP_NAME_SIZE);
 		load_req_64bit.phy_addr = (uint64_t)pa;
 		cmd_buf = (void *)&load_req_64bit;
 		cmd_len = sizeof(struct qseecom_load_app_64bit_ireq);
@@ -5165,12 +5165,12 @@ static int __qseecom_start_app(struct qseecom_handle **handle,
 	init_waitqueue_head(&data->abort_wq);
 
 	app_ireq.qsee_cmd_id = QSEOS_APP_LOOKUP_COMMAND;
-	strlcpy(app_ireq.app_name, app_name, MAX_APP_NAME_SIZE);
+	strscpy(app_ireq.app_name, app_name, MAX_APP_NAME_SIZE);
 	ret = __qseecom_check_app_exists(app_ireq, &app_id);
 	if (ret)
 		goto err;
 
-	strlcpy(data->client.app_name, app_name, MAX_APP_NAME_SIZE);
+	strscpy(data->client.app_name, app_name, MAX_APP_NAME_SIZE);
 	if (app_id) {
 		pr_warn("App id %d for [%s] app exists\n", app_id,
 			(char *)app_ireq.app_name);
@@ -5211,7 +5211,7 @@ static int __qseecom_start_app(struct qseecom_handle **handle,
 		}
 		entry->app_id = app_id;
 		entry->ref_cnt = 1;
-		strlcpy(entry->app_name, app_name, MAX_APP_NAME_SIZE);
+		strscpy(entry->app_name, app_name, MAX_APP_NAME_SIZE);
 		if (__qseecom_get_fw_size(app_name, &fw_size, &app_arch)) {
 			ret = -EIO;
 			kfree(entry);
@@ -6139,7 +6139,7 @@ static int qseecom_query_app_loaded(struct qseecom_dev_handle *data,
 
 	req.qsee_cmd_id = QSEOS_APP_LOOKUP_COMMAND;
 	query_req.app_name[MAX_APP_NAME_SIZE-1] = '\0';
-	strlcpy(req.app_name, query_req.app_name, MAX_APP_NAME_SIZE);
+	strscpy(req.app_name, query_req.app_name, MAX_APP_NAME_SIZE);
 
 	ret = __qseecom_check_app_exists(req, &app_id);
 	if (ret) {
@@ -6179,7 +6179,7 @@ static int qseecom_query_app_loaded(struct qseecom_dev_handle *data,
 			data->client.app_arch = 0;
 			query_req.app_arch = 0;
 		}
-		strlcpy(data->client.app_name, query_req.app_name,
+		strscpy(data->client.app_name, query_req.app_name,
 				MAX_APP_NAME_SIZE);
 		/*
 		 * If app was loaded by appsbl before and was not registered,
@@ -6196,7 +6196,7 @@ static int qseecom_query_app_loaded(struct qseecom_dev_handle *data,
 			entry->app_id = app_id;
 			entry->ref_cnt = 1;
 			entry->app_arch = data->client.app_arch;
-			strlcpy(entry->app_name, data->client.app_name,
+			strscpy(entry->app_name, data->client.app_name,
 				MAX_APP_NAME_SIZE);
 			entry->app_blocked = false;
 			entry->blocked_on_listener_id = 0;

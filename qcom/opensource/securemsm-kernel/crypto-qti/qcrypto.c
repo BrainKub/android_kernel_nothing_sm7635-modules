@@ -3,7 +3,7 @@
  * QTI Crypto driver
  *
  * Copyright (c) 2010-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <linux/module.h>
@@ -4294,7 +4294,7 @@ static int _qcrypto_prefix_alg_cra_name(char cra_name[], unsigned int size)
 	if (size >= CRYPTO_MAX_ALG_NAME - strlen("qcom-"))
 		return -EINVAL;
 	strlcat(new_cra_name, cra_name, CRYPTO_MAX_ALG_NAME);
-	strlcpy(cra_name, new_cra_name, CRYPTO_MAX_ALG_NAME);
+	strscpy(cra_name, new_cra_name, CRYPTO_MAX_ALG_NAME);
 	return 0;
 }
 
