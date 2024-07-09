@@ -152,7 +152,7 @@ static void cdsp_loader_unload(struct platform_device *pdev)
 	if (!priv)
 		return;
 
-	if (priv->pil_h) {
+	if (priv->pil_h && cdsp_state == CDSP_SUBSYS_LOADED) {
 		dev_dbg(&pdev->dev, "%s: calling subsystem_put\n", __func__);
 		rproc_shutdown(priv->pil_h);
 		priv->pil_h = NULL;
