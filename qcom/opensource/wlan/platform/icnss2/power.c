@@ -887,7 +887,7 @@ int icnss_aop_pdc_reconfig(struct icnss_priv *priv)
 	if (priv->pdc_init_table_len <= 0 || !priv->pdc_init_table)
 		return 0;
 
-	icnss_pr_dbg("Setting PDC defaults for device ID: (0x%x)\n",
+	icnss_pr_dbg("Setting PDC defaults for device ID: (0x%lx)\n",
 		     priv->device_id);
 	for (i = 0; i < priv->pdc_init_table_len; i++) {
 		mbox_msg = (char *)priv->pdc_init_table[i];

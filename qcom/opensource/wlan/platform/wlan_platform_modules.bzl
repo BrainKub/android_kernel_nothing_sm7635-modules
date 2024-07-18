@@ -178,7 +178,7 @@ def _define_modules_for_target_variant(target, variant):
             ]),
             includes = ["icnss2", "cnss_utils"],
             kconfig = "icnss2/Kconfig",
-            copts = ["-Wno-format"],
+            copts = [""],
             defconfig = defconfig,
             conditional_srcs = {
                 "CONFIG_ICNSS2_QMI": {
