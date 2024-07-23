@@ -1257,7 +1257,7 @@ static void lpass_cdc_add_child_devices(struct work_struct *work)
 				__func__);
 		}
 
-		strlcpy(plat_dev_name, node->name,
+		strscpy(plat_dev_name, node->name,
 				(LPASS_CDC_STRING_LEN - 1));
 
 		pdev = platform_device_alloc(plat_dev_name, -1);

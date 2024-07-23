@@ -4728,10 +4728,10 @@ static void lpass_cdc_rx_macro_add_child_devices(struct work_struct *work)
 			rx_swr_master_node = true;
 
 		if(rx_swr_master_node)
-			strlcpy(plat_dev_name, "rx_swr_ctrl",
+			strscpy(plat_dev_name, "rx_swr_ctrl",
 				(RX_SWR_STRING_LEN - 1));
 		else
-			strlcpy(plat_dev_name, node->name,
+			strscpy(plat_dev_name, node->name,
 				(RX_SWR_STRING_LEN - 1));
 
 		pdev = platform_device_alloc(plat_dev_name, -1);

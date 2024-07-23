@@ -6,6 +6,7 @@
 #include <linux/slab.h>
 #include <linux/module.h>
 #include <linux/of_device.h>
+#include <linux/of_platform.h>
 #include <linux/err.h>
 #include <sound/core.h>
 #include <sound/pcm.h>

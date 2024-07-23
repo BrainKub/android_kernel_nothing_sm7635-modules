@@ -16,6 +16,7 @@
 #include <linux/dma-buf.h>
 #include <linux/iosys-map.h>
 #include <linux/platform_device.h>
+#include <linux/of_platform.h>
 #include <linux/of_device.h>
 #include <linux/export.h>
 #include <linux/ioctl.h>
@@ -30,6 +31,7 @@
 #include <linux/msm_audio.h>
 #include <linux/qcom_scm.h>
 #include <soc/qcom/secure_buffer.h>
+#include <linux/of.h>
 
 MODULE_IMPORT_NS(DMA_BUF);
 

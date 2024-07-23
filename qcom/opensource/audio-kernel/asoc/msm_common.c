@@ -961,7 +961,7 @@ void msm_common_get_backend_name(const char *stream_name, char **backend_name)
 	if (!(*backend_name))
 		return;
 
-	strlcpy(*backend_name, arg, ARRAY_SZ);
+	strscpy(*backend_name, arg, ARRAY_SZ);
 }
 
 static void msm_audio_update_qos_request(u32 latency)

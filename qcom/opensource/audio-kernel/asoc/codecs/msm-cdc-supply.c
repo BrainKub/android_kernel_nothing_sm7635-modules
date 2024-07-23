@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2016-2020, The Linux Foundation. All rights reserved.
- * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2024, Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <linux/kernel.h>
@@ -12,6 +12,7 @@
 #include <linux/regulator/consumer.h>
 #include <asoc/msm-cdc-supply.h>
 #include <sound/soc.h>
+#include <linux/of_platform.h>
 
 #define CODEC_DT_MAX_PROP_SIZE 40
 

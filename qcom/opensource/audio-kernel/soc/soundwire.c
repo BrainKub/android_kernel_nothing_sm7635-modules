@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2015-2020, The Linux Foundation. All rights reserved.
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022-2024, Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <linux/kernel.h>
@@ -117,7 +117,7 @@ struct swr_device *swr_new_device(struct swr_master *master,
 	}
 	swr->master = master;
 	swr->addr = info->addr;
-	strlcpy(swr->name, info->name, sizeof(swr->name));
+	strscpy(swr->name, info->name, sizeof(swr->name));
 	swr->dev.type = &swr_dev_type;
 	swr->dev.parent = &master->dev;
 	swr->dev.bus = &soundwire_type;

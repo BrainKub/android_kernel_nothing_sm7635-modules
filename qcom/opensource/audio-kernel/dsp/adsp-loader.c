@@ -424,7 +424,7 @@ static int adsp_loader_probe(struct platform_device *pdev)
 						GFP_KERNEL);
 			if (!priv->adsp_fw_name)
 				goto wqueue;
-			strlcpy(priv->adsp_fw_name, adsp_fw_name,
+			strscpy(priv->adsp_fw_name, adsp_fw_name,
 				fw_name_size);
 
 			ret = of_property_read_string(pdev->dev.of_node,
@@ -527,7 +527,7 @@ static int adsp_loader_probe(struct platform_device *pdev)
 						GFP_KERNEL);
 			if (!priv->adsp_fw_name)
 				goto wqueue;
-			strlcpy(priv->adsp_fw_name, adsp_fw_name_array[i],
+			strscpy(priv->adsp_fw_name, adsp_fw_name_array[i],
 				fw_name_size);
 
 			fw_name_size = strlen(adsp_dtb_fw_name_array[i]) + 1;
