@@ -1,5 +1,5 @@
 /* Copyright (c) 2018-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -113,7 +113,7 @@ TRACE_EVENT(dfc_flow_check,
 	),
 
 	TP_fast_assign(
-		__assign_str(dev_name, name)
+		__assign_str(dev_name, name);
 		__entry->bearer_id = bearer_id;
 		__entry->len = len;
 		__entry->mark = mark;
@@ -142,7 +142,7 @@ TRACE_EVENT(dfc_flow_info,
 	),
 
 	TP_fast_assign(
-		__assign_str(dev_name, name)
+		__assign_str(dev_name, name);
 		__entry->bid = bearer_id;
 		__entry->fid = flow_id;
 		__entry->ip = ip_type;
@@ -347,7 +347,7 @@ TRACE_EVENT(dfc_ll_switch,
 	),
 
 	TP_fast_assign(
-		__assign_str(cmd_str, cmd)
+		__assign_str(cmd_str, cmd);
 		__entry->type = type;
 		__entry->num_bearer = num_bearer;
 		memcpy(__get_dynamic_array(bearers), bearers, num_bearer);
