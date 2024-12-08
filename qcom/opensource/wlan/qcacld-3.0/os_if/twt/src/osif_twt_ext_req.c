@@ -977,24 +977,14 @@ int osif_twt_get_capabilities(struct wlan_objmgr_vdev *vdev)
 	struct wlan_objmgr_psoc *psoc;
 	enum QDF_OPMODE mode;
 	QDF_STATUS status;
-	uint8_t vdev_id;
 
 	psoc = wlan_vdev_get_psoc(vdev);
 	if (!psoc)
 		return -EINVAL;
 
-	vdev_id = wlan_vdev_get_id(vdev);
 	mode = wlan_vdev_mlme_get_opmode(vdev);
 	if (mode != QDF_STA_MODE && mode != QDF_P2P_CLIENT_MODE)
 		return -EOPNOTSUPP;
-
-	if (!wlan_cm_is_vdev_connected(vdev)) {
-		osif_err_rl("Not associated!, vdev %d mode %d", vdev_id, mode);
-		return -EAGAIN;
-	}
-
-	if (wlan_cm_host_roam_in_progress(psoc, vdev_id))
-		return -EBUSY;
 
 	status = osif_twt_send_get_capabilities_response(psoc, vdev);
 	if (QDF_IS_STATUS_ERROR(status))
@@ -1048,17 +1038,17 @@ int osif_twt_setup_req(struct wlan_objmgr_vdev *vdev,
 
 	if (params.flag_bcast && !(peer_cap & WLAN_TWT_CAPA_BROADCAST)) {
 		osif_err_rl("TWT setup reject: TWT Broadcast not supported");
-		return -EOPNOTSUPP;
+		return -EPROTONOSUPPORT;
 	}
 
 	if (!params.flag_bcast && !(peer_cap & WLAN_TWT_CAPA_RESPONDER)) {
 		osif_err_rl("TWT setup reject: TWT responder not supported");
-		return -EOPNOTSUPP;
+		return -EPROTONOSUPPORT;
 	}
 
 	ret = osif_is_twt_command_allowed(vdev, vdev_id, psoc);
 	if (ret)
-		return ret;
+		return -EOPNOTSUPP;
 
 	if (osif_twt_setup_conc_allowed(psoc, vdev_id)) {
 		osif_err_rl("TWT setup reject: SCC or MCC concurrency exists");
@@ -1073,7 +1063,7 @@ int osif_twt_setup_req(struct wlan_objmgr_vdev *vdev,
 							  reason);
 		if (ret) {
 			osif_err("Failed to disable TWT");
-			return ret;
+			return -EOPNOTSUPP;
 		}
 	}
 
@@ -1082,7 +1072,7 @@ int osif_twt_setup_req(struct wlan_objmgr_vdev *vdev,
 	ret = osif_twt_send_requestor_enable_cmd(psoc, pdev_id);
 	if (ret) {
 		osif_err("Failed to Enable TWT");
-		return ret;
+		return -EOPNOTSUPP;
 	}
 
 	return osif_send_twt_setup_req(vdev, psoc, &params);
