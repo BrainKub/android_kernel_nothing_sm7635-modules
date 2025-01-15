@@ -5,6 +5,8 @@ M ?= $(shell pwd)
 ifeq ($(WLAN_PLATFORM_ROOT),)
 WLAN_PLATFORM_ROOT = $(shell pwd)
 
+USE_EXTERNAL_CONFIGS := y
+
 # If it reaches here, compilation is probably without Android.mk,
 # so enable all flags (including debug flag CONFIG_CNSS2_DEBUG) by
 # default.
