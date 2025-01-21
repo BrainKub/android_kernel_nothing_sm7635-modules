@@ -5,6 +5,9 @@ VIDEO_COMPILE_BY = $(shell whoami | sed 's/\\/\\\\/')
 VIDEO_COMPILE_HOST = $(shell uname -n)
 VIDEO_GEN_PATH = $(VIDEO_ROOT)/driver/vidc/inc/video_generated_h
 
+VIDEO_ROOT := $(KERNEL_SRC)/$(M)
+KBUILD_OPTIONS += VIDEO_ROOT=$(VIDEO_ROOT)
+
 all: modules
 
 $(VIDEO_GEN_PATH): $(shell find . -type f \( -iname \*.c -o -iname \*.h -o -iname \*.mk \))
