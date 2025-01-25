@@ -2,6 +2,7 @@
 
 include $(MSM_EXT_DISPLAY_ROOT)/config/kalamammdrivers.conf
 LINUXINCLUDE += -include $(MSM_EXT_DISPLAY_ROOT)/config/kalamammdriversconf.h
+ccflags-y += -I$(srctree)/$(src)/include
 
 obj-m += msm_ext_display.o
 

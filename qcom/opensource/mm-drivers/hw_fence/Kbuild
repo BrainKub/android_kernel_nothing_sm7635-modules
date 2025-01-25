@@ -6,6 +6,10 @@ LINUXINCLUDE += -include $(MSM_HW_FENCE_ROOT)/config/kalamammdriversconf.h \
 		-I$(MSM_HW_FENCE_ROOT)hw_fence/include/
 
 ifdef CONFIG_QTI_HW_FENCE
+ccflags-y += \
+		-I$(MSM_HW_FENCE_ROOT)../synx-kernel/include/uapi/synx/media \
+		-I$(MSM_HW_FENCE_ROOT)../synx-kernel/msm/synx
+
 obj-m += msm_hw_fence.o
 
 msm_hw_fence-y := src/msm_hw_fence.o \
