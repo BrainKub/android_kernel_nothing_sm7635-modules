@@ -10,7 +10,7 @@
 #include <sound/core.h>
 #include <sound/pcm.h>
 #include <sound/soc.h>
-#include <linux/soc/qcom/msm_ext_display.h>
+#include <msm_ext_display.h>
 
 #define DRV_NAME "HDMI_codec"
 
