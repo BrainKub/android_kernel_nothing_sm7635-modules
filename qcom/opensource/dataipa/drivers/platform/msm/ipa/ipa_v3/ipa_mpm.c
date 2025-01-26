@@ -1128,7 +1128,7 @@ static int ipa_mpm_connect_mhip_gsi_pipe(enum ipa_client_type mhip_client,
 	/* Channel Params */
 	gsi_params.chan_params.prot = GSI_CHAN_PROT_MHIP;
 	gsi_params.chan_params.dir = IPA_CLIENT_IS_PROD(mhip_client) ?
-		GSI_CHAN_DIR_TO_GSI : GSI_CHAN_DIR_FROM_GSI;
+		CHAN_DIR_TO_GSI : CHAN_DIR_FROM_GSI;
 	/* chan_id is set in ipa3_request_gsi_channel() */
 	gsi_params.chan_params.re_size = GSI_CHAN_RE_SIZE_16B;
 	gsi_params.chan_params.ring_len =

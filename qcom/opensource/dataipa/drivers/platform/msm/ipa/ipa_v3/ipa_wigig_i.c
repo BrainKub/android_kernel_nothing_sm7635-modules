@@ -687,9 +687,9 @@ static int ipa3_wigig_config_gsi(bool Rx,
 	memset(&gsi_scratch, 0, sizeof(gsi_scratch));
 
 	if (Rx)
-		channel_props.dir = GSI_CHAN_DIR_TO_GSI;
+		channel_props.dir = CHAN_DIR_TO_GSI;
 	else
-		channel_props.dir = GSI_CHAN_DIR_FROM_GSI;
+		channel_props.dir = CHAN_DIR_FROM_GSI;
 
 	channel_props.re_size = GSI_CHAN_RE_SIZE_16B;
 	channel_props.prot = GSI_CHAN_PROT_11AD;

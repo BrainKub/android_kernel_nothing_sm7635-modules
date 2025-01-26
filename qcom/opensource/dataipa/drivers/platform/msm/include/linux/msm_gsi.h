@@ -8,11 +8,6 @@
 #include <linux/types.h>
 #include <linux/interrupt.h>
 
-enum gsi_chan_dir {
-	GSI_CHAN_DIR_FROM_GSI = 0x0,
-	GSI_CHAN_DIR_TO_GSI = 0x1
-};
-
 /**
  * @GSI_USE_PREFETCH_BUFS: Channel will use normal prefetch buffers if possible
  * @GSI_ESCAPE_BUF_ONLY: Channel will always use escape buffers only
