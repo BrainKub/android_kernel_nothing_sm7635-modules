@@ -1,5 +1,10 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
+ccflags-y += \
+	-DIPA_TRACE_INCLUDE_PATH=$(srctree)/$(src)/ipa_v3 \
+	-DRNDIS_TRACE_INCLUDE_PATH=$(srctree)/$(src)/ipa_clients \
+	-I$(srctree)/$(src)/../../../../../datarmnet-ext/mem
+
 ipam-y += \
 	ipa_rm.o ipa_rm_dependency_graph.o ipa_rm_peers_list.o ipa_rm_resource.o ipa_rm_inactivity_timer.o \
 	ipa_v3/ipa.o \

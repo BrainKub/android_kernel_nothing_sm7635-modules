@@ -7,3 +7,5 @@ gsim-objs := gsi.o gsihal/gsihal.o gsihal/gsihal_reg.o
 gsim-$(CONFIG_DEBUG_FS) += gsi_dbg.o
 
 gsim-$(CONFIG_IPA_EMULATION) += gsi_emulation.o
+
+ccflags-y += -DGSI_TRACE_INCLUDE_PATH=$(srctree)/$(src)
