@@ -24,7 +24,7 @@ WLAN_PROFILE ?= default
 CONFIG_QCA_CLD_WLAN_PROFILE ?= $(WLAN_PROFILE)
 DEVNAME ?= wlan
 WLAN_PLATFORM_INC ?= $(WLAN_ROOT)/../platform/inc
-DATA_IPA_INC ?= $(WLAN_ROOT)/../dataipa/drivers/platform/msm/include
+DATA_IPA_INC ?= $(WLAN_ROOT)/../../dataipa/drivers/platform/msm/include
 DATA_IPA_UAPI_INC ?= $(DATA_IPA_INC)/uapi
 
 ifeq ($(KERNEL_BUILD), n)
@@ -3362,6 +3362,7 @@ INCS +=		$(COAP_WMI_INC)
 ccflags-y += $(INCS)
 
 ccflags-y += -include $(WLAN_ROOT)/configs/default_config.h
+ccflags-y += -include $(WLAN_ROOT)/../../dataipa/config/dataipa_vendor.h
 
 ccflags-y += -D__ANDROID_COMMON_KERNEL__
 

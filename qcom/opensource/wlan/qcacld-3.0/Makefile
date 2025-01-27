@@ -27,6 +27,7 @@ LOCAL_DEV_NAME := $(patsubst .%,%,\
 	$(lastword $(strip $(subst /, ,$(M)))))
 
 KBUILD_EXTRA := \
+    CONFIG_IPA_OUT_OF_TREE=y \
     WLAN_PROFILE=$(LOCAL_DEV_NAME) \
     DYNAMIC_SINGLE_CHIP=$(LOCAL_DEV_NAME) \
     MODNAME=$(WLAN_CHIPSET)_$(LOCAL_DEV_NAME) \
