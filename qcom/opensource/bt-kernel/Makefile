@@ -12,6 +12,8 @@ KBUILD_OPTIONS += CONFIG_MSM_BT_POWER=m
 KBUILD_OPTIONS += CONFIG_BTFM_SLIM=m
 endif
 
+KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS=$(M)/../audio-kernel/Module.symvers
+KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS+=$(M)/../wlan/platform/Module.symvers
 
 all:
 	$(MAKE) -C $(KERNEL_SRC) M=$(M) modules $(KBUILD_OPTIONS)
