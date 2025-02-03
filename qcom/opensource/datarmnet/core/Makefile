@@ -40,6 +40,7 @@ KERNEL_SRC ?= /lib/modules/$(shell uname -r)/build
 KBUILD_OPTIONS := RMNET_CORE_ROOT=$(PWD)
 KBUILD_OPTIONS += MODNAME?=rmnet_core
 KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS=$(M)/../../datarmnet-ext/mem/Module.symvers
+KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS+=$(M)/../../dataipa/drivers/platform/msm/Module.symvers
 
 all:
 	$(MAKE) -C $(KERNEL_SRC) M=$(M) modules $(KBUILD_OPTIONS)

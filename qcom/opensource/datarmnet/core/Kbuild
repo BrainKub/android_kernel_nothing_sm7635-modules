@@ -6,7 +6,8 @@ ccflags-y += \
 	-DRMNET_TRACE_INCLUDE_PATH=$(srctree)/$(src) \
 	-I$(srctree)/$(src)/../../dataipa/drivers/platform/msm/include \
 	-I$(srctree)/$(src)/../../dataipa/drivers/platform/msm/include/uapi \
-	-I$(srctree)/$(src)/../../datarmnet-ext/mem
+	-I$(srctree)/$(src)/../../datarmnet-ext/mem \
+	-include $(srctree)/$(src)/../../dataipa/config/dataipa_vendor.h
 
 obj-m += rmnet_core.o
 
