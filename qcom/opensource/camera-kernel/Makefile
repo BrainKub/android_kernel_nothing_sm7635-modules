@@ -7,7 +7,8 @@ KBUILD_OPTIONS += BOARD_PLATFORM=pineapple
 
 KBUILD_EXTRA_SYMBOLS := \
     $(OUT_DIR)/../sm8650-modules/qcom/opensource/mmrm-driver/Module.symvers \
-    $(OUT_DIR)/../sm8650-modules/qcom/opensource/securemsm-kernel/Module.symvers
+    $(OUT_DIR)/../sm8650-modules/qcom/opensource/securemsm-kernel/Module.symvers \
+    $(OUT_DIR)/../sm8650-modules/qcom/opensource/synx-kernel/Module.symvers
 
 all: modules
 
