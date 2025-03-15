@@ -87,9 +87,9 @@ LINUXINCLUDE +=                                 \
 # Optional include directories
 SYNXVENDORDIR=$(CAMERA_KERNEL_ROOT)/../synx-kernel
 ccflags-$(CONFIG_MSM_GLOBAL_SYNX) += -I$(KERNEL_ROOT)/drivers/media/platform/msm/synx
-ccflags-$(TARGET_SYNX_ENABLE) += -I$(SYNXVENDORDIR)/include/uapi/synx/media
-ccflags-$(TARGET_SYNX_ENABLE) += -I$(SYNXVENDORDIR)/msm/synx
-ccflags-$(TARGET_SYNX_ENABLE) += -DCONFIG_TARGET_SYNX_ENABLE=1
+ccflags-$(CONFIG_TARGET_SYNX_ENABLE) += -I$(SYNXVENDORDIR)/include/uapi/synx/media
+ccflags-$(CONFIG_TARGET_SYNX_ENABLE) += -I$(SYNXVENDORDIR)/msm/synx
+ccflags-$(CONFIG_TARGET_SYNX_ENABLE) += -DCONFIG_TARGET_SYNX_ENABLE=1
 ccflags-y += -I$(CAMERA_KERNEL_ROOT)/../securemsm-kernel/
 ccflags-y += -I$(CAMERA_KERNEL_ROOT)/../securemsm-kernel/include/
 
@@ -140,7 +140,7 @@ else
 	ccflags-y += -DCONFIG_CAM_PRESIL=1
 endif
 
-camera-$(TARGET_SYNX_ENABLE) += drivers/cam_sync/cam_sync_synx.o
+camera-$(CONFIG_TARGET_SYNX_ENABLE) += drivers/cam_sync/cam_sync_synx.o
 camera-$(CONFIG_QCOM_CX_IPEAK) += drivers/cam_utils/cam_cx_ipeak.o
 camera-$(CONFIG_QCOM_BUS_SCALING) += drivers/cam_utils/cam_soc_bus.o
 camera-$(CONFIG_INTERCONNECT_QCOM) += drivers/cam_utils/cam_soc_icc.o
