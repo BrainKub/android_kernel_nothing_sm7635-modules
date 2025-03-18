@@ -4,7 +4,8 @@ endif
 
 ccflags-y += \
 	-I$(srctree)/$(src)/../../dataipa/drivers/platform/msm/include \
-	-I$(srctree)/$(src)/../../dataipa/drivers/platform/msm/include/uapi
+	-I$(srctree)/$(src)/../../dataipa/drivers/platform/msm/include/uapi \
+        -I$(srctree)/$(src)/../../datarmnet-ext/mem
 
 obj-m += rmnet_core.o
 
