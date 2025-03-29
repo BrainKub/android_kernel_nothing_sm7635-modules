@@ -358,9 +358,9 @@ static int ipa_eth_setup_rtk_gsi_channel(
 	memset(&gsi_channel_props, 0, sizeof(gsi_channel_props));
 	gsi_channel_props.prot = GSI_CHAN_PROT_RTK;
 	if (pipe->dir == IPA_ETH_PIPE_DIR_TX)
-		gsi_channel_props.dir = GSI_CHAN_DIR_FROM_GSI;
+		gsi_channel_props.dir = CHAN_DIR_FROM_GSI;
 	else
-		gsi_channel_props.dir = GSI_CHAN_DIR_TO_GSI;
+		gsi_channel_props.dir = CHAN_DIR_TO_GSI;
 	gsi_ep_info = ipa_get_gsi_ep_info(ep->client);
 	if (!gsi_ep_info) {
 		IPAERR("Failed getting GSI EP info for client=%d\n",
@@ -648,9 +648,9 @@ static int ipa_eth_setup_aqc_gsi_channel(
 	memset(&gsi_channel_props, 0, sizeof(gsi_channel_props));
 	gsi_channel_props.prot = GSI_CHAN_PROT_AQC;
 	if (pipe->dir == IPA_ETH_PIPE_DIR_TX)
-		gsi_channel_props.dir = GSI_CHAN_DIR_FROM_GSI;
+		gsi_channel_props.dir = CHAN_DIR_FROM_GSI;
 	else
-		gsi_channel_props.dir = GSI_CHAN_DIR_TO_GSI;
+		gsi_channel_props.dir = CHAN_DIR_TO_GSI;
 	gsi_ep_info = ipa_get_gsi_ep_info(ep->client);
 	if (!gsi_ep_info) {
 		IPAERR("Failed getting GSI EP info for client=%d\n",
@@ -779,9 +779,9 @@ static int ipa_eth_setup_ntn_gsi_channel(
 	memset(&gsi_channel_props, 0, sizeof(gsi_channel_props));
 	gsi_channel_props.prot = GSI_CHAN_PROT_NTN;
 	if (pipe->dir == IPA_ETH_PIPE_DIR_TX)
-		gsi_channel_props.dir = GSI_CHAN_DIR_FROM_GSI;
+		gsi_channel_props.dir = CHAN_DIR_FROM_GSI;
 	else
-		gsi_channel_props.dir = GSI_CHAN_DIR_TO_GSI;
+		gsi_channel_props.dir = CHAN_DIR_TO_GSI;
 	gsi_ep_info = ipa_get_gsi_ep_info(ep->client);
 	if (!gsi_ep_info) {
 		IPAERR("Failed getting GSI EP info for client=%d\n",

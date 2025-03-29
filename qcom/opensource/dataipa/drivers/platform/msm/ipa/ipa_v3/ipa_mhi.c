@@ -282,7 +282,7 @@ static int ipa_mhi_start_gsi_channel(enum ipa_client_type client,
 	memset(&ch_props, 0, sizeof(ch_props));
 	ch_props.prot = GSI_CHAN_PROT_MHI;
 	ch_props.dir = IPA_CLIENT_IS_PROD(client) ?
-		GSI_CHAN_DIR_TO_GSI : GSI_CHAN_DIR_FROM_GSI;
+		CHAN_DIR_TO_GSI : CHAN_DIR_FROM_GSI;
 	ch_props.ch_id = ep_cfg->ipa_gsi_chan_num;
 	ch_props.evt_ring_hdl = *params->cached_gsi_evt_ring_hdl;
 	ch_props.re_size = GSI_CHAN_RE_SIZE_16B;

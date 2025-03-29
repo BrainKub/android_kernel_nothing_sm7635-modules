@@ -6892,7 +6892,7 @@ static int ipa_gsi_setup_transfer_ring(struct ipa3_ep_context *ep,
 	else
 		gsi_channel_props.prot = GSI_CHAN_PROT_GPI;
 	if (IPA_CLIENT_IS_PROD(ep->client)) {
-		gsi_channel_props.dir = GSI_CHAN_DIR_TO_GSI;
+		gsi_channel_props.dir = CHAN_DIR_TO_GSI;
 		if(ep->client == IPA_CLIENT_APPS_WAN_PROD ||
 		   ep->client == IPA_CLIENT_APPS_LAN_PROD ||
 		   ep->client == IPA_CLIENT_APPS_WAN_LOW_LAT_DATA_PROD)
@@ -6900,7 +6900,7 @@ static int ipa_gsi_setup_transfer_ring(struct ipa3_ep_context *ep,
 		else
 			gsi_channel_props.tx_poll = false;
 	} else {
-		gsi_channel_props.dir = GSI_CHAN_DIR_FROM_GSI;
+		gsi_channel_props.dir = CHAN_DIR_FROM_GSI;
 		if (ep->sys)
 			gsi_channel_props.max_re_expected = ep->sys->rx_pool_sz;
 	}
@@ -7356,7 +7356,7 @@ int ipa_gsi_ch20_wa(void)
 
 	memset(&gsi_channel_props, 0, sizeof(gsi_channel_props));
 	gsi_channel_props.prot = GSI_CHAN_PROT_GPI;
-	gsi_channel_props.dir = GSI_CHAN_DIR_TO_GSI;
+	gsi_channel_props.dir = CHAN_DIR_TO_GSI;
 	gsi_channel_props.evt_ring_hdl = ~0;
 	gsi_channel_props.re_size = GSI_CHAN_RE_SIZE_16B;
 	gsi_channel_props.ring_len = 4 * gsi_channel_props.re_size;
