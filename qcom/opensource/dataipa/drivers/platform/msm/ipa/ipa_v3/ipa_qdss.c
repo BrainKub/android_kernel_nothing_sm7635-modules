@@ -109,7 +109,7 @@ int ipa_qdss_conn_pipes(struct ipa_qdss_conn_in_params *in,
 	/* setup channel ring */
 	memset(&gsi_channel_props, 0, sizeof(gsi_channel_props));
 	gsi_channel_props.prot = GSI_CHAN_PROT_QDSS;
-	gsi_channel_props.dir = GSI_CHAN_DIR_TO_GSI;
+	gsi_channel_props.dir = CHAN_DIR_TO_GSI;
 
 	gsi_ep_info = ipa_get_gsi_ep_info(ep_rx->client);
 	if (!gsi_ep_info) {

@@ -184,9 +184,9 @@ static int ipa3_setup_wdi3_gsi_channel(u8 is_smmu_enabled,
 	/* setup channel ring */
 	if ((dir == IPA_WDI3_TX_DIR) || (dir == IPA_WDI3_TX1_DIR) ||
 		(dir == IPA_WDI3_TX2_DIR))
-		gsi_channel_props.dir = GSI_CHAN_DIR_FROM_GSI;
+		gsi_channel_props.dir = CHAN_DIR_FROM_GSI;
 	else
-		gsi_channel_props.dir = GSI_CHAN_DIR_TO_GSI;
+		gsi_channel_props.dir = CHAN_DIR_TO_GSI;
 
 	gsi_ep_info = ipa_get_gsi_ep_info(ep->client);
 	if (!gsi_ep_info) {

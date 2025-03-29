@@ -1172,11 +1172,11 @@ static int ipa3_wdi2_gsi_alloc_channel_ring(
 
 	if (IPA_CLIENT_IS_PROD(client)) {
 		IPAERR("Client is PROD\n");
-		channel_props->dir = GSI_CHAN_DIR_TO_GSI;
+		channel_props->dir = CHAN_DIR_TO_GSI;
 		channel_props->re_size = GSI_CHAN_RE_SIZE_16B;
 	} else {
 		IPAERR("Client is CONS");
-		channel_props->dir = GSI_CHAN_DIR_FROM_GSI;
+		channel_props->dir = CHAN_DIR_FROM_GSI;
 		channel_props->re_size = GSI_CHAN_RE_SIZE_8B;
 	}
 
