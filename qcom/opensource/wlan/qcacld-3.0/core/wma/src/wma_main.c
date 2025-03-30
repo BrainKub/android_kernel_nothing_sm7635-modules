@@ -6294,7 +6294,7 @@ static void wma_update_mlme_aux_dev_caps(struct wlan_objmgr_psoc *psoc,
 	struct wlan_mlme_aux_dev_caps
 		wlan_mlme_aux0_dev_caps[WLAN_MLME_HW_MODE_MAX] = {0};
 
-	if (WMI_HOST_HW_MODE_MAX != WLAN_MLME_HW_MODE_MAX)
+	if ((enum wlan_mlme_hw_mode_config_type)WMI_HOST_HW_MODE_MAX != WLAN_MLME_HW_MODE_MAX)
 		wma_err("struct define mismatch, pls fix it.");
 
 	num_aux_dev_caps =
