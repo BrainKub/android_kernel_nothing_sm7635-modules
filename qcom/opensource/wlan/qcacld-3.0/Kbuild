@@ -46,6 +46,8 @@ endif
 WLAN_PLATFORM_ROOT := $(WLAN_ROOT)/../platform
 
 ifeq ($(CONFIG_ARCH_PINEAPPLE), y)
+CONFIG_QCA_CLD_WLAN_PROFILE=pineapple_gki_$(WLAN_PROFILE)
+
 include \
 	$(WLAN_PLATFORM_ROOT)/cnss2/pineapple_gki_defconfig \
 	$(WLAN_PLATFORM_ROOT)/cnss_genl/pineapple_gki_defconfig \
@@ -54,6 +56,8 @@ include \
 endif
 
 ifeq ($(CONFIG_ARCH_SUN), y)
+CONFIG_QCA_CLD_WLAN_PROFILE=sun_gki_$(WLAN_PROFILE)
+
 include \
 	$(WLAN_PLATFORM_ROOT)/cnss2/sun_gki_defconfig \
 	$(WLAN_PLATFORM_ROOT)/cnss_genl/sun_gki_defconfig \

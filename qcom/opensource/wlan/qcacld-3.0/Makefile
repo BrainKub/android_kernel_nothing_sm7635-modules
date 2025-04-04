@@ -22,6 +22,16 @@ else
 KBUILD_OPTIONS += MODNAME?=wlan
 endif
 
+WLAN_CHIPSET := qca_cld3
+LOCAL_DEV_NAME := $(patsubst .%,%,\
+	$(lastword $(strip $(subst /, ,$(M)))))
+
+KBUILD_EXTRA := \
+    WLAN_PROFILE=$(LOCAL_DEV_NAME) \
+    DYNAMIC_SINGLE_CHIP=$(LOCAL_DEV_NAME) \
+    MODNAME=$(WLAN_CHIPSET)_$(LOCAL_DEV_NAME) \
+    DEVNAME=$(LOCAL_DEV_NAME)
+
 #By default build for CLD
 WLAN_SELECT := CONFIG_QCA_CLD_WLAN=m
 KBUILD_OPTIONS += CONFIG_QCA_WIFI_ISOC=0
