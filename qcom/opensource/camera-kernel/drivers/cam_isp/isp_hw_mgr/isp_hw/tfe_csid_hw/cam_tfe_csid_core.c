@@ -3206,6 +3206,7 @@ static int cam_tfe_csid_stop(void *hw_priv,
 				cam_io_w_mb(val, mem_base + pxl_reg->csid_pxl_cfg0_addr);
 			} else
 				continue;
+			break;
 		default:
 			CAM_DBG(CAM_ISP, "CSID:%d Invalid res type%d",
 				csid_hw->hw_intf->hw_idx,
