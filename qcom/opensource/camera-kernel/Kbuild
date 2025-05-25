@@ -6,10 +6,6 @@ $(info "KERNEL_ROOT is: $(KERNEL_ROOT)")
 endif
 
 # Include Architecture configurations
-ifeq ($(CONFIG_ARCH_CLIFFS), y)
-include $(CAMERA_KERNEL_ROOT)/config/cliffs.mk
-endif
-
 ifeq ($(CONFIG_ARCH_WAIPIO), y)
 include $(CAMERA_KERNEL_ROOT)/config/waipio.mk
 endif
@@ -54,6 +50,10 @@ endif
 # we cannot rely on CONFIG_ARCH_* symbol which is defined in Kernel defconfig
 ifeq ($(BOARD_PLATFORM), kalama)
 include $(CAMERA_KERNEL_ROOT)/config/kalama.mk
+endif
+
+ifeq ($(BOARD_PLATFORM), cliffs)
+include $(CAMERA_KERNEL_ROOT)/config/cliffs.mk
 endif
 
 ifeq ($(BOARD_PLATFORM), crow)
