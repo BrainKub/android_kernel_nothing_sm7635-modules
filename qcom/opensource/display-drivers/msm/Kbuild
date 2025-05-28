@@ -36,6 +36,9 @@ ifeq ($(CONFIG_ARCH_PINEAPPLE), y)
 ifeq ($(CONFIG_ARCH_QTI_VM), y)
     include $(DISPLAY_ROOT)/config/gki_pineappledisptui.conf
     LINUX_INC += -include $(DISPLAY_ROOT)/config/gki_pineappledisptuiconf.h
+else ifeq ($(TARGET_BOARD_PLATFORM), volcano)
+    include $(DISPLAY_ROOT)/config/gki_volcanodisp.conf
+    LINUX_INC += -include $(DISPLAY_ROOT)/config/gki_volcanodispconf.h
 else
 	include $(DISPLAY_ROOT)/config/gki_pineappledisp.conf
 	LINUX_INC += -include $(DISPLAY_ROOT)/config/gki_pineappledispconf.h
