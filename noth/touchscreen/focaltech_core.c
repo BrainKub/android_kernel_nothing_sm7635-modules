@@ -35,6 +35,7 @@
 #include <linux/of_device.h>
 #include <linux/of_gpio.h>
 #include <linux/of_irq.h>
+#include <linux/sysfs.h>
 #include <linux/version.h>
 
 #if IS_ENABLED(CONFIG_DRM)
@@ -666,6 +667,7 @@ void fts_fod_report_key(struct fts_ts_data *ts_data)
 
     if ((ts_data->fod_fp_down) && (!ts_data->fp_down_report)) {
         ts_data->fp_down_report = 1;
+        sysfs_notify(&ts_data->dev->kobj, NULL, "fts_fod_pressed");
         input_report_key(ts_data->input_dev, KEY_GESTURE_FOD, 1);
         input_sync(ts_data->input_dev);
         coordinate.x = ts_data->fp_x;
