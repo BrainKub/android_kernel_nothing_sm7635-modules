@@ -397,6 +397,7 @@ static void dsi_ctrl_dma_cmd_wait_for_done(struct dsi_ctrl *dsi_ctrl)
 					"dma_tx done but irq not triggered\n");
 		} else {
 			SDE_EVT32(dsi_ctrl->cell_index, SDE_EVTLOG_ERROR);
+
 			DSI_CTRL_ERR(dsi_ctrl,
 					"Command transfer failed\n");
 		}
