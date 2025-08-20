@@ -48,7 +48,6 @@ struct adsp_loader_private {
 	struct kobject *boot_adsp_obj;
 	struct attribute_group *attr_group;
 	char *adsp_fw_name;
-	char *adsp_dtb_name;
 };
 
 static struct kobj_attribute adsp_boot_attribute =
@@ -150,20 +149,6 @@ load_adsp:
 					priv->adsp_fw_name);
 				if (rc) {
 					dev_err(&pdev->dev, "%s: rproc set firmware failed,\n",
-						__func__);
-					goto fail;
-				}
-			}
-			if (!priv->adsp_dtb_name) {
-				dev_info(&pdev->dev, "%s: Load default ADSP DTB\n",
-					__func__);
-			} else {
-				dev_info(&pdev->dev, "%s: Load ADSP DTB with fw name %s\n",
-					__func__, priv->adsp_dtb_name);
-				rc = qcom_rproc_set_dtb_firmware(priv->pil_h,
-					priv->adsp_dtb_name);
-				if (rc) {
-					dev_err(&pdev->dev, "%s: rproc set dtb firmware failed,\n",
 						__func__);
 					goto fail;
 				}
@@ -348,7 +333,6 @@ static int adsp_loader_probe(struct platform_device *pdev)
 	size_t len;
 	u32 *buf;
 	const char **adsp_fw_name_array = NULL;
-	const char **adsp_dtb_fw_name_array = NULL;
 	int adsp_fw_cnt;
 	u32* adsp_fw_bit_values = NULL;
 	int i;
@@ -357,7 +341,6 @@ static int adsp_loader_probe(struct platform_device *pdev)
 	int ret = 0;
 	u32 adsp_fuse_not_supported = 0;
 	const char *adsp_fw_name;
-	const char *adsp_dtb_name;
 	struct property *prop;
 	int size;
 	phandle rproc_phandle;
@@ -426,24 +409,6 @@ static int adsp_loader_probe(struct platform_device *pdev)
 				goto wqueue;
 			strscpy(priv->adsp_fw_name, adsp_fw_name,
 				fw_name_size);
-
-			ret = of_property_read_string(pdev->dev.of_node,
-						"adsp-dtb-name",
-						 &adsp_dtb_name);
-			if (ret < 0) {
-				dev_dbg(&pdev->dev, "%s: unable to read fw-dtb-name\n",
-					__func__);
-				goto wqueue;
-			}
-
-			fw_name_size = strlen(adsp_dtb_name) + 1;
-			priv->adsp_dtb_name = devm_kzalloc(&pdev->dev,
-						fw_name_size,
-						GFP_KERNEL);
-			if (!priv->adsp_dtb_name)
-				goto wqueue;
-			strscpy(priv->adsp_dtb_name, adsp_dtb_name,
-				fw_name_size);
 		}
 		goto wqueue;
 	}
@@ -505,20 +470,6 @@ static int adsp_loader_probe(struct platform_device *pdev)
 		goto wqueue;
 	}
 
-	adsp_dtb_fw_name_array = devm_kzalloc(&pdev->dev,
-				adsp_fw_cnt * sizeof(char *), GFP_KERNEL);
-
-	/* Read ADSP dtb firmware image names */
-	ret = of_property_read_string_array(pdev->dev.of_node,
-					"adsp-dtb-fw-names",
-					adsp_dtb_fw_name_array,
-					adsp_fw_cnt);
-	if (ret < 0) {
-		dev_dbg(&pdev->dev, "%s: unable to read adsp-dtb-fw-names\n",
-			__func__);
-		goto wqueue;
-	}
-
 	for (i = 0; i < adsp_fw_cnt; i++) {
 		if (adsp_fw_bit_values[i] == adsp_var_idx) {
 			fw_name_size = strlen(adsp_fw_name_array[i]) + 1;
@@ -528,15 +479,6 @@ static int adsp_loader_probe(struct platform_device *pdev)
 			if (!priv->adsp_fw_name)
 				goto wqueue;
 			strscpy(priv->adsp_fw_name, adsp_fw_name_array[i],
-				fw_name_size);
-
-			fw_name_size = strlen(adsp_dtb_fw_name_array[i]) + 1;
-			priv->adsp_dtb_name = devm_kzalloc(&pdev->dev,
-						fw_name_size,
-						GFP_KERNEL);
-			if (!priv->adsp_dtb_name)
-				goto wqueue;
-			strscpy(priv->adsp_dtb_name, adsp_dtb_fw_name_array[i],
 				fw_name_size);
 			break;
 		}
