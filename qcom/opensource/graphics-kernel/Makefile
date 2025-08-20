@@ -4,6 +4,7 @@ KGSL_MODULE_ROOT = $(dir $(CUR_MKFILE))
 endif
 
 KBUILD_OPTIONS+=KGSL_PATH=$(KGSL_MODULE_ROOT)
+KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS+=$(M)/../mm-drivers/hw_fence/Module.symvers
 
 all: modules
 
