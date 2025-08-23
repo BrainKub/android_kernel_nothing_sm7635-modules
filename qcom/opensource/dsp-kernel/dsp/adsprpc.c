@@ -404,6 +404,17 @@ static struct fastrpc_channel_ctx gcinfo[NUM_CHANNELS] = {
 		.cpuinfo_todsp = FASTRPC_CPUINFO_EARLY_WAKEUP,
 		.cpuinfo_status = false,
 	},
+	{
+		.name = "cdsprpc1-smd",
+		.subsys = "cdsp1",
+		.spd = {
+			{
+				.cid = CDSP1_DOMAIN_ID,
+			}
+		},
+		.cpuinfo_todsp = FASTRPC_CPUINFO_EARLY_WAKEUP,
+		.cpuinfo_status = false,
+	},
 };
 
 
