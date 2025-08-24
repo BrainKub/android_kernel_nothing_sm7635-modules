@@ -40,6 +40,13 @@
 #include <linux/cpumask.h>
 #include <linux/icmp.h>
 #include <linux/inet.h>
+#include <linux/version.h>
+#if (KERNEL_VERSION(6, 5, 0) <= LINUX_VERSION_CODE)
+#include <net/gso.h>
+#endif
+#if (KERNEL_VERSION(6, 6, 0) <= LINUX_VERSION_CODE)
+#include <net/netdev_rx_queue.h>
+#endif
 static char*verinfo[]={"\x34\x35\x35\x66\x31\x32\x38\x38"
 "\x36\x37\x30\x32\x34\x34\x63\x35","\x63\x66\x66\x31\x64\x38\x38\x36",
 "\x30\x37\x63\x37\x63\x37\x36\x39","\x63\x34\x65\x33\x65\x61\x34\x65",

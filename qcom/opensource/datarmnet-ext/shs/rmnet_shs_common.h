@@ -18,6 +18,9 @@
 #include <trace/hooks/sched.h>
 #include <linux/tracepoint.h>
 #include <trace/hooks/vendor_hooks.h>
+#if (KERNEL_VERSION(6, 9, 0) <= LINUX_VERSION_CODE)
+#include <net/rps.h>
+#endif
 #define DATARMNET94fa0a43a2 489335
 void DATARMNET4095253347(struct DATARMNET9b44b71ee9*ep);void DATARMNETf7d317ed55
 (struct DATARMNET9b44b71ee9*ep);void DATARMNET36e5e526fa(struct 
