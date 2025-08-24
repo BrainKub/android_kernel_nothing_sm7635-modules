@@ -238,20 +238,20 @@ static int cam_tfe_mgr_get_hw_caps_internal(void *hw_mgr_priv,
 		if (i >= query_isp->num_dev)
 			return -EINVAL;
 
-		query_isp->dev_caps[i].hw_type = CAM_ISP_TFE_HW_TFE;
-		query_isp->dev_caps[i].hw_version.major = 7;
-		query_isp->dev_caps[i].hw_version.minor = 7;
-		query_isp->dev_caps[i].hw_version.incr = 0;
+		query_isp->dev_caps_flex[i].hw_type = CAM_ISP_TFE_HW_TFE;
+		query_isp->dev_caps_flex[i].hw_version.major = 7;
+		query_isp->dev_caps_flex[i].hw_version.minor = 7;
+		query_isp->dev_caps_flex[i].hw_version.incr = 0;
 
 		/*
 		 * device number is based on number of full tfe
 		 * if pix is not supported, set reserve to 1
 		 */
 		if (hw_mgr->tfe_csid_dev_caps[i].num_pix) {
-			query_isp->dev_caps[i].hw_version.reserved = 0;
+			query_isp->dev_caps_flex[i].hw_version.reserved = 0;
 			num_dev++;
 		} else {
-			query_isp->dev_caps[i].hw_version.reserved = 1;
+			query_isp->dev_caps_flex[i].hw_version.reserved = 1;
 		}
 	}
 
@@ -296,7 +296,7 @@ static int cam_tfe_mgr_get_hw_caps(void *hw_mgr_priv,
 	for (i = 0; i < CAM_ISP_TFE_HW_MAX; i++) {
 		if (!hw_mgr->csid_devices[i])
 			continue;
-		query_isp.dev_caps[i] = query_isp_v2->dev_caps[i];
+		query_isp.dev_caps_flex[i] = query_isp_v2->dev_caps_flex[i];
 	}
 
 	query_isp.num_dev = query_isp_v2->num_dev;
