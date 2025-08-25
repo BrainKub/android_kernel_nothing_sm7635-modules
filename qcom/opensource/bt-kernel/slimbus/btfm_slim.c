@@ -14,6 +14,7 @@
 #include <linux/ratelimit.h>
 #include <linux/slab.h>
 #include <linux/fs.h>
+#include <linux/version.h>
 #include <sound/pcm.h>
 #include <sound/pcm_params.h>
 #include <sound/soc.h>
@@ -674,7 +675,11 @@ static int btfm_slim_probe(struct slim_device *slim)
 		goto register_err;
 	}
 
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+	btfm_slim_class = class_create("btfmslim-dev");
+#else
 	btfm_slim_class = class_create(THIS_MODULE, "btfmslim-dev");
+#endif
 	if (IS_ERR(btfm_slim_class)) {
 		BTFMSLIM_ERR("%s: coudn't create class\n", __func__);
 		ret = -1;

@@ -31,6 +31,7 @@
 #include <linux/idr.h>
 #include <linux/cdev.h>
 #include <linux/device.h>
+#include <linux/version.h>
 #include <linux/pinctrl/qcom-pinctrl.h>
 #include "btpower.h"
 #if (defined CONFIG_BT_SLIM)
@@ -2651,7 +2652,11 @@ static int __init btpower_init(void)
 		goto chrdev_err;
 	}
 
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+	bt_class = class_create("bt-dev");
+#else
 	bt_class = class_create(THIS_MODULE, "bt-dev");
+#endif
 	if (IS_ERR(bt_class)) {
 		pr_err("%s: coudn't create class\n", __func__);
 		ret = -1;
