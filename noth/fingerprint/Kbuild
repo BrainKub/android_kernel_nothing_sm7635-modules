@@ -1,0 +1,4 @@
+goodix_fp-y += gf_spi.o \
+               platform.o \
+               netlink.o
+obj-m := goodix_fp.o
