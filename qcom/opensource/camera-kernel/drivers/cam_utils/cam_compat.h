@@ -23,8 +23,11 @@
 #include "cam_cpastop_hw.h"
 #include "cam_smmu_api.h"
 
-#if KERNEL_VERSION(6, 0, 0) <= LINUX_VERSION_CODE
+#ifdef CONFIG_CSF_2_5_SECURE_CAMERA
 #include <smmu-proxy/linux/qti-smmu-proxy.h>
+#endif
+
+#if KERNEL_VERSION(6, 0, 0) <= LINUX_VERSION_CODE
 #include <linux/qcom-dma-mapping.h>
 #endif
 
