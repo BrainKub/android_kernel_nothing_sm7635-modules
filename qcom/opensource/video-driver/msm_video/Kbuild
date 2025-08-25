@@ -1,15 +1,14 @@
 # SPDX-License-Identifier: GPL-2.0-only
 
-KBUILD_CPPFLAGS += -DCONFIG_MSM_MMRM=1
 VIDEO_DRIVER_ABS_PATH := $(VIDEO_ROOT)/msm_video/driver
 VIDEO_DRIVER_REL_PATH := ../msm_video/driver
 
-ifeq ($(CONFIG_ARCH_PINEAPPLE), y)
+ifeq ($(TARGET_BOARD_PLATFORM), pineapple)
 include $(VIDEO_ROOT)/config/pineapple_video.conf
 LINUXINCLUDE   += -include $(VIDEO_ROOT)/config/pineapple_video.h
 endif
 
-ifeq ($(CONFIG_ARCH_VOLCANO), y)
+ifeq ($(TARGET_BOARD_PLATFORM), volcano)
 include $(VIDEO_ROOT)/config/volcano_video.conf
 LINUXINCLUDE   += -include $(VIDEO_ROOT)/config/volcano_video.h
 endif
