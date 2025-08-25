@@ -1,3 +1,7 @@
+ifeq ($(CONFIG_ARCH_PINEAPPLE), y)
+include $(BT_ROOT)/config/pineapplebt.conf
+endif
+
 ifeq ($(CONFIG_MSM_BT_POWER),m)
 KBUILD_CPPFLAGS += -DCONFIG_MSM_BT_POWER
 endif
