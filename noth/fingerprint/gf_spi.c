@@ -41,6 +41,7 @@
 #include <linux/pm_qos.h>
 #include <linux/cpufreq.h>
 #include <linux/pm_wakeup.h>
+#include <linux/version.h>
 #include <drm/drm_panel.h>
 #include "gf_spi.h"
 
@@ -954,7 +955,11 @@ static int __init gf_init(void)
 		return status;
 	}
 	SPIDEV_MAJOR = status;
+#if (KERNEL_VERSION(6, 3, 0) <= LINUX_VERSION_CODE)
+	gf_class = class_create(CLASS_NAME);
+#else
 	gf_class = class_create(THIS_MODULE, CLASS_NAME);
+#endif
 	if (IS_ERR(gf_class)) {
 		unregister_chrdev(SPIDEV_MAJOR, gf_driver.driver.name);
 		pr_warn("Failed to create class.\n");
