@@ -35,6 +35,7 @@
 #include <linux/of_device.h>
 #include <linux/of_gpio.h>
 #include <linux/of_irq.h>
+#include <linux/version.h>
 
 #if IS_ENABLED(CONFIG_DRM)
 #if IS_ENABLED(CONFIG_DRM_PANEL)
@@ -1994,13 +1995,21 @@ static int fts_parse_dt(struct device *dev, struct fts_ts_platform_data *pdata)
     }
 
     /* reset, irq gpio info */
+#if (KERNEL_VERSION(6, 2, 0) <= LINUX_VERSION_CODE)
+    pdata->reset_gpio = of_get_named_gpio(np, "focaltech,reset-gpio", 0);
+#else
     pdata->reset_gpio = of_get_named_gpio_flags(np, "focaltech,reset-gpio",
                         0, &pdata->reset_gpio_flags);
+#endif
     if (pdata->reset_gpio < 0)
         FTS_ERROR("Unable to get reset_gpio");
 
+#if (KERNEL_VERSION(6, 2, 0) <= LINUX_VERSION_CODE)
+    pdata->irq_gpio = of_get_named_gpio(np, "focaltech,irq-gpio", 0);
+#else
     pdata->irq_gpio = of_get_named_gpio_flags(np, "focaltech,irq-gpio",
                       0, &pdata->irq_gpio_flags);
+#endif
     if (pdata->irq_gpio < 0)
         FTS_ERROR("Unable to get irq_gpio");
 
