@@ -2309,7 +2309,7 @@ static int fts_notifier_callback_init(struct fts_ts_data *ts_data)
                 PANEL_EVENT_NOTIFIER_CLIENT_PRIMARY_TOUCH, active_panel,
                 fts_panel_notifier_callback, ts_data);
         ts_data->notifier_cookie = cookie;
-        if (!cookie) FTS_ERROR("[DRM]panel_notifier_register fail: %d", cookie);
+        if (!cookie) FTS_ERROR("[DRM]Failed to register for panel events");
     }
 #else
 	ts_data->notifier_cookie = cookie;
