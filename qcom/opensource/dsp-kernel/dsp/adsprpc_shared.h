@@ -24,11 +24,12 @@
 
 #define smq_invoke_ctx_params "pid: %d, tgid: %d, handle: %d, sc: 0x%x, fl: %p, fd: %p, magic: %d\n"
 
-#define fastrpc_file_params "fl->tgid: %d, fl->cid: %d, fl->ssrcount: %p, fl->pd: %d, fl->profile: %p, fl->mode: %p, fl->tgid_open: %d, fl->num_cached_buf: %d, num_pers_hdrs: %d, fl->sessionid: %d, fl->servloc_name: %s, fl->file_close: %d, fl->dsp_proc_init: %d,fl->apps: %p, fl->qos_request: %d, fl->dev_minor: %d, fl->debug_buf: %s fl->debug_buf_alloced_attempted: %d, fl->wake_enable: %d, fl->ws_timeout: %d, fl->untrusted_process: %d\n"
+#define fastrpc_file_params "fl->tgid: %d, fl->cid: %d, fl->ssrcount: %llu, fl->pd: %d, fl->profile: %u, fl->mode: %u, fl->tgid_open: %d, fl->num_cached_buf: %d, num_pers_hdrs: %d, fl->sessionid: %d, fl->servloc_name: %s, fl->file_close: %d, fl->dsp_proc_init: %d,fl->apps: %p, fl->qos_request: %d, fl->dev_minor: %d, fl->debug_buf: %s fl->debug_buf_alloced_attempted: %d, fl->wake_enable: %d, fl->ws_timeout: %d, fl->untrusted_process: %d\n"
 
-#define fastrpc_mmap_params "fd: %d, flags: %p, buf: %p, phys: %p, size : %d, va : %p, map->raddr: %p, len : %d, refs : %d, secure: %d\n"
 
-#define fastrpc_buf_params "buf->fl: %p, buf->phys: %p, buf->virt: %p, buf->size: %d, buf->dma_attr: %ld, buf->raddr: %p, buf->flags: %d, buf->type: %d, buf->in_use: %d\n"
+#define fastrpc_mmap_params "fd: %d, flags: 0x%x, buf: %p, phys: 0x%llx, size: %zu, va: 0x%lx, map->raddr: 0x%lx, len: %zu, refs: %d, secure: %d\n"
+
+#define fastrpc_buf_params "buf->fl: %p, buf->phys: 0x%llx, buf->virt: %p, buf->size: %zu, buf->dma_attr: %ld, buf->raddr: 0x%lx, buf->flags: %d, buf->type: %d, buf->in_use: %d\n"
 /* Set for buffers that have no virtual mapping in userspace */
 #define FASTRPC_ATTR_NOVA 0x1
 
