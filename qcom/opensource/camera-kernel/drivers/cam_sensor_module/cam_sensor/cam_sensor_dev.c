@@ -92,7 +92,7 @@ static ssize_t  ext_cam_i2c_show(struct kobject *kobj,
 				strncpy(buf, "READ_FAIL\n", 11);
 			}
 		}
-		pr_info("ext_cam_i2c_show buff=[%s] size = %d\n",buf, strlen(buf));
+		pr_info("ext_cam_i2c_show buff=[%s] size = %lu\n",buf, strlen(buf));
 	}
     return strlen(buf);
 }
@@ -105,7 +105,7 @@ static ssize_t  ext_cam_i2c_store(struct kobject *kobj,
 	int count = 0;
 	char tmpStr[128] = {0};
 	ext_i2c_info.status = 0;
-	pr_info("ext_cam_i2c_store buff=[%s] size = %d\n",buf, strlen(buf));
+	pr_info("ext_cam_i2c_store buff=[%s] size = %lu\n",buf, strlen(buf));
 	for (i = 0; i < strlen(buf); i++)
 	{
 		if (buf[i] == ',')
@@ -120,7 +120,7 @@ static ssize_t  ext_cam_i2c_store(struct kobject *kobj,
 				count++;
 				switch(count) {
 					case 1:
-						sscanf(tmpStr, "%x", &ext_i2c_info.slave_addr);
+						sscanf(tmpStr, "%hx", &ext_i2c_info.slave_addr);
 						break;
 					case 2:
 						if (tmpStr[0] == 'r') {
