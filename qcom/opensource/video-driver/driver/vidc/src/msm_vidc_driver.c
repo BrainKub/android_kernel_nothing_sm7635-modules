@@ -4092,7 +4092,7 @@ int msm_vidc_trigger_ssr(struct msm_vidc_core *core,
 			(unsigned long)SSR_TYPE) >> SSR_TYPE_SHIFT;
 
 	if (!is_ssr_type_allowed(core, ssr->ssr_type)) {
-		d_vpr_h("SSR Type %#llx is not allowed\n", ssr->ssr_type);
+		d_vpr_h("SSR Type %#x is not allowed\n", ssr->ssr_type);
 		return 0;
 	}
 

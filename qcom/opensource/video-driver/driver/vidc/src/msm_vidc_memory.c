@@ -512,7 +512,7 @@ static int msm_vidc_dma_unmap_page(struct msm_vidc_core *core,
 	}
 
 	d_vpr_l(
-		"%s: type %11s, device_addr %#x, refcount %d, region %d\n",
+		"%s: type %11s, device_addr %#llx, refcount %d, region %d\n",
 		__func__, buf_name(mem->type), mem->device_addr,
 		mem->refcount, mem->region);
 
