@@ -1073,7 +1073,7 @@ static int wcd9378_sys_usage_auto_udpate(struct snd_soc_component *component,
 	int i = 0;
 
 	dev_dbg(component->dev,
-		"%s: enter, current sys_usage: %d, sys_usage_status: 0x%x, sys_usage_bit: %d, set_enable: %d\n",
+		"%s: enter, current sys_usage: %d, sys_usage_status: 0x%lx, sys_usage_bit: %d, set_enable: %d\n",
 			__func__, wcd9378->sys_usage,
 			wcd9378->sys_usage_status,
 			sys_usage_bit, set_enable);
@@ -3200,7 +3200,7 @@ static int wcd9378_tx_master_ch_put(struct snd_kcontrol *kcontrol,
 		return -EINVAL;
 
 	dev_dbg(component->dev, "%s: slave_ch_idx: %d", __func__, slave_ch_idx);
-	dev_dbg(component->dev, "%s: ucontrol->value.enumerated.item[0] = %ld\n",
+	dev_dbg(component->dev, "%s: ucontrol->value.enumerated.item[0] = %u\n",
 			__func__, ucontrol->value.enumerated.item[0]);
 
 	idx = ucontrol->value.enumerated.item[0];

@@ -2588,7 +2588,7 @@ static int msm_asoc_parse_soundcard_name(struct platform_device *pdev,
 		goto parse;
 	}
 	if (len <= 0 || len > sizeof(u32)) {
-		dev_dbg(&pdev->dev, "%s: nvmem cell length out of range: %d\n",
+		dev_dbg(&pdev->dev, "%s: nvmem cell length out of range: %zu\n",
 			__func__, len);
 		kfree(buf);
 		goto parse;
