@@ -3700,7 +3700,7 @@ static ssize_t ipa_xr_add_flt_to_wlan(struct file *file,
 		flt_add_req.flt_info[0].dport = dst_port[i];
 		flt_add_req.flt_info[0].protocol = prot[i];
 
-		IPADBG("IPv4 saddr:%lu, daddr:%lu IPv4 sport:%u, dport:%u protocol:%u\n",
+		IPADBG("IPv4 saddr:%u, daddr:%u IPv4 sport:%u, dport:%u protocol:%u\n",
 				flt_add_req.flt_info[0].ipv4_addr.ipv4_saddr,
 				flt_add_req.flt_info[0].ipv4_addr.ipv4_daddr,
 				flt_add_req.flt_info[0].sport,
