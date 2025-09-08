@@ -1,0 +1,88 @@
+load("//build/kernel/kleaf:kernel.bzl", "ddk_headers", "ddk_uapi_headers")
+
+package(
+    default_visibility = [
+      "//visibility:public"],
+)
+
+ddk_headers(
+    name = "linux_includes",
+    hdrs = glob([
+      "include/linux/*.h",
+    ]),
+    includes = ["include"]
+)
+
+filegroup(
+    name = "_display_uapi_headers",
+    srcs = glob([
+        "include/uapi/display/drm/*.h",
+        "include/uapi/display/hdcp/*.h",
+        "include/uapi/display/media/*.h",
+    ]),
+)
+
+ddk_headers(
+    name = "uapi_headers",
+    hdrs = [
+        ":_display_uapi_headers",
+    ],
+    includes = ["include/uapi/display"]
+)
+
+ddk_headers(
+    name = "dp_headers",
+    hdrs = glob([
+      "msm/dp/*.h",
+    ]),
+    includes = ["msm/dp"]
+)
+
+ddk_headers(
+    name = "dsi_headers",
+    hdrs = glob([
+      "msm/dsi/*.h",
+    ]),
+    includes = ["msm/dsi"]
+)
+
+ddk_headers(
+    name = "sde_headers",
+    hdrs = glob([
+      "msm/sde/*.h",
+    ]),
+    includes = ["msm/sde"]
+)
+
+ddk_headers(
+    name = "rotator_headers",
+    hdrs = glob([
+      "rotator/*.h",
+    ]),
+    includes = ["rotator"]
+)
+
+ddk_headers(
+    name = "msm_headers",
+    hdrs = glob([
+      "msm/*.h",
+    ]),
+    includes = ["msm"]
+)
+
+ddk_headers(
+    name = "display_drivers_headers",
+    hdrs = [ ":linux_includes", ":uapi_headers", ":msm_headers",":dp_headers",":dsi_headers",":sde_headers",":rotator_headers"]
+)
+
+ddk_uapi_headers(
+    name = "msm_display_ddk_uapi_headers",
+    srcs = [
+        ":_display_uapi_headers",
+    ],
+    out = "display-uapi-headers.tar.gz",
+    kernel_build = "//:target_kernel_build",
+)
+
+load(":target.bzl", "define_display_target")
+define_display_target()
