@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2015-2020, 2021, The Linux Foundation. All rights reserved.
- * Copyright (c) 2022-2025 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
  */
 
 #define pr_fmt(fmt) "icnss2: " fmt
@@ -2008,7 +2008,8 @@ static int icnss_driver_event_early_crash_ind(struct icnss_priv *priv,
 	}
 
 	priv->early_crash_ind = true;
-	icnss_fw_crashed(priv, NULL);
+	if (!test_bit(ICNSS_PD_RESTART, &priv->state))
+		icnss_fw_crashed(priv, NULL);
 
 out:
 	kfree(data);
@@ -4695,7 +4696,7 @@ static int icnss_resource_parse(struct icnss_priv *priv)
 			ret = -ENOMEM;
 			goto put_clk;
 		}
-		icnss_pr_dbg("MSI Addr pa: %pa, iova: %lluK\n",
+		icnss_pr_dbg("MSI Addr pa: %pa, iova: 0x%lluK\n",
 			     &priv->msi_addr_pa,
 			     priv->msi_addr_iova);
 
