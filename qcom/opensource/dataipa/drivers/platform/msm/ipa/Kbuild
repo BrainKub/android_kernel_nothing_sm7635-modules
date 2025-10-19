@@ -3,6 +3,7 @@
 ccflags-y += \
 	-DIPA_TRACE_INCLUDE_PATH=$(srctree)/$(src)/ipa_v3 \
 	-DRNDIS_TRACE_INCLUDE_PATH=$(srctree)/$(src)/ipa_clients \
+	-DNCM_TRACE_INCLUDE_PATH=$(srctree)/$(src)/ipa_clients \
 	-I$(srctree)/$(src)/../../../../../datarmnet-ext/mem
 
 ipam-y += \
