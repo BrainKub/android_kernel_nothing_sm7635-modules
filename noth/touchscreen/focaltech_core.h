@@ -153,7 +153,6 @@
 
 
 #define FTS_HI_RES_X_MAX                    16
-#define KEY_GESTURE_FOD                     0xF9
 
 
 /* If need read customer info when probing, max:FTS_MAX_CUSTOMER_INFO */

@@ -548,7 +548,6 @@ int fts_gesture_init(struct fts_ts_data *ts_data)
     input_set_capability(input_dev, EV_KEY, KEY_GESTURE_V);
     input_set_capability(input_dev, EV_KEY, KEY_GESTURE_Z);
     input_set_capability(input_dev, EV_KEY, KEY_GESTURE_C);
-    input_set_capability(input_dev, EV_KEY, KEY_GESTURE_FOD);
 
     __set_bit(KEY_GESTURE_RIGHT, input_dev->keybit);
     __set_bit(KEY_GESTURE_LEFT, input_dev->keybit);
@@ -564,7 +563,6 @@ int fts_gesture_init(struct fts_ts_data *ts_data)
     __set_bit(KEY_GESTURE_V, input_dev->keybit);
     __set_bit(KEY_GESTURE_C, input_dev->keybit);
     __set_bit(KEY_GESTURE_Z, input_dev->keybit);
-    __set_bit(KEY_GESTURE_FOD, input_dev->keybit);
 
 
     fts_create_gesture_sysfs(ts_data->dev);
