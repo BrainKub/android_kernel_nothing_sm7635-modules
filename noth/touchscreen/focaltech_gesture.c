@@ -123,10 +123,6 @@ static ssize_t fts_gesture_sys_store(
 {
     struct fts_ts_data *ts_data = dev_get_drvdata(dev);
 
-    if (ts_data->suspended) {
-        FTS_INFO("In suspend,not operation gesture mode!");
-        return count;
-    }
     mutex_lock(&ts_data->input_dev->mutex);
     if (FTS_SYSFS_ECHO_ON(buf)) {
         FTS_DEBUG("enable gesture");
@@ -136,6 +132,9 @@ static ssize_t fts_gesture_sys_store(
         ts_data->gesture_support = DISABLE;
     }
     mutex_unlock(&ts_data->input_dev->mutex);
+
+    if (ts_data->suspended)
+        fts_gesture_write(ts_data, ts_data->gesture_support);
 
     return count;
 }
@@ -251,6 +250,8 @@ static ssize_t fts_gesture_single_tap_enabled_store(struct device *dev,
 
     mutex_lock(&ts_data->input_dev->mutex);
     ts_data->single_tap_enabled = val;
+
+    fts_gesture_write(ts_data, val);
     mutex_unlock(&ts_data->input_dev->mutex);
 
     return count;

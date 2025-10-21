@@ -671,10 +671,6 @@ static ssize_t fts_gesture_store(
     if (kstrtouint(buf, 0, &tmp))
         return -EINVAL;
 
-    if (ts_data->suspended) {
-        FTS_INFO("In suspend,not operation gesture mode!");
-        return count;
-    }
     mutex_lock(&ts_data->input_dev->mutex);
     if (FTS_SYSFS_ECHO_ON(buf)) {
         FTS_DEBUG("enable gesture");
@@ -684,6 +680,9 @@ static ssize_t fts_gesture_store(
         ts_data->gesture_support = DISABLE;
     }
     mutex_unlock(&ts_data->input_dev->mutex);
+
+    if (ts_data->suspended)
+        fts_gesture_write(ts_data, ts_data->gesture_support);
 
     return count;
 
