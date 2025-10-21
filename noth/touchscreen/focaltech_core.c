@@ -552,6 +552,8 @@ void fts_fod_enable(int enable)
 
     ts_data->fod_fp_down = false;
     ts_data->fod_mode = enable;
+    ts_data->fp_down_report = 0;
+
     if (enable == FTS_FOD_ENABLE) {
         FTS_INFO("Fod enable,fod_mode = %d\n", ts_data->fod_mode);
         fts_fod_set_reg(FTS_VAL_FOD_ENABLE);
